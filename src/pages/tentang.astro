@@ -1,0 +1,90 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { supabase } from '../lib/supabase.js';
+
+// Ambil data Profil (Tentang Kami)
+const { data: tentangData } = await supabase.from('tentang_kami').select('*').order('created_at', { ascending: true });
+const profilList = tentangData || [];
+
+// Ambil data Syaikhuna (Asatidz)
+const { data: syaikhunaData } = await supabase.from('syaikhuna').select('*');
+const asatidzList = syaikhunaData || [];
+---
+
+<MainLayout title="Tentang Kami">
+  <!-- Header Title -->
+  <div class="bg-pesantren py-16 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">Profil Yayasan</h1>
+      <p class="text-xl text-green-100 font-light">Mengenal lebih dekat visi, sejarah, dan jajaran pengasuh Pondok Pesantren Nailul Khoir Majalengka.</p>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <!-- Konten Dinamis Tentang Kami (CMS Profil) -->
+    {profilList.length > 0 ? (
+      <div class="space-y-16">
+        {profilList.map((item, index) => (
+          <div class={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 md:gap-12 items-center`}>
+            {item.foto_url && (
+              <div class="w-full md:w-5/12 shrink-0">
+                <img src={item.foto_url} alt={item.judul} class="w-full h-auto rounded-2xl shadow-xl object-cover border-4 border-gray-50" loading="lazy" />
+              </div>
+            )}
+            <div class={`w-full ${item.foto_url ? 'md:w-7/12' : 'w-full'} prose prose-lg prose-green max-w-none`}>
+              <h2 class="text-3xl font-bold text-pesantren mb-6 pb-2 border-b-2 border-emas inline-block">{item.judul}</h2>
+              <div class="whitespace-pre-wrap text-gray-600 leading-relaxed">{item.description}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <!-- Fallback Default jika belum diisi Admin -->
+      <div class="prose prose-lg prose-green mx-auto">
+        <h2 class="text-pesantren border-b-2 border-emas pb-2 inline-block">Tentang Yayasan PP Nailul Khoir</h2>
+        <p>Yayasan Pondok Pesantren Nailul Khoir didirikan sebagai lembaga keagamaan dan sosial yang berkomitmen untuk mencerdaskan kehidupan bangsa melalui pendidikan yang berlandaskan paham Ahlussunnah Wal Jama'ah.</p>
+        <h3>Visi & Misi</h3>
+        <p>Mencetak generasi qur'ani yang mandiri, berilmu, dan berakhlakul karimah serta mampu menghadapi tantangan global dengan menyelenggarakan pendidikan pesantren salafiyah dan modern secara terpadu.</p>
+      </div>
+    )}
+  </div>
+
+  <!-- Jajaran Syaikhuna & Asatidz -->
+  <div class="bg-gray-50 py-20 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-base text-emas font-bold tracking-wide uppercase">Dewan Asatidz</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-pesantren sm:text-4xl">
+          Pengasuh & Tenaga Pengajar
+        </p>
+      </div>
+
+      {asatidzList.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {asatidzList.map(guru => (
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden border border-gray-100 group">
+              <div class="h-64 sm:h-56 bg-gradient-to-br from-green-50 to-gray-100 relative overflow-hidden">
+                {guru.foto_url ? (
+                   <img src={guru.foto_url} alt={guru.nama} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                ) : (
+                   <div class="absolute inset-0 flex items-center justify-center text-pesantren opacity-20">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                   </div>
+                )}
+                <div class="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+              </div>
+              <div class="p-6 relative text-center">
+                <h3 class="font-bold text-lg text-gray-900 mb-1">{guru.nama}</h3>
+                <p class="text-sm font-medium text-pesantren bg-green-50 rounded-full px-3 py-1 inline-block mb-3">{guru.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center text-gray-500 bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
+          <p>Data profil pengajar sedang dalam pembaruan sistem.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,79 @@
+-- Skema Database Yayasan Pondok Pesantren Nailul Khoir Majalengka
+
+-- HAPUS TABEL JIKA SUDAH ADA (Untuk menghindari error 'already exists' saat mengulang run)
+DROP TABLE IF EXISTS tentang_kami CASCADE;
+DROP TABLE IF EXISTS syaikhuna CASCADE;
+DROP TABLE IF EXISTS berita CASCADE;
+DROP TABLE IF EXISTS kajian CASCADE;
+DROP TABLE IF EXISTS pendaftaran CASCADE;
+
+-- 1. Tabel tentang_kami
+CREATE TABLE tentang_kami (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR NOT NULL,
+    foto_url TEXT,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 2. Tabel syaikhuna
+CREATE TABLE syaikhuna (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama VARCHAR NOT NULL,
+    foto_url TEXT,
+    description TEXT
+);
+
+-- 3. Tabel berita
+CREATE TABLE berita (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR NOT NULL,
+    foto_url TEXT,
+    description TEXT,
+    penulis VARCHAR,
+    tanggal_berita DATE DEFAULT CURRENT_DATE
+);
+
+-- 4. Tabel kajian
+CREATE TABLE kajian (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR NOT NULL,
+    foto_url TEXT,
+    description TEXT
+);
+
+-- 5. Tabel pendaftaran
+CREATE TABLE pendaftaran (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama_santri VARCHAR NOT NULL,
+    nama_wali VARCHAR NOT NULL,
+    alamat TEXT NOT NULL,
+    no_hp VARCHAR NOT NULL,
+    status VARCHAR DEFAULT 'Tertunda',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Aktifkan Row Level Security (RLS) di semua tabel
+ALTER TABLE tentang_kami ENABLE ROW LEVEL SECURITY;
+ALTER TABLE syaikhuna ENABLE ROW LEVEL SECURITY;
+ALTER TABLE berita ENABLE ROW LEVEL SECURITY;
+ALTER TABLE kajian ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pendaftaran ENABLE ROW LEVEL SECURITY;
+
+-- KEBIAJAKAN KEAMANAN (POLICIES)
+
+-- A. Tabel Publik (Read-only untuk anonim)
+CREATE POLICY "Anonim bisa melihat tentang_kami" ON tentang_kami FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa melihat syaikhuna" ON syaikhuna FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa melihat berita" ON berita FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa melihat kajian" ON kajian FOR SELECT TO anon USING (true);
+
+-- B. Tabel Pendaftaran (Anonim hanya bisa Insert)
+CREATE POLICY "Anonim bisa mendaftar" ON pendaftaran FOR INSERT TO anon WITH CHECK (true);
+
+-- C. Akses Penuh untuk Admin (Authenticated)
+CREATE POLICY "Admin full access tentang_kami" ON tentang_kami FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access syaikhuna" ON syaikhuna FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access berita" ON berita FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access kajian" ON kajian FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access pendaftaran" ON pendaftaran FOR ALL TO authenticated USING (true) WITH CHECK (true);

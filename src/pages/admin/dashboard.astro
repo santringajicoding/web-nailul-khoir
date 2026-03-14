@@ -1,0 +1,388 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Dashboard Utama">
+  
+  <div class="mb-8">
+    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Data Pendaftar Santri</h2>
+    <p class="text-gray-600 mt-2 text-lg">Manajemen pendaftaran santri baru Yayasan Nailul Khoir.</p>
+  </div>
+
+  <style>
+    @media print {
+      /* Sembunyikan semua elemen kecuali tabel saat diprint/PDF */
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+      .overflow-x-auto { overflow: visible !important; }
+      .print-hide { display: none !important; }
+      /* Bersihkan margin */
+      @page { margin: 1cm; size: landscape; }
+    }
+  </style>
+
+  <!-- Statistik Pendaftar (Grid Cards) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 print-hide relative z-10">
+    <!-- Total Semua -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-pesantren flex items-center justify-between hover:shadow-xl transition-shadow">
+      <div>
+        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Pendaftar</p>
+        <p class="text-3xl font-black text-gray-800 mt-2" id="statTotal">0</p>
+      </div>
+      <div class="bg-green-100 p-3 rounded-full text-pesantren">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+      </div>
+    </div>
+    
+    <!-- Total SMPIT -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 flex items-center justify-between hover:shadow-xl transition-shadow">
+      <div>
+        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Pendaftar SMP</p>
+        <p class="text-3xl font-black text-blue-600 mt-2" id="statSMP">0</p>
+      </div>
+      <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+      </div>
+    </div>
+
+    <!-- Total SMK -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-emas flex items-center justify-between hover:shadow-xl transition-shadow">
+      <div>
+        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Pendaftar SMK</p>
+        <p class="text-3xl font-black text-yellow-600 mt-2" id="statSMK">0</p>
+      </div>
+      <div class="bg-yellow-100 p-3 rounded-full text-yellow-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+      </div>
+    </div>
+
+    <!-- Total Pondok -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-green-700 flex items-center justify-between hover:shadow-xl transition-shadow">
+      <div>
+        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Santri Pondok</p>
+        <p class="text-3xl font-black text-green-700 mt-2" id="statPondok">0</p>
+      </div>
+      <div class="bg-green-100 p-3 rounded-full text-green-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100" id="printableArea">
+    <!-- Header Tabel Tools -->
+    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 print-hide">
+      <!-- Tabs Filter -->
+      <div class="flex flex-wrap gap-2" id="filterTabs">
+        <button data-filter="Semua" class="tab-btn active bg-pesantren text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">Semua</button>
+        <button data-filter="SMPIT" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">SMPIT</button>
+        <button data-filter="SMK" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">SMK</button>
+        <button data-filter="Pondok Pesantren" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">Pondok</button>
+      </div>
+
+      <!-- Aksi Ekspor & Segarkan -->
+      <div class="flex flex-wrap gap-2 w-full xl:w-auto">
+        <button id="btnExportCSV" class="flex-1 xl:flex-none bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          Exel/CSV
+        </button>
+        <button id="btnExportPDF" class="flex-1 xl:flex-none bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+          PDF / Cetak
+        </button>
+        <button id="btnRefresh" class="flex-1 xl:flex-none bg-gray-800 hover:bg-gray-900 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          Segarkan
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto min-h-[400px]">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-white">
+          <tr>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Waktu Daftar</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Nama Santri</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Program Pilihan</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Nama Wali</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Kontak WhatsApp</th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Status</th>
+            <th scope="col" class="print-hide px-6 py-4 text-center text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="pendaftarTableBody" class="bg-white divide-y divide-gray-100">
+          <tr>
+            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+              <div class="flex flex-col items-center justify-center">
+                <svg class="animate-spin h-10 w-10 text-pesantren mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="font-medium text-lg">Menyinkronkan data dengan database...</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase.js';
+
+    // Auth Guard - Proteksi Halaman
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.replace('/admin/login');
+        return null;
+      }
+      return session;
+    }
+
+    // Format tanggal cantik
+    function formatDate(dateStr: string) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
+    }
+
+    let allData: any[] = [];
+    let currentFilter = 'Semua';
+
+    // Render Data Function
+    const renderTable = () => {
+      const tbody = document.getElementById('pendaftarTableBody');
+      if (!tbody) return;
+
+      // Filter Data
+      const filteredData = currentFilter === 'Semua' 
+        ? allData 
+        : allData.filter(item => item.jalur === currentFilter);
+
+      if (!filteredData || filteredData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-16 text-center text-gray-500 font-medium text-lg">Tidak ada data pendaftar untuk Program / Filter ini.</td></tr>`;
+        return;
+      }
+
+      // Helper untuk warna status
+      const getStatusStyle = (status: string) => {
+        if(status === 'Diterima') return 'bg-green-100 text-green-800 border-green-300';
+        if(status === 'Ditolak') return 'bg-red-100 text-red-800 border-red-300';
+        return 'bg-yellow-50 text-yellow-700 border-yellow-200';
+      };
+
+      // Helper warna Jalur
+      const getJalurStyle = (jalur: string) => {
+        if(jalur === 'SMPIT') return 'bg-blue-100 text-blue-800 font-bold';
+        if(jalur === 'SMK') return 'bg-orange-100 text-orange-800 font-bold';
+        if(jalur === 'Pondok Pesantren') return 'bg-pesantren text-white font-bold';
+        return 'bg-gray-100 text-gray-800 font-medium';
+      };
+
+      tbody.innerHTML = filteredData.map(item => `
+        <tr class="hover:bg-green-50 transition-colors duration-150 group">
+          <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-500 font-medium">${formatDate(item.created_at)}</td>
+          <td class="px-6 py-5">
+            <div class="text-base font-extrabold text-gray-900 mb-1 group-hover:text-pesantren transition-colors">${item.nama_santri}</div>
+            <div class="text-xs text-gray-500 line-clamp-2 pr-4 leading-relaxed" title="${item.alamat}">
+              <span class="font-bold text-gray-600">Alamat:</span> ${item.alamat}
+            </div>
+          </td>
+          <td class="px-6 py-5 whitespace-nowrap">
+            <span class="px-3 py-1.5 text-xs rounded-lg ${getJalurStyle(item.jalur)} shadow-sm border border-transparent">
+              ${item.jalur || 'Jalur Tidak Diketahui'}
+            </span>
+          </td>
+          <td class="px-6 py-5 whitespace-nowrap text-sm font-bold text-gray-700">${item.nama_wali}</td>
+          <td class="px-6 py-5 whitespace-nowrap">
+            <a href="https://wa.me/${item.no_hp.replace(/^0/, '62')}" target="_blank" 
+               class="inline-flex items-center px-4 py-2 rounded-full text-xs font-bold bg-green-50 text-green-700 hover:bg-green-600 hover:text-white transition-all shadow-sm border border-green-200 hover:border-transparent">
+              ${item.no_hp}
+            </a>
+          </td>
+          <td class="px-6 py-5 whitespace-nowrap">
+             <span class="px-3 py-1.5 inline-flex text-xs leading-5 font-bold rounded-full border ${getStatusStyle(item.status)}">
+              ${item.status}
+            </span>
+          </td>
+          <td class="print-hide px-6 py-5 whitespace-nowrap text-center text-sm font-medium">
+            <div class="flex items-center justify-center space-x-2">
+              ${item.status !== 'Diterima' ? 
+                `<button data-action="terima" data-id="${item.id}" class="text-white bg-pesantren hover:bg-green-800 px-3 py-1.5 rounded-md text-xs shadow-sm transition-colors" title="Terima Santri">Terima</button>` 
+                : ''}
+              ${item.status !== 'Ditolak' ? 
+                `<button data-action="tolak" data-id="${item.id}" class="text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md text-xs shadow-sm transition-colors" title="Tolak Status">Tolak</button>` 
+                : ''}
+              <button data-action="hapus" data-id="${item.id}" data-name="${item.nama_santri}" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1.5 rounded-md transition-colors" title="Hapus Data">
+                Hapus
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    };
+
+    // Load Data Function (Fetch dari Supabase)
+    const loadData = async () => {
+      const session = await checkAuth();
+      if (!session) return;
+
+      const tbody = document.getElementById('pendaftarTableBody');
+      if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-gray-500"><svg class="animate-spin mx-auto h-8 w-8 text-pesantren mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Memuat data...</td></tr>`;
+
+      const { data, error } = await supabase
+        .from('pendaftaran')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Database Error:', error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-red-600 font-bold bg-red-50">Gagal memuat data: ${error.message}</td></tr>`;
+        return;
+      }
+
+      allData = data || [];
+      renderTable();
+
+      // Perhitungan Statistik Total
+      const statTotal = document.getElementById('statTotal');
+      const statSMP = document.getElementById('statSMP');
+      const statSMK = document.getElementById('statSMK');
+      const statPondok = document.getElementById('statPondok');
+
+      if (statTotal) statTotal.textContent = allData.length.toString();
+      if (statSMP) statSMP.textContent = allData.filter(i => i.jalur === 'SMPIT').length.toString();
+      if (statSMK) statSMK.textContent = allData.filter(i => i.jalur === 'SMK').length.toString();
+      if (statPondok) statPondok.textContent = allData.filter(i => i.jalur === 'Pondok Pesantren').length.toString();
+    };
+
+    // Fungsi Update Status
+    const updateStatus = async (id: string, newStatus: string) => {
+      const { error } = await supabase
+        .from('pendaftaran')
+        .update({ status: newStatus })
+        .eq('id', id);
+      
+      if (error) {
+        alert('Gagal memperbarui status: ' + error.message);
+      } else {
+        loadData(); // Refresh UI
+      }
+    };
+
+    // Fungsi Hapus Data
+    const deleteData = async (id: string, nama: string) => {
+      if(confirm(`Yakin ingin menghapus data calon santri secara permanen bernama: ${nama}?`)) {
+        const { error } = await supabase
+          .from('pendaftaran')
+          .delete()
+          .eq('id', id);
+        
+        if (error) {
+          alert('Gagal menghapus data: ' + error.message);
+        } else {
+          loadData(); // Refresh UI
+        }
+      }
+    };
+
+    // Fungsi Export CSV/Excel
+    const exportCSV = () => {
+      const filteredData = currentFilter === 'Semua' ? allData : allData.filter(item => item.jalur === currentFilter);
+      if (filteredData.length === 0) {
+        alert('Tidak ada data untuk diekspor!');
+        return;
+      }
+
+      // Headers CSV
+      const headers = ['Waktu_Daftar', 'Nama_Santri', 'Program_Jalur', 'Nama_Wali', 'No_WhatsApp', 'Alamat', 'Status'];
+      const csvRows = [headers.join(',')];
+
+      // Format Data ke CSV
+      filteredData.forEach(row => {
+        const values = [
+          `"${new Date(row.created_at).toLocaleString('id-ID')}"`,
+          `"${row.nama_santri}"`,
+          `"${row.jalur || 'Tidak Diketahui'}"`,
+          `"${row.nama_wali}"`,
+          `"${row.no_hp}"`,
+          `"${row.alamat.replace(/\n/g, ' ')}"`, // Hapus enter di alamat
+          `"${row.status}"`
+        ];
+        csvRows.push(values.join(','));
+      });
+
+      // Bikin file blob untuk didownload
+      const csvData = csvRows.join('\n');
+      const blob = new Blob([csvData], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `Laporan_Pendaftar_${currentFilter.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    // Jalankan saat script dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      
+      // Setup Tombol Filter Tabs
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // Ganti kelas aktif
+          tabBtns.forEach(b => {
+            b.classList.remove('bg-pesantren', 'text-white');
+            b.classList.add('bg-white', 'text-gray-700');
+          });
+          const targetBtn = e.target as HTMLButtonElement;
+          targetBtn.classList.remove('bg-white', 'text-gray-700');
+          targetBtn.classList.add('bg-pesantren', 'text-white');
+          
+          // Set Filter State dan Render Ulang
+          currentFilter = targetBtn.getAttribute('data-filter') || 'Semua';
+          renderTable();
+        });
+      });
+
+      // Tombol Aksi Laporan & Segarkan
+      const btnRefresh = document.getElementById('btnRefresh');
+      if (btnRefresh) btnRefresh.addEventListener('click', loadData);
+
+      const btnExportCSV = document.getElementById('btnExportCSV');
+      if (btnExportCSV) btnExportCSV.addEventListener('click', exportCSV);
+
+      const btnExportPDF = document.getElementById('btnExportPDF');
+      if (btnExportPDF) {
+        btnExportPDF.addEventListener('click', () => {
+           window.print(); // Memanggil dialog cetak sistem operasi
+        });
+      }
+
+      // Event Delegation untuk Tabel Aksi (Update/Delete)
+      const tbody = document.getElementById('pendaftarTableBody');
+      if (tbody) {
+        tbody.addEventListener('click', (e) => {
+          const target = (e.target as Element).closest('button');
+          if (!target) return;
+
+          const action = target.getAttribute('data-action');
+          const id = target.getAttribute('data-id');
+          const name = target.getAttribute('data-name');
+
+          if (!id) return;
+
+          if (action === 'terima') {
+            updateStatus(id, 'Diterima');
+          } else if (action === 'tolak') {
+            updateStatus(id, 'Ditolak');
+          } else if (action === 'hapus') {
+            deleteData(id, name || 'Santri');
+          }
+        });
+      }
+    });
+  </script>
+</AdminLayout>

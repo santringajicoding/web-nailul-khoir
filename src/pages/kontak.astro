@@ -1,0 +1,184 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+<MainLayout title="Kontak Kami - Yayasan PP Nailul Khoir">
+  <!-- Hero Section -->
+  <div class="bg-pesantren py-16 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">Hubungi Kami</h1>
+      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Kami senantiasa terbuka untuk pertanyaan, saran, maupun informasi pendaftaran dari Anda.</p>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        
+        <!-- Formulir Pesan -->
+        <div class="p-8 md:p-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b-2 border-emas pb-2 inline-block">Kirim Pesan</h2>
+          <form id="formPesan" class="space-y-6">
+            <div>
+              <label for="nama_pengirim" class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap</label>
+              <input type="text" id="nama_pengirim" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pesantren focus:ring-2 focus:ring-green-200 transition-colors bg-gray-50 focus:bg-white" placeholder="Masukkan nama Anda" required>
+            </div>
+            <div>
+              <label for="kontak_pengirim" class="block text-sm font-bold text-gray-700 mb-2">Alamat Email / WhatsApp</label>
+              <input type="text" id="kontak_pengirim" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pesantren focus:ring-2 focus:ring-green-200 transition-colors bg-gray-50 focus:bg-white" placeholder="Email atau nomor WhatsApp aktif" required>
+            </div>
+            <div>
+              <label for="isi_pesan" class="block text-sm font-bold text-gray-700 mb-2">Pesan Anda</label>
+              <textarea id="isi_pesan" rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pesantren focus:ring-2 focus:ring-green-200 transition-colors bg-gray-50 focus:bg-white resize-none" placeholder="Tuliskan pertanyaan atau pesan Anda di sini..." required></textarea>
+            </div>
+
+            <!-- Honeypot Anti-Spam (Tersembunyi) -->
+            <div class="hidden" aria-hidden="true">
+              <label for="bot_check">Biarkan kosong jika Anda manusia</label>
+              <input type="text" id="bot_check" tabindex="-1" autocomplete="off">
+            </div>
+            
+            <div id="alertBox" class="hidden p-4 rounded-xl text-center font-bold text-sm"></div>
+
+            <button type="submit" id="btnSubmitPesan" class="w-full bg-pesantren text-white hover:bg-green-800 font-bold px-8 py-4 rounded-xl shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex justify-center items-center gap-2">
+              <span id="btnText">Kirim Pesan Sekarang</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Kontak -->
+        <div class="bg-green-50 p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-200">
+          <h2 class="text-2xl font-bold text-pesantren mb-6 border-b-2 border-emas pb-2 inline-block">Informasi Kontak</h2>
+          
+          <div class="space-y-8 mt-4">
+            <!-- Alamat -->
+            <div class="flex items-start">
+              <div class="bg-white p-3 rounded-full shadow-sm text-pesantren mr-4 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-lg">Alamat Kesekretariatan</h3>
+                <p class="text-gray-600 mt-1 leading-relaxed">
+                  Blok Desa, RT 01/RW 01, Desa Panyindangan,<br>
+                  Kecamatan Banjaran, Kabupaten Majalengka,<br>
+                  Jawa Barat, 45468
+                </p>
+              </div>
+            </div>
+
+            <!-- Telepon -->
+            <div class="flex items-start">
+              <div class="bg-white p-3 rounded-full shadow-sm text-pesantren mr-4 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-lg">Layanan Telepon/WA</h3>
+                <p class="text-gray-600 mt-1 leading-relaxed"><a href="https://wa.me/6288218336152" target="_blank" class="hover:text-pesantren hover:underline transition-colors">+62 882-1833-6152 (Mang Aan)</a></p>
+                <p class="text-gray-600 leading-relaxed"><a href="https://wa.me/6285794405083" target="_blank" class="hover:text-pesantren hover:underline transition-colors">+62 857-9440-5083 (Panitia PPDB)</a></p>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="flex items-start">
+              <div class="bg-white p-3 rounded-full shadow-sm text-pesantren mr-4 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-lg">Email Resmi</h3>
+                <p class="text-gray-600 mt-1 leading-relaxed"><a href="mailto:pesantrennailulkhoir@gmail.com" class="hover:text-pesantren hover:underline transition-colors">pesantrennailulkhoir@gmail.com</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Maps Placeholder -->
+          <div class="mt-10 rounded-xl overflow-hidden shadow-sm border border-gray-200">
+            <!-- Ini adalah embed Google Maps iframe contoh - Ganti dengan lokasi asli nantinya -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15843.415053744315!2d108.31295245!3d-6.9080760499999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f3d9d6e8b4e7b%3A0x6bbaafe5bae9937b!2sBanjaran%2C%20Kec.%20Banjaran%2C%20Kabupaten%20Majalengka%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1650000000000!5m2!1sid!2sid" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  import { supabase } from '../lib/supabase.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const formPesan = document.getElementById('formPesan') as HTMLFormElement;
+    const btnSubmit = document.getElementById('btnSubmitPesan') as HTMLButtonElement;
+    const btnText = document.getElementById('btnText');
+    const alertBox = document.getElementById('alertBox');
+
+    if (formPesan) {
+      formPesan.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Ambil elemen input
+        const namaInput = document.getElementById('nama_pengirim') as HTMLInputElement;
+        const kontakInput = document.getElementById('kontak_pengirim') as HTMLInputElement;
+        const pesanInput = document.getElementById('isi_pesan') as HTMLTextAreaElement;
+
+        const nama = namaInput.value.trim();
+        const kontak = kontakInput.value.trim();
+        const pesan = pesanInput.value.trim();
+        const botCheckInput = document.getElementById('bot_check') as HTMLInputElement;
+
+        // Pengecekan Honeypot Anti-Spam
+        if (botCheckInput && botCheckInput.value !== '') {
+           console.warn('Bot spam terdeteksi.');
+           return; // Hentikan proses
+        }
+
+        if (!nama || !kontak || !pesan) {
+          showAlert('Mohon lengkapi semua bidang.', 'bg-yellow-100 text-yellow-800 border-yellow-300');
+          return;
+        }
+
+        // Tampilan Loading
+        if (btnText) btnText.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Mengirim...`;
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
+
+        // Kirim ke Supabase
+        const { error } = await supabase
+          .from('pesan_masuk')
+          .insert([
+            {
+              nama: nama,
+              kontak: kontak,
+              pesan: pesan,
+              status_baca: false
+            }
+          ]);
+
+        // Pulihkan UI
+        if (btnText) btnText.innerHTML = 'Kirim Pesan Sekarang';
+        btnSubmit.disabled = false;
+        btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
+
+        if (error) {
+          console.error('Error insert message:', error);
+          showAlert(`Gagal mengirim pesan: ${error.message}`, 'bg-red-100 text-red-800 border-red-300');
+        } else {
+          showAlert('✅ Terima kasih! Pesan Anda telah sukses terkirim ke sistem kami.', 'bg-green-100 text-green-800 border-green-300');
+          formPesan.reset(); // Kosongkan formulir
+          
+          // Sembunyikan alert setelah 5 detik
+          setTimeout(() => {
+            if (alertBox) {
+              alertBox.classList.add('hidden');
+            }
+          }, 5000);
+        }
+      });
+    }
+
+    function showAlert(message: string, styleClasses: string) {
+      if (!alertBox) return;
+      alertBox.className = `p-4 rounded-xl text-center font-bold text-sm border ${styleClasses}`;
+      alertBox.textContent = message;
+      alertBox.classList.remove('hidden');
+    }
+  });
+</script>

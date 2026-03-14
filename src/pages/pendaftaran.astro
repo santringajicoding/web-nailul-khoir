@@ -1,0 +1,190 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Pendaftaran Santri Baru">
+  <div class="bg-pesantren py-12 text-white text-center">
+    <h1 class="text-3xl md:text-5xl font-bold mb-4">Pendaftaran Santri Baru</h1>
+    <p class="text-gray-200 max-w-2xl mx-auto px-4">Mari bergabung dan menuntut ilmu di Yayasan Pondok Pesantren Nailul Khoir Majalengka.</p>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 py-12 -mt-8 relative z-10">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header Form -->
+      <div class="bg-gray-50 px-8 py-6 border-b border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800">Formulir Pendaftaran</h2>
+        <p class="text-gray-500 text-sm mt-1">Silakan isi data calon santri dengan lengkap dan benar.</p>
+      </div>
+
+      <!-- Form Body -->
+      <div class="p-8">
+        <!-- Notifikasi (Sukses/Gagal) -->
+        <div id="alertMessage" class="hidden mb-6 p-4 rounded-lg font-medium"></div>
+
+        <form id="formPendaftaran" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Pilihan Pendidikan / Jalur -->
+            <div class="col-span-1 md:col-span-2">
+              <label for="jalur" class="block text-sm font-medium text-gray-700 mb-1">Pilihan Program Pendidikan <span class="text-red-500">*</span></label>
+              <select id="jalur" name="jalur" required 
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren focus:border-pesantren outline-none transition-colors bg-white appearance-none">
+                <option value="" disabled selected>-- Pilih Program Pendidikan --</option>
+                <option value="SMPIT">SMPIT Nailul Khoir</option>
+                <option value="SMK">SMK Nailul Khoir</option>
+                <option value="Pondok Pesantren">Pondok Pesantren Salafiyah Murni</option>
+              </select>
+            </div>
+            <!-- Nama Santri -->
+            <div class="col-span-1 md:col-span-2">
+              <label for="nama_santri" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap Santri <span class="text-red-500">*</span></label>
+              <input type="text" id="nama_santri" name="nama_santri" required 
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren focus:border-pesantren outline-none transition-colors"
+                placeholder="Contoh: Ahmad Abdullah">
+            </div>
+
+            <!-- Nama Wali -->
+            <div class="col-span-1">
+              <label for="nama_wali" class="block text-sm font-medium text-gray-700 mb-1">Nama Wali <span class="text-red-500">*</span></label>
+              <input type="text" id="nama_wali" name="nama_wali" required 
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren focus:border-pesantren outline-none transition-colors"
+                placeholder="Nama Ayah / Ibu">
+            </div>
+
+            <!-- No HP / WA -->
+            <div class="col-span-1">
+              <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1">No WhatsApp <span class="text-red-500">*</span></label>
+              <input type="tel" id="no_hp" name="no_hp" required 
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren focus:border-pesantren outline-none transition-colors"
+                placeholder="Contoh: 081234567890">
+            </div>
+
+            <!-- Honeypot Anti-Spam (Tersembunyi) -->
+            <div class="hidden" aria-hidden="true">
+              <label for="website">Biarkan kosong jika Anda manusia</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <!-- Alamat -->
+            <div class="col-span-1 md:col-span-2">
+              <label for="alamat" class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap <span class="text-red-500">*</span></label>
+              <textarea id="alamat" name="alamat" rows="4" required 
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren focus:border-pesantren outline-none transition-colors resize-none"
+                placeholder="Masukkan alamat lengkap rumah..."></textarea>
+            </div>
+          </div>
+
+          <!-- Tombol Submit -->
+          <div class="pt-4 border-t border-gray-100">
+            <button type="submit" id="btnSubmit" 
+              class="w-full bg-pesantren hover:bg-green-800 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all flex justify-center items-center">
+              <span id="btnText">Kirim Pendaftaran</span>
+              <!-- Spinner Loading svg -->
+              <svg id="btnSpinner" class="animate-spin ml-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../lib/supabase.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('formPendaftaran') as HTMLFormElement;
+      const btnSubmit = document.getElementById('btnSubmit') as HTMLButtonElement;
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const alertMessage = document.getElementById('alertMessage');
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Tampilkan loading state
+          btnSubmit.disabled = true;
+          btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
+          if (btnText) btnText.textContent = 'Memproses...';
+          if (btnSpinner) btnSpinner.classList.remove('hidden');
+          
+          if (alertMessage) {
+            alertMessage.classList.add('hidden');
+            alertMessage.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+          }
+
+          // Ambil data form
+          const formData = new FormData(form);
+
+          // Pengecekan Honeypot Anti-Spam
+          if (formData.get('website') !== '') {
+            console.warn('Bot spam terdeteksi.');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+            if (btnText) btnText.textContent = 'Kirim Pendaftaran';
+            if (btnSpinner) btnSpinner.classList.add('hidden');
+            return; // Abaikan pengiriman form
+          }
+
+          const pendaftar = {
+            nama_santri: formData.get('nama_santri'),
+            nama_wali: formData.get('nama_wali'),
+            no_hp: formData.get('no_hp'),
+            alamat: formData.get('alamat'),
+            jalur: formData.get('jalur'), // Insert field jalur
+            status: 'Tertunda' // Status default
+          };
+
+          try {
+            // Operasi POST / Insert ke tabel pendaftaran Supabase
+            const { error } = await supabase
+              .from('pendaftaran')
+              .insert([pendaftar]);
+
+            if (error) throw error;
+
+            // Sukses
+            if (alertMessage) {
+              alertMessage.textContent = 'Alhamdulillah, Form berhasil dikirim. Tunggu informasi selanjutnya melalui WhatsApp.';
+              alertMessage.classList.remove('hidden');
+              alertMessage.classList.add('bg-green-100', 'text-green-800');
+            }
+            form.reset();
+
+          } catch (error: any) {
+            console.error('Error saat insert pendaftaran:', error.message);
+            // Gagal
+            if (alertMessage) {
+              alertMessage.textContent = 'Mohon maaf, terjadi kesalahan. Silakan coba lagi.';
+              alertMessage.classList.remove('hidden');
+              alertMessage.classList.add('bg-red-100', 'text-red-800');
+            }
+          } finally {
+            // Kembalikan tombol ke state normal
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+            if (btnText) btnText.textContent = 'Kirim Pendaftaran';
+            if (btnSpinner) btnSpinner.classList.add('hidden');
+          }
+        });
+      }
+
+      // Auto-Select dropdown from URL Params (Misal: ?jalur=SMK)
+      const urlParams = new URLSearchParams(window.location.search);
+      const jalurParam = urlParams.get('jalur');
+      if (jalurParam) {
+        const selectJalur = document.getElementById('jalur') as HTMLSelectElement;
+        if (selectJalur) {
+          for (let i = 0; i < selectJalur.options.length; i++) {
+            if (selectJalur.options[i].value === jalurParam) {
+              selectJalur.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
+    });
+  </script>
+</MainLayout>

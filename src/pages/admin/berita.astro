@@ -1,0 +1,265 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Kelola Berita & Publikasi">
+  
+  <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Manajemen Berita</h2>
+      <p class="text-gray-600 mt-2 text-lg">Tambah, lihat, atau hapus publikasi Yayasan Nailul Khoir.</p>
+    </div>
+    <button id="btnToggleForm" class="bg-pesantren hover:bg-green-800 text-white px-5 py-3 rounded-xl font-bold font-medium shadow-md transition-all flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Tulis Berita Baru
+    </button>
+  </div>
+
+  <!-- Modal / Form Tambah Berita (Hidden by default) -->
+  <div id="formContainer" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8 relative">
+    <button id="btnCloseForm" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Formulir Publikasi Baru</h3>
+    
+    <div id="alertFormName" class="hidden mb-4 p-3 rounded text-sm font-medium"></div>
+
+    <form id="formBerita" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="col-span-1 md:col-span-2">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Judul Berita <span class="text-red-500">*</span></label>
+          <input type="text" id="judul" name="judul" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Masukkan judul yang menarik">
+        </div>
+        
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Unggah Foto (Opsional)</label>
+          <input type="file" id="foto_file" name="foto_file" accept="image/*" class="w-full px-3 py-2 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Nama Penulis <span class="text-red-500">*</span></label>
+          <input type="text" id="penulis" name="penulis" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Admin / Pengurus">
+        </div>
+
+        <div class="col-span-1 md:col-span-2">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Isi Konten / Deskripsi <span class="text-red-500">*</span></label>
+          <textarea id="description" name="description" rows="5" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none resize-y" placeholder="Tuliskan detail berita disini..."></textarea>
+        </div>
+      </div>
+
+      <div class="pt-4 flex justify-end">
+        <button type="submit" id="btnSubmitBerita" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors flex items-center">
+          <span id="btnSubmitText">Terbitkan Berita</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Data Display -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div class="font-bold text-gray-700">Daftar Berita Aktif</div>
+      <button id="btnRefreshBerita" class="w-full sm:w-auto bg-white text-pesantren border border-pesantren hover:bg-green-50 px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Segarkan
+      </button>
+    </div>
+
+    <div class="auto-cols-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6" id="beritaGrid">
+      <div class="col-span-full py-12 text-center text-gray-500">
+        <svg class="animate-spin h-8 w-8 text-pesantren mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Memuat Berita...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase.js';
+
+    // Auth Check
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.replace('/admin/login');
+        return;
+      }
+      loadBerita();
+    }
+
+    // Toggle Formulir
+    const formContainer = document.getElementById('formContainer');
+    const btnToggle = document.getElementById('btnToggleForm');
+    const btnClose = document.getElementById('btnCloseForm');
+
+    if(btnToggle && formContainer && btnClose) {
+      btnToggle.addEventListener('click', () => {
+        formContainer.classList.remove('hidden');
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+      });
+      btnClose.addEventListener('click', () => {
+        formContainer.classList.add('hidden');
+      });
+    }
+
+    // Render Grid Berita
+    async function loadBerita() {
+      const grid = document.getElementById('beritaGrid');
+      if (!grid) return;
+
+      const { data, error } = await supabase
+        .from('berita')
+        .select('*')
+        .order('tanggal_berita', { ascending: false });
+
+      if (error) {
+        grid.innerHTML = `<div class="col-span-full text-center text-red-500 font-bold p-4 bg-red-50 rounded">Gagal memuat: ${error.message}</div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-gray-500 p-8 border-2 border-dashed border-gray-200 rounded-xl">Belum ada berita yang dipublikasikan.</div>`;
+        return;
+      }
+
+      const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+      };
+
+      grid.innerHTML = data.map(item => `
+        <div class="bg-white border text-left border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col group relative">
+          <div class="h-40 bg-gray-100 w-full overflow-hidden">
+            ${item.foto_url 
+              ? `<img src="${item.foto_url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />` 
+              : `<div class="w-full h-full flex items-center justify-center text-gray-400 bg-green-50"><span class="text-xs font-bold uppercase tracking-widest text-green-800">Tanpa Foto</span></div>`}
+          </div>
+          <div class="p-5 flex-grow flex flex-col">
+            <div class="text-xs text-emas font-bold mb-2 uppercase">${formatDate(item.tanggal_berita)} &bull; ${item.penulis}</div>
+            <h4 class="font-bold text-gray-900 text-lg mb-2 line-clamp-2">${item.judul}</h4>
+            <p class="text-gray-500 text-sm line-clamp-3 mb-4 flex-grow">${item.description}</p>
+            <div class="pt-4 border-t border-gray-100 flex justify-end">
+              <button data-action="hapus-berita" data-id="${item.id}" data-judul="${item.judul}" class="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded text-sm font-bold flex items-center transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Submit Form
+    const formBerita = document.getElementById('formBerita') as HTMLFormElement;
+    if (formBerita) {
+      formBerita.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnSubmitBerita') as HTMLButtonElement;
+        const btnText = document.getElementById('btnSubmitText');
+        const alertMsg = document.getElementById('alertFormName');
+        const fileInput = document.getElementById('foto_file') as HTMLInputElement;
+        
+        btn.disabled = true;
+        if(btnText) btnText.textContent = 'Menyimpan...';
+
+        const formData = new FormData(formBerita);
+        let uploadedFotoUrl = null;
+
+        // Proses unggah gambar ke Supabase Storage
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+          if(btnText) btnText.textContent = 'Mengunggah Foto...';
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('berita_images')
+            .upload(fileName, file);
+
+          if (uploadError) {
+             if (alertMsg) {
+               alertMsg.textContent = 'Gagal unggah foto: Pastikan Anda sudah membuat Storage Bucket "berita_images" dan izinkan Akses Publik! (' + uploadError.message + ')';
+               alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-red-100 text-red-800';
+             }
+             btn.disabled = false;
+             if(btnText) btnText.textContent = 'Terbitkan Berita';
+             return; // Hentikan eksekusi
+          }
+
+          // Dapatkan URL Publik gambar
+          const { data: publicUrlData } = supabase.storage.from('berita_images').getPublicUrl(fileName);
+          uploadedFotoUrl = publicUrlData.publicUrl;
+        }
+
+        if(btnText) btnText.textContent = 'Menyimpan Berita...';
+        
+        const newData = {
+          judul: formData.get('judul'),
+          penulis: formData.get('penulis'),
+          foto_url: uploadedFotoUrl,
+          description: formData.get('description'),
+          tanggal_berita: new Date().toISOString()
+        };
+
+        const { error } = await supabase.from('berita').insert([newData]);
+
+        if (error) {
+          if (alertMsg) {
+             alertMsg.textContent = 'Gagal menyimpan: ' + error.message;
+             alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-red-100 text-red-800';
+          }
+        } else {
+          formBerita.reset();
+          if (alertMsg) {
+             alertMsg.textContent = 'Berita berhasil dipublikasikan!';
+             alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-green-100 text-green-800';
+          }
+          if(formContainer) {
+            setTimeout(() => { formContainer.classList.add('hidden'); alertMsg!.className = 'hidden'; }, 2000);
+          }
+          loadBerita();
+        }
+
+        btn.disabled = false;
+        if(btnText) btnText.textContent = 'Terbitkan Berita';
+      });
+    }
+
+    // Event Delegation Grid Hapus
+    const gridBerita = document.getElementById('beritaGrid');
+    if (gridBerita) {
+      gridBerita.addEventListener('click', async (e) => {
+        const target = (e.target as Element).closest('button');
+        if (!target) return;
+
+        if (target.getAttribute('data-action') === 'hapus-berita') {
+          const id = target.getAttribute('data-id');
+          const judul = target.getAttribute('data-judul');
+          
+          if(confirm(`Yakin hapus berita berjudul: "${judul}"?`)) {
+            const { error } = await supabase.from('berita').delete().eq('id', id);
+            if (error) alert('Gagal menghapus: ' + error.message);
+            else loadBerita();
+          }
+        }
+      });
+    }
+
+    // Listener Tambahan
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      const btnRefresh = document.getElementById('btnRefreshBerita');
+      if (btnRefresh) btnRefresh.addEventListener('click', loadBerita);
+    });
+
+  </script>
+</AdminLayout>

@@ -1,0 +1,56 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+<MainLayout title="SMK Nailul Khoir">
+  <!-- Hero Section -->
+  <div class="bg-pesantren py-16 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg p-1.5 border-4 border-yellow-400 transition-transform hover:scale-105">
+        <img src="/images/logo-smk.png" alt="Logo SMK" class="w-full h-full object-contain mix-blend-multiply" />
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">SMK Nailul Khoir</h1>
+      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Mencetak Lulusan Siap Kerja yang Berkompetensi Tinggi di Era Digital dengan Bekal Iman & Takwa.</p>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-yellow mx-auto">
+      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Profil & Kompetensi Keahlian SMK</h2>
+      <p class="lead text-gray-700 font-medium">
+        Sekolah Menengah Kejuruan (SMK) Nailul Khoir berorientasi pada teknologi informasi dan kewirausahaan santri. Kami menyelaraskan keterampilan vokasi abad ke-21 dengan kemandirian layaknya santri salaf.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+        <div class="bg-yellow-50 p-6 rounded-xl border-l-4 border-emas">
+          <h3 class="font-bold text-yellow-700 text-xl mb-2">Jurusan Tersedia</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Rekayasa Perangkat Lunak (RPL)</li>
+            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Teknik Komputer & Jaringan (TKJ)</li>
+            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Bisnis Daring & Pemasaran Online</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
+          <h3 class="font-bold text-gray-800 text-xl mb-2">Kurikulum Ekstra</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Kewirausahaan (Santri Preneur)</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Magang Industri Kompetensi</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Pembacaan Kitab Kuning</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Pendidikan di tingkat jenjang SMK mewajibkan luluisannya memiliki sertifikat berbasis kompetensi IT dan kemampuan berniaga. Selama belajar, santri juga dipupuk di bilik asrama untuk melestarikan tradisi salaf, dari mulai kajian kitab fikih, tasawuf, hingga pembiasaan Bahasa Arab dan Inggris harian.
+      </p>
+
+      <!-- Pendaftaran Call to Action -->
+      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Wujudkan Karir Masa Depanmu Disini!</h3>
+        <a href="/pendaftaran?jalur=SMK" class="bg-pesantren text-white hover:bg-green-800 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg border-2 border-transparent hover:border-emas">
+          Isi Formulir Pendaftaran PPDB
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

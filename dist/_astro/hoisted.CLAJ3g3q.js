@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("mobileMenuBtn"),n=document.getElementById("mobileMenu"),t=document.getElementById("menuIcon"),o=document.getElementById("closeIcon");e&&n&&e.addEventListener("click",()=>{n.classList.toggle("hidden"),t?.classList.toggle("hidden"),o?.classList.toggle("hidden")})});

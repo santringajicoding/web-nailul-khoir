@@ -1,0 +1,58 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+<MainLayout title="SMPIT Nailul Khoir">
+  <!-- Hero Section -->
+  <div class="bg-pesantren py-16 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg p-1.5 border-4 border-emas transition-transform hover:scale-105">
+        <img src="/images/logo-smp.png" alt="Logo SMPIT" class="w-full h-full object-contain mix-blend-multiply" />
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">SMPIT Nailul Khoir</h1>
+      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Mencetak Generasi Qur'ani Berprestasi Melalui Kurikulum Terpadu & Pembinaan Karakter Islam.</p>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-green mx-auto">
+      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Profil & Kurikulum SMPIT</h2>
+      <p class="lead text-gray-700 font-medium">
+        Sekolah Menengah Pertama Islam Terpadu (SMPIT) Nailul Khoir hadir untuk memadukan kurikulum pendidikan nasional dengan sistem kepesantrenan modern dan salafiyah.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+        <div class="bg-green-50 p-6 rounded-xl border-l-4 border-pesantren">
+          <h3 class="font-bold text-pesantren text-xl mb-2">Program Unggulan</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Tahfidz Al-Qur'an 3-5 Juz</li>
+            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Pembiasaan Ibadah Sunnah Rutin</li>
+            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Bahasa Arab & Bahasa Inggris Aktif</li>
+            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Bimbingan Akhlakul Karimah</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
+          <h3 class="font-bold text-gray-800 text-xl mb-2">Fasilitas Penunjang</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Ruang Kelas Nyaman</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Asrama Santri Terpisah</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Laboratorium Komputer</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Lapangan Olahraga</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Para siswa tidak hanya dituntut untuk berprestasi dalam bidang akademik Ilmu Pengetahuan Alam (IPA), Matematika, dan Bahasa, namun juga diwajibkan untuk menguasai dasar-dasar akidah, fikih, dan adab Islami secara mendalam melalui bimbingan dewan Asatidz secara langsung di asrama.
+      </p>
+
+      <!-- Pendaftaran Call to Action -->
+      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Siap Bergabung Bersama Kami?</h3>
+        <a href="/pendaftaran?jalur=SMPIT" class="bg-emas text-pesantren hover:bg-yellow-400 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg">
+          Isi Formulir Pendaftaran PPDB
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

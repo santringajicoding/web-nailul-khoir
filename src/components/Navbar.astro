@@ -1,0 +1,68 @@
+---
+---
+<nav class="bg-pesantren text-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20">
+      <div class="flex items-center">
+        <a href="/" class="flex-shrink-0 flex items-center gap-3 group">
+          <div class="bg-white p-1.5 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
+            <!-- File logo pengguna -->
+            <img src="/images/logo.png" alt="Logo PP Nailul Khoir" class="h-10 sm:h-12 w-auto object-contain" />
+          </div>
+          <div class="hidden sm:flex flex-col justify-center max-w-[200px] md:max-w-xs lg:max-w-none">
+            <span class="font-bold text-sm md:text-base lg:text-lg leading-tight tracking-wide text-white group-hover:text-emas transition-colors font-sans truncate lg:whitespace-normal">Yayasan Pondok Pesantren Nailul Khoir</span>
+            <span class="text-[10px] md:text-xs font-medium text-green-200 mt-0.5">Banjaran - Majalengka</span>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="/" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Beranda</a>
+        <a href="/kontak" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Kontak Kami</a>
+        <a href="/tentang" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Tentang Kami</a>
+        <a href="/pendaftaran" class="bg-emas text-pesantren hover:bg-yellow-400 px-6 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:scale-105">Pendaftaran PPDB</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="flex items-center md:hidden">
+        <button id="mobileMenuBtn" class="text-white hover:text-emas focus:outline-none p-2 rounded-md">
+          <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path id="closeIcon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Panel -->
+  <div id="mobileMenu" class="hidden md:hidden bg-green-900 border-t border-green-800 absolute w-full shadow-xl">
+    <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+      <a href="/" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Beranda</a>
+      <a href="/kontak" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Kontak Kami</a>
+      <a href="/tentang" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Tentang Kami</a>
+      <div class="pt-4 mt-2 border-t border-green-800">
+        <a href="/pendaftaran" class="block w-full text-center bg-emas text-pesantren hover:bg-yellow-400 px-4 py-3 rounded-xl text-base font-extrabold shadow-md transition-colors">Pendaftaran PPDB</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Script Toggle Mobile Menu
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+    const closeIcon = document.getElementById('closeIcon');
+
+    if (btn && menu) {
+      btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        menuIcon?.classList.toggle('hidden');
+        closeIcon?.classList.toggle('hidden');
+      });
+    }
+  });
+</script>

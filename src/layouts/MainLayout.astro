@@ -1,0 +1,57 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+}
+
+const { 
+	title, 
+	description = "Yayasan Pondok Pesantren Nailul Khoir Majalengka. Lembaga pendidikan Islam jenjang SMPIT, SMK, dan Pondok Pesantren Salafiyah.",
+	image = "/images/logo.png" // Default image for share preview
+} = Astro.props;
+
+// Mendapatkan URL saat ini untuk Canonical Link & Open Graph URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nailulkhoir.netlify.app');
+---
+
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="theme-color" content="#15803d" />
+		
+		<!-- Primary Meta Tags -->
+		<title>{title} | Nailul Khoir Majalengka</title>
+		<meta name="title" content={`${title} | Nailul Khoir Majalengka`} />
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph / Facebook / WhatsApp (Preview Link) -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={`${title} | Nailul Khoir Majalengka`} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, canonicalURL)} />
+		<meta property="og:site_name" content="Yayasan Nailul Khoir" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={canonicalURL} />
+		<meta property="twitter:title" content={`${title} | Nailul Khoir Majalengka`} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={new URL(image, canonicalURL)} />
+	</head>
+	<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+		<Navbar />
+		<main class="flex-grow">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

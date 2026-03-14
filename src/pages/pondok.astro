@@ -1,0 +1,58 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+<MainLayout title="Pondok Pesantren">
+  <!-- Hero Section -->
+  <div class="bg-pesantren py-16 text-white text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-extrabold text-pesantren shadow-lg">
+        PonPes
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">Pondok Pesantren</h1>
+      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Benteng Pertahanan Ahlussunnah Wal Jama'ah Melalui Kajian Kitab Salaf & Tahfidz Al-Qur'an.</p>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-green mx-auto">
+      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Pendidikan Murni Kepesantrenan</h2>
+      <p class="lead text-gray-700 font-medium">
+        Bagi Anda yang ingin mengerucutkan fokus spiritual dan ilmu agama tanpa mengejar ijazah sekolah formal, Yayasan Pondok Pesantren Nailul Khoir juga membuka program Pendidikan Diniariyah dan Salafiyah Murni.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+        <div class="bg-green-50 p-6 rounded-xl border-l-4 border-pesantren">
+          <h3 class="font-bold text-pesantren text-xl mb-2">Program Utma Pon-Pes</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Tahfidz Mutqin Menuju 30 Juz</li>
+            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Qiro'atul Kutub (Baca Kitab Kuning)</li>
+            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Kajian Ilmu Nahwu & Shorof (Al-Miftah/Jurumiyah)</li>
+            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Tasawuf & Fiqih Syafi'iyah</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
+          <h3 class="font-bold text-gray-800 text-xl mb-2">Sistem Belajar</h3>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Sorogan Kitab</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Bandongan Massal</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Mudzakaroh Mingguan</li>
+            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Setoran Hafalan Harian</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Program ini mencetak da'i, Ustadz, dan Kyai masa depan yang faqih fiddin (paham agama mendalam) dan teguh dalam pendirian akidah Aswaja. Santri akan dibimbing secara intensif oleh dewan kyai secara langsung menyusuri matan kitab dari jenjang ibtidaiyah hingga ma'had 'ali (tingkatan tinggi).
+      </p>
+
+      <!-- Pendaftaran Call to Action -->
+      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Siapkan Diri Anda Sebagai Penerus Ulama</h3>
+        <a href="/pendaftaran?jalur=Pondok Pesantren" class="bg-emas text-pesantren hover:bg-yellow-400 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg">
+          Daftar Sebagai Santri Salaf Murni
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
