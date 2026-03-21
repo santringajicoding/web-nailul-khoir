@@ -4,38 +4,40 @@ import MainLayout from '../layouts/MainLayout.astro';
 <MainLayout title="SMK Nailul Khoir">
   <!-- Hero Section -->
   <div class="bg-pesantren py-16 text-white text-center">
-    <div class="max-w-3xl mx-auto px-4">
-      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg p-1.5 border-4 border-yellow-400 transition-transform hover:scale-105">
-        <img src="/images/logo-smk.png" alt="Logo SMK" class="w-full h-full object-contain mix-blend-multiply" />
+    <div class="max-w-3xl mx-auto px-4" data-aos="zoom-in">
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl p-1.5 border-4 gap-2 border-yellow-400 transition-transform hover:scale-110">
+        <img src="/images/logo-smk.png" alt="Logo SMK" class="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
       </div>
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">SMK Nailul Khoir</h1>
-      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Mencetak Lulusan Siap Kerja yang Berkompetensi Tinggi di Era Digital dengan Bekal Iman & Takwa.</p>
+      <h1 class="text-4xl md:text-5xl font-display font-black mb-4 text-emas drop-shadow-xl tracking-tight">SMK Nailul Khoir</h1>
+      <p class="text-xl md:text-2xl text-green-50 font-medium max-w-2xl mx-auto drop-shadow-md leading-relaxed">Mencetak Lulusan Siap Kerja yang Berkompetensi Tinggi di Era Digital dengan Bekal Iman & Takwa.</p>
     </div>
   </div>
 
   <!-- Content Section -->
-  <div class="max-w-4xl mx-auto px-4 py-16">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-yellow mx-auto">
-      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Profil & Kompetensi Keahlian SMK</h2>
+  <div class="max-w-4xl mx-auto px-4 py-20">
+    <div class="bg-white rounded-3xl shadow-2xl shadow-green-900/10 border border-gray-100 p-8 md:p-14 mx-auto" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-display text-pesantren border-b-4 border-emas pb-3 inline-block font-bold mb-8">Profil & Kompetensi Keahlian SMK</h2>
       <p class="lead text-gray-700 font-medium">
         Sekolah Menengah Kejuruan (SMK) Nailul Khoir berorientasi pada teknologi informasi dan kewirausahaan santri. Kami menyelaraskan keterampilan vokasi abad ke-21 dengan kemandirian layaknya santri salaf.
       </p>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
-        <div class="bg-yellow-50 p-6 rounded-xl border-l-4 border-emas">
-          <h3 class="font-bold text-yellow-700 text-xl mb-2">Jurusan Tersedia</h3>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Rekayasa Perangkat Lunak (RPL)</li>
-            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Teknik Komputer & Jaringan (TKJ)</li>
-            <li class="flex items-center"><span class="text-pesantren mr-2">♦</span> Bisnis Daring & Pemasaran Online</li>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 text-base md:text-lg">
+        <div class="bg-gradient-to-br from-yellow-50 to-white px-8 py-8 rounded-2xl border border-yellow-100 shadow-sm relative overflow-hidden" data-aos="fade-right">
+          <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-100 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-yellow-700 text-2xl mb-4 relative z-10">Jurusan Tersedia</h3>
+          <ul class="space-y-3 text-gray-700 relative z-10">
+            <li class="flex items-start"><span class="text-pesantren mr-3 text-xl drop-shadow-sm">♦</span> <span>Rekayasa Perangkat Lunak (RPL)</span></li>
+            <li class="flex items-start"><span class="text-pesantren mr-3 text-xl drop-shadow-sm">♦</span> <span>Teknik Komputer & Jaringan (TKJ)</span></li>
+            <li class="flex items-start"><span class="text-pesantren mr-3 text-xl drop-shadow-sm">♦</span> <span>Bisnis Daring & Pemasaran Online</span></li>
           </ul>
         </div>
-        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
-          <h3 class="font-bold text-gray-800 text-xl mb-2">Kurikulum Ekstra</h3>
-          <ul class="space-y-2 text-gray-600">
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Kewirausahaan (Santri Preneur)</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Magang Industri Kompetensi</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Pembacaan Kitab Kuning</li>
+        <div class="bg-gradient-to-br from-gray-50 to-white px-8 py-8 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden" data-aos="fade-left">
+          <div class="absolute -left-4 -bottom-4 w-24 h-24 bg-gray-200 rounded-full blur-2xl opacity-50 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-gray-800 text-2xl mb-4 relative z-10">Kurikulum Ekstra</h3>
+          <ul class="space-y-3 text-gray-600 relative z-10">
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Kewirausahaan (Santri Preneur)</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Magang Industri Kompetensi</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Pembacaan Kitab Kuning</span></li>
           </ul>
         </div>
       </div>
@@ -44,11 +46,39 @@ import MainLayout from '../layouts/MainLayout.astro';
         Pendidikan di tingkat jenjang SMK mewajibkan luluisannya memiliki sertifikat berbasis kompetensi IT dan kemampuan berniaga. Selama belajar, santri juga dipupuk di bilik asrama untuk melestarikan tradisi salaf, dari mulai kajian kitab fikih, tasawuf, hingga pembiasaan Bahasa Arab dan Inggris harian.
       </p>
 
+      <div class="mt-12 text-lg">
+        <h3 class="font-display text-3xl font-bold text-gray-800 mb-6 border-b-2 border-gray-100 pb-3">Visi & Misi SMK</h3>
+        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+          <li><strong>Visi:</strong> Mewujudkan lulusan Sekolah Menengah Kejuruan yang unggul dalam ilmu pengetahuan dan teknologi (IPTEK) berlandaskan iman dan takwa (IMTAK) serta memiliki kemandirian wirausaha (Santri Preneur).</li>
+          <li><strong>Misi:</strong> 
+            <ul class="list-circle pl-5 mt-2 space-y-1">
+              <li>Menyelenggarakan pendidikan kejuruan yang adaktif terhadap perkembangan teknologi informasi.</li>
+              <li>Membangun jiwa kewirausahaan islami yang tangguh dan inovatif.</li>
+              <li>Menerapkan nilai-nilai kepesantrenan dalam kehidupan sehari-hari (akhlak mulia).</li>
+              <li>Menjalin kemitraan dengan Dunia Usaha dan Dunia Industri (DUDI) untuk menyerap lulusan.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="my-12 bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8 md:p-10 flex flex-col items-center justify-center rounded-3xl border border-gray-700 shadow-xl relative overflow-hidden" data-aos="fade-up">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <h3 class="font-display text-2xl font-bold text-emas mb-8 relative z-10">Prospek Lulusan</h3>
+        <div class="flex flex-wrap gap-4 justify-center relative z-10">
+          <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-3 rounded-full font-bold shadow-sm">Software Engineer</span>
+          <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-3 rounded-full font-bold shadow-sm">Network Administrator</span>
+          <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-3 rounded-full font-bold shadow-sm">Technopreneur</span>
+          <span class="bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-3 rounded-full font-bold shadow-sm">Digital Marketer</span>
+        </div>
+        <p class="mt-8 text-center text-gray-300 text-base leading-relaxed max-w-2xl relative z-10">Selain siap bekerja dan membuka usaha sendiri, lulusan SMK Nailul Khoir juga dibekali kemampuan untuk melanjutkan pendidikan tinggi dan memperdalam ilmu agama di jenjang yang lebih tinggi.</p>
+      </div>
+
       <!-- Pendaftaran Call to Action -->
-      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">Wujudkan Karir Masa Depanmu Disini!</h3>
-        <a href="/pendaftaran?jalur=SMK" class="bg-pesantren text-white hover:bg-green-800 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg border-2 border-transparent hover:border-emas">
-          Isi Formulir Pendaftaran PPDB
+      <div class="mt-16 text-center pt-10 border-t border-gray-100 flex flex-col items-center" data-aos="zoom-in">
+        <h3 class="font-display text-3xl font-black text-gray-900 mb-6 tracking-tight">Wujudkan Karir Masa Depanmu Disini!</h3>
+        <a href="/pendaftaran?jalur=SMK" class="bg-gradient-to-r from-pesantren to-green-700 text-white hover:from-green-700 hover:to-green-600 font-bold px-10 py-5 rounded-full shadow-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl inline-flex items-center gap-3 text-lg group">
+          <span>Isi Formulir Pendaftaran PPDB</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
         </a>
       </div>
     </div>

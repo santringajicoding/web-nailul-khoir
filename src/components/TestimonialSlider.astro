@@ -1,0 +1,68 @@
+---
+// src/components/TestimonialSlider.astro
+const testimoniList = [
+  {
+    nama: "Bapak Suparman",
+    peran: "Wali Santri SMPIT",
+    teks: "Alhamdulillah sejak mondok di Nailul Khoir, ananda menjadi lebih rajin ibadah, disiplin, dan hafalannya meningkat pesat. Guru-gurunya sangat telaten membimbing.",
+    foto: "https://ui-avatars.com/api/?name=Bapak+Suparman&background=0D8ABC&color=fff"
+  },
+  {
+    nama: "Ahmad Fachrurozi",
+    peran: "Alumni Angkatan 2021",
+    teks: "Berkat bekal ilmu agama dan skill kewirausahaan dari SMK Nailul Khoir, kini saya mantap membangun usaha mandiri sembari tetap aktif mengaji di madrasah kampung halaman.",
+    foto: "https://ui-avatars.com/api/?name=Ahmad+Fachrurozi&background=F59E0B&color=fff"
+  },
+  {
+    nama: "Ibu Siti Fatimah",
+    peran: "Wali Santri Salaf",
+    teks: "Mencari pesantren yang murni salaf dengan sanad keilmuan jelas saat ini tidak mudah. Nailul Khoir adalah pilihan terbaik untuk pendalaman kitab kuning anak-anak kami.",
+    foto: "https://ui-avatars.com/api/?name=Siti+Fatimah&background=10B981&color=fff"
+  }
+]
+---
+
+<section class="py-16 bg-white overflow-hidden relative">
+  <!-- Dekorasi -->
+  <div class="absolute top-0 right-0 w-64 h-64 bg-green-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <h2 class="text-base text-emas font-bold tracking-wide uppercase">Testimoni Mereka</h2>
+      <p class="mt-2 text-3xl font-display leading-8 font-extrabold tracking-tight text-pesantren sm:text-4xl">
+        Apa Kata Alumni & Wali Santri?
+      </p>
+    </div>
+
+    <!-- Gunakan Grid di desktop, Flex-scrollable di mobile -->
+    <div class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 md:grid md:grid-cols-3 hide-scrollbar">
+      {testimoniList.map((testi, i) => (
+        <div class="min-w-[85vw] md:min-w-0 snap-center bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-md hover:shadow-xl transition-shadow relative" data-aos="fade-up" data-aos-delay={i * 150}>
+          <!-- Quote Icon -->
+          <svg class="absolute top-6 right-6 w-12 h-12 text-emas opacity-20" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+          
+          <p class="text-gray-700 leading-loose italic mb-8 relative z-10">"{testi.teks}"</p>
+          
+          <div class="flex items-center gap-4 mt-auto">
+            <img src={testi.foto} alt={testi.nama} class="w-14 h-14 rounded-full border-2 border-emas shadow-sm" loading="lazy" />
+            <div>
+              <h4 class="font-display font-bold text-gray-900">{testi.nama}</h4>
+              <span class="text-sm font-medium text-pesantren">{testi.peran}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <style>
+    /* CSS untuk menyembunyikan scrollbar di slider tipe flex di HP */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</section>

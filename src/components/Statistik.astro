@@ -1,0 +1,94 @@
+---
+// src/components/Statistik.astro
+---
+
+<section class="py-16 bg-gradient-to-r from-pesantren to-green-800 text-white relative overflow-hidden">
+  <!-- Elemen Dekoratif -->
+  <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-10"></div>
+  <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-emas opacity-10 rounded-full blur-3xl"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" id="statistik-container">
+      
+      <!-- Counter Item 1 -->
+      <div class="p-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="text-4xl md:text-5xl font-display font-black text-emas drop-shadow-md mb-2 flex justify-center items-center">
+          <span class="counter" data-target="520">0</span>
+          <span class="text-3xl md:text-4xl">+</span>
+        </div>
+        <div class="text-green-50 font-bold text-lg md:text-xl uppercase tracking-wider">Santri Aktif</div>
+      </div>
+      
+      <!-- Counter Item 2 -->
+      <div class="p-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="text-4xl md:text-5xl font-display font-black text-emas drop-shadow-md mb-2 flex justify-center items-center">
+          <span class="counter" data-target="45">0</span>
+        </div>
+        <div class="text-green-50 font-bold text-lg md:text-xl uppercase tracking-wider">Mata Pelajaran</div>
+      </div>
+      
+      <!-- Counter Item 3 -->
+      <div class="p-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="text-4xl md:text-5xl font-display font-black text-emas drop-shadow-md mb-2 flex justify-center items-center">
+          <span class="counter" data-target="30">0</span>
+          <span class="text-3xl md:text-4xl">+</span>
+        </div>
+        <div class="text-green-50 font-bold text-lg md:text-xl uppercase tracking-wider">Tenaga Pengajar</div>
+      </div>
+      
+      <!-- Counter Item 4 -->
+      <div class="p-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="text-4xl md:text-5xl font-display font-black text-emas drop-shadow-md mb-2 flex justify-center items-center">
+          <span class="counter" data-target="3">0</span>
+        </div>
+        <div class="text-green-50 font-bold text-lg md:text-xl uppercase tracking-wider">Program Pendidikan</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+    const speed = 150; // Waktu tempuh animasi (semakin kecil semakin cepat)
+
+    // Fungsi untuk memulai animasi angka
+    const animateCounters = () => {
+      counters.forEach((counter) => {
+        // @ts-ignore
+        const target = +counter.getAttribute('data-target');
+        // @ts-ignore
+        const count = +counter.innerText;
+        const inc = target / speed;
+
+        if (count < target) {
+          // @ts-ignore
+          counter.innerText = Math.ceil(count + inc);
+          setTimeout(() => animateCounters(), 20); // Panggil lagi
+        } else {
+          // @ts-ignore
+          counter.innerText = target;
+        }
+      });
+    };
+
+    // Intersection Observer untuk memicu animasi HANYA saat elemen terlihat
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target); // Hanya dijalankan 1 kali
+        }
+      });
+    }, {
+      threshold: 0.5 // Trigger ketika 50% elemen masuk layar
+    });
+
+    const statistikSect = document.getElementById('statistik-container');
+    if (statistikSect) {
+      observer.observe(statistikSect);
+    }
+  });
+</script>

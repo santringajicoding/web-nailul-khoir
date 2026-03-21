@@ -4,40 +4,42 @@ import MainLayout from '../layouts/MainLayout.astro';
 <MainLayout title="SMPIT Nailul Khoir">
   <!-- Hero Section -->
   <div class="bg-pesantren py-16 text-white text-center">
-    <div class="max-w-3xl mx-auto px-4">
-      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg p-1.5 border-4 border-emas transition-transform hover:scale-105">
-        <img src="/images/logo-smp.png" alt="Logo SMPIT" class="w-full h-full object-contain mix-blend-multiply" />
+    <div class="max-w-3xl mx-auto px-4" data-aos="zoom-in">
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl p-1.5 border-4 gap-2 border-emas transition-transform hover:scale-110">
+        <img src="/images/logo-smp.png" alt="Logo SMPIT" class="w-full h-full object-contain mix-blend-multiply drop-shadow-sm" />
       </div>
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">SMPIT Nailul Khoir</h1>
-      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Mencetak Generasi Qur'ani Berprestasi Melalui Kurikulum Terpadu & Pembinaan Karakter Islam.</p>
+      <h1 class="text-4xl md:text-5xl font-display font-black mb-4 text-emas drop-shadow-xl tracking-tight">SMPIT Nailul Khoir</h1>
+      <p class="text-xl md:text-2xl text-green-50 font-medium max-w-2xl mx-auto drop-shadow-md leading-relaxed">Mencetak Generasi Qur'ani Berprestasi Melalui Kurikulum Terpadu & Pembinaan Karakter Islam.</p>
     </div>
   </div>
 
   <!-- Content Section -->
-  <div class="max-w-4xl mx-auto px-4 py-16">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-green mx-auto">
-      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Profil & Kurikulum SMPIT</h2>
+  <div class="max-w-4xl mx-auto px-4 py-20">
+    <div class="bg-white rounded-3xl shadow-2xl shadow-green-900/10 border border-gray-100 p-8 md:p-14 mx-auto" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-display text-pesantren border-b-4 border-emas pb-3 inline-block font-bold mb-8">Profil & Kurikulum SMPIT</h2>
       <p class="lead text-gray-700 font-medium">
         Sekolah Menengah Pertama Islam Terpadu (SMPIT) Nailul Khoir hadir untuk memadukan kurikulum pendidikan nasional dengan sistem kepesantrenan modern dan salafiyah.
       </p>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
-        <div class="bg-green-50 p-6 rounded-xl border-l-4 border-pesantren">
-          <h3 class="font-bold text-pesantren text-xl mb-2">Program Unggulan</h3>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Tahfidz Al-Qur'an 3-5 Juz</li>
-            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Pembiasaan Ibadah Sunnah Rutin</li>
-            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Bahasa Arab & Bahasa Inggris Aktif</li>
-            <li class="flex items-center"><span class="text-emas mr-2">✦</span> Bimbingan Akhlakul Karimah</li>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 text-base md:text-lg">
+        <div class="bg-gradient-to-br from-green-50 to-white px-8 py-8 rounded-2xl border border-green-100 shadow-sm relative overflow-hidden" data-aos="fade-right">
+          <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-100 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-pesantren text-2xl mb-4 relative z-10">Program Unggulan</h3>
+          <ul class="space-y-3 text-gray-700 relative z-10">
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">✦</span> <span>Tahfidz Al-Qur'an 3-5 Juz</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">✦</span> <span>Pembiasaan Ibadah Sunnah Rutin</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">✦</span> <span>Bahasa Arab & Bahasa Inggris Aktif</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">✦</span> <span>Bimbingan Akhlakul Karimah</span></li>
           </ul>
         </div>
-        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
-          <h3 class="font-bold text-gray-800 text-xl mb-2">Fasilitas Penunjang</h3>
-          <ul class="space-y-2 text-gray-600">
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Ruang Kelas Nyaman</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Asrama Santri Terpisah</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Laboratorium Komputer</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Lapangan Olahraga</li>
+        <div class="bg-gradient-to-br from-gray-50 to-white px-8 py-8 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden" data-aos="fade-left">
+          <div class="absolute -left-4 -bottom-4 w-24 h-24 bg-gray-200 rounded-full blur-2xl opacity-50 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-gray-800 text-2xl mb-4 relative z-10">Fasilitas Penunjang</h3>
+          <ul class="space-y-3 text-gray-600 relative z-10">
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Ruang Kelas Nyaman</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Asrama Santri Terpisah</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Laboratorium Komputer</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Lapangan Olahraga</span></li>
           </ul>
         </div>
       </div>
@@ -46,11 +48,38 @@ import MainLayout from '../layouts/MainLayout.astro';
         Para siswa tidak hanya dituntut untuk berprestasi dalam bidang akademik Ilmu Pengetahuan Alam (IPA), Matematika, dan Bahasa, namun juga diwajibkan untuk menguasai dasar-dasar akidah, fikih, dan adab Islami secara mendalam melalui bimbingan dewan Asatidz secara langsung di asrama.
       </p>
 
+      <div class="mt-12 text-lg">
+        <h3 class="font-display text-3xl font-bold text-pesantren mb-6 border-b-2 border-gray-100 pb-3">Visi & Misi SMPIT</h3>
+        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+          <li><strong>Visi:</strong> Terwujudnya generasi muda Islam yang cerdas, berakhlak mulia, hafal Al-Qur'an, dan memiliki wawasan global berlandaskan akidah Ahlussunnah Wal Jama'ah.</li>
+          <li><strong>Misi:</strong> 
+            <ul class="list-circle pl-5 mt-2 space-y-1">
+              <li>Menyelenggarakan proses pembelajaran yang memadukan kurikulum pendidikan umum dan pesantren secara holistik.</li>
+              <li>Membekali peserta didik dengan hafalan Al-Qur'an dan pemahaman kandungan isinya.</li>
+              <li>Menumbuhkan budaya literasi dan prestasi akademik maupun non-akademik di lingkungan sekolah.</li>
+              <li>Menanamkan kebiasaan ibadah wajib dan sunnah serta perilaku beradab dalam kegiatan sehari-hari (Full Day Assesment).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-gradient-to-r from-pesantren to-green-800 text-white p-8 md:p-10 rounded-3xl mt-12 shadow-xl relative overflow-hidden" data-aos="fade-up">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-emas text-2xl mb-8 text-center relative z-10">Ekstrakurikuler Pilihan</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center relative z-10">
+            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 hover:bg-white/20 transition-colors font-medium text-white shadow-sm flex items-center justify-center min-h-[80px]">Pramuka SIT</div>
+            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 hover:bg-white/20 transition-colors font-medium text-white shadow-sm flex items-center justify-center min-h-[80px]">Pencak Silat (Pagar Nusa)</div>
+            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 hover:bg-white/20 transition-colors font-medium text-white shadow-sm flex items-center justify-center min-h-[80px]">Klub Jurnalistik</div>
+            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 hover:bg-white/20 transition-colors font-medium text-white shadow-sm flex items-center justify-center min-h-[80px]">Tilawah & Hadroh</div>
+          </div>
+       </div>
+
       <!-- Pendaftaran Call to Action -->
-      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">Siap Bergabung Bersama Kami?</h3>
-        <a href="/pendaftaran?jalur=SMPIT" class="bg-emas text-pesantren hover:bg-yellow-400 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg">
-          Isi Formulir Pendaftaran PPDB
+      <div class="mt-16 text-center pt-10 border-t border-gray-100 flex flex-col items-center" data-aos="zoom-in">
+        <h3 class="font-display text-3xl font-black text-gray-900 mb-6 tracking-tight">Siap Bergabung Bersama Kami?</h3>
+        <a href="/pendaftaran?jalur=SMPIT" class="bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 font-bold px-10 py-5 rounded-full shadow-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl inline-flex items-center gap-3 text-lg group">
+          <span>Isi Formulir Pendaftaran PPDB</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
         </a>
       </div>
     </div>

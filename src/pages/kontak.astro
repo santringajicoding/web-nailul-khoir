@@ -4,9 +4,9 @@ import MainLayout from '../layouts/MainLayout.astro';
 <MainLayout title="Kontak Kami - Yayasan PP Nailul Khoir">
   <!-- Hero Section -->
   <div class="bg-pesantren py-16 text-white text-center">
-    <div class="max-w-3xl mx-auto px-4">
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">Hubungi Kami</h1>
-      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Kami senantiasa terbuka untuk pertanyaan, saran, maupun informasi pendaftaran dari Anda.</p>
+    <div class="max-w-3xl mx-auto px-4 mt-8" data-aos="zoom-in">
+      <h1 class="text-4xl md:text-5xl font-display font-black mb-6 text-emas drop-shadow-xl tracking-tight">Hubungi Kami</h1>
+      <p class="text-xl md:text-2xl text-green-50 font-medium max-w-2xl mx-auto drop-shadow-md leading-relaxed">Kami senantiasa terbuka untuk pertanyaan, saran, maupun informasi pendaftaran dari Anda.</p>
     </div>
   </div>
 
@@ -16,8 +16,8 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="grid grid-cols-1 md:grid-cols-2">
         
         <!-- Formulir Pesan -->
-        <div class="p-8 md:p-12">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b-2 border-emas pb-2 inline-block">Kirim Pesan</h2>
+        <div class="p-8 md:p-12" data-aos="fade-right">
+          <h2 class="text-3xl font-display font-bold text-gray-900 mb-8 border-b-4 border-emas pb-3 inline-block drop-shadow-sm">Kirim Pesan</h2>
           <form id="formPesan" class="space-y-6">
             <div>
               <label for="nama_pengirim" class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap</label>
@@ -40,15 +40,15 @@ import MainLayout from '../layouts/MainLayout.astro';
             
             <div id="alertBox" class="hidden p-4 rounded-xl text-center font-bold text-sm"></div>
 
-            <button type="submit" id="btnSubmitPesan" class="w-full bg-pesantren text-white hover:bg-green-800 font-bold px-8 py-4 rounded-xl shadow-md hover:shadow-lg transition-transform hover:-translate-y-1 flex justify-center items-center gap-2">
+            <button type="submit" id="btnSubmitPesan" class="w-full bg-gradient-to-r from-pesantren to-green-700 text-white hover:from-green-700 hover:to-green-600 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 flex justify-center items-center gap-2 text-lg">
               <span id="btnText">Kirim Pesan Sekarang</span>
             </button>
           </form>
         </div>
 
         <!-- Info Kontak -->
-        <div class="bg-green-50 p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-200">
-          <h2 class="text-2xl font-bold text-pesantren mb-6 border-b-2 border-emas pb-2 inline-block">Informasi Kontak</h2>
+        <div class="bg-green-50 p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-200" data-aos="fade-left" data-aos-delay="100">
+          <h2 class="text-3xl font-display font-bold text-pesantren mb-8 border-b-4 border-emas pb-3 inline-block drop-shadow-sm">Informasi Kontak</h2>
           
           <div class="space-y-8 mt-4">
             <!-- Alamat -->

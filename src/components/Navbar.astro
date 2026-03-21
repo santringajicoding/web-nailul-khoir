@@ -1,27 +1,30 @@
 ---
 ---
-<nav class="bg-pesantren text-white shadow-md sticky top-0 z-50">
+<nav class="bg-pesantren/95 backdrop-blur-md text-white shadow-lg sticky top-0 z-50 border-b border-green-800/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-20">
       <div class="flex items-center">
         <a href="/" class="flex-shrink-0 flex items-center gap-3 group">
-          <div class="bg-white p-1.5 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
+          <div class="bg-white p-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
             <!-- File logo pengguna -->
             <img src="/images/logo.png" alt="Logo PP Nailul Khoir" class="h-10 sm:h-12 w-auto object-contain" />
           </div>
           <div class="hidden sm:flex flex-col justify-center max-w-[200px] md:max-w-xs lg:max-w-none">
-            <span class="font-bold text-sm md:text-base lg:text-lg leading-tight tracking-wide text-white group-hover:text-emas transition-colors font-sans truncate lg:whitespace-normal">Yayasan Pondok Pesantren Nailul Khoir</span>
-            <span class="text-[10px] md:text-xs font-medium text-green-200 mt-0.5">Banjaran - Majalengka</span>
+            <span class="font-display font-bold text-sm md:text-base lg:text-lg leading-tight tracking-wide text-white group-hover:text-emas transition-colors truncate lg:whitespace-normal">Yayasan Pondok Pesantren Nailul Khoir</span>
+            <span class="text-[10px] md:text-xs font-medium text-green-200 mt-0.5 tracking-wider uppercase">Banjaran - Majalengka</span>
           </div>
         </a>
       </div>
       
       <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Beranda</a>
-        <a href="/kontak" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Kontak Kami</a>
-        <a href="/tentang" class="hover:text-emas px-3 py-2 rounded-md text-sm font-bold transition-colors">Tentang Kami</a>
-        <a href="/pendaftaran" class="bg-emas text-pesantren hover:bg-yellow-400 px-6 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:scale-105">Pendaftaran PPDB</a>
+      <div class="hidden md:flex items-center space-x-2 lg:space-x-4">
+        <a href="/" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Beranda</a>
+        <a href="/kontak" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Kontak Kami</a>
+        <a href="/tentang" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Tentang Kami</a>
+        <a href="/pendaftaran" class="ml-2 bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 px-6 py-2.5 rounded-full text-sm font-bold shadow-md transition-all hover:scale-105 hover:shadow-lg flex items-center gap-2">
+          <span>Pendaftaran PPDB</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+        </a>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -37,13 +40,15 @@
   </div>
 
   <!-- Mobile Menu Panel -->
-  <div id="mobileMenu" class="hidden md:hidden bg-green-900 border-t border-green-800 absolute w-full shadow-xl">
-    <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
-      <a href="/" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Beranda</a>
-      <a href="/kontak" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Kontak Kami</a>
-      <a href="/tentang" class="block px-3 py-3 rounded-md text-base font-bold text-white hover:bg-green-800 hover:text-emas transition-colors">Tentang Kami</a>
-      <div class="pt-4 mt-2 border-t border-green-800">
-        <a href="/pendaftaran" class="block w-full text-center bg-emas text-pesantren hover:bg-yellow-400 px-4 py-3 rounded-xl text-base font-extrabold shadow-md transition-colors">Pendaftaran PPDB</a>
+  <div id="mobileMenu" class="hidden md:hidden bg-green-900/95 backdrop-blur-lg border-t border-green-800 absolute w-full shadow-2xl">
+    <div class="px-4 pt-4 pb-8 space-y-2 flex flex-col">
+      <a href="/" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Beranda</a>
+      <a href="/kontak" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Kontak Kami</a>
+      <a href="/tentang" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Tentang Kami</a>
+      <div class="pt-6 mt-4 border-t border-green-800/50">
+        <a href="/pendaftaran" class="flex justify-center items-center w-full bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 px-4 py-4 rounded-xl text-base font-bold shadow-lg transition-all">
+          Mulai Pendaftaran
+        </a>
       </div>
     </div>
   </div>

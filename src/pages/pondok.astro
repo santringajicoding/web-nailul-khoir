@@ -4,40 +4,42 @@ import MainLayout from '../layouts/MainLayout.astro';
 <MainLayout title="Pondok Pesantren">
   <!-- Hero Section -->
   <div class="bg-pesantren py-16 text-white text-center">
-    <div class="max-w-3xl mx-auto px-4">
-      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-extrabold text-pesantren shadow-lg">
-        PonPes
+    <div class="max-w-3xl mx-auto px-4" data-aos="zoom-in">
+      <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-display font-extrabold text-pesantren shadow-xl border-4 border-emas transition-transform hover:scale-110">
+        N/K
       </div>
-      <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-emas drop-shadow-md">Pondok Pesantren</h1>
-      <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">Benteng Pertahanan Ahlussunnah Wal Jama'ah Melalui Kajian Kitab Salaf & Tahfidz Al-Qur'an.</p>
+      <h1 class="text-4xl md:text-5xl font-display font-black mb-4 text-emas drop-shadow-xl tracking-tight">Pondok Pesantren</h1>
+      <p class="text-xl md:text-2xl text-green-50 font-medium max-w-2xl mx-auto drop-shadow-md leading-relaxed">Benteng Pertahanan Ahlussunnah Wal Jama'ah Melalui Kajian Kitab Salaf & Tahfidz Al-Qur'an.</p>
     </div>
   </div>
 
   <!-- Content Section -->
-  <div class="max-w-4xl mx-auto px-4 py-16">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12 prose prose-lg prose-green mx-auto">
-      <h2 class="text-3xl text-pesantren border-b-2 border-emas pb-2 inline-block font-bold mb-6">Pendidikan Murni Kepesantrenan</h2>
+  <div class="max-w-4xl mx-auto px-4 py-20">
+    <div class="bg-white rounded-3xl shadow-2xl shadow-green-900/10 border border-gray-100 p-8 md:p-14 mx-auto" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-display text-pesantren border-b-4 border-emas pb-3 inline-block font-bold mb-8">Pendidikan Murni Kepesantrenan</h2>
       <p class="lead text-gray-700 font-medium">
         Bagi Anda yang ingin mengerucutkan fokus spiritual dan ilmu agama tanpa mengejar ijazah sekolah formal, Yayasan Pondok Pesantren Nailul Khoir juga membuka program Pendidikan Diniariyah dan Salafiyah Murni.
       </p>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
-        <div class="bg-green-50 p-6 rounded-xl border-l-4 border-pesantren">
-          <h3 class="font-bold text-pesantren text-xl mb-2">Program Utma Pon-Pes</h3>
-          <ul class="space-y-2 text-gray-700">
-            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Tahfidz Mutqin Menuju 30 Juz</li>
-            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Qiro'atul Kutub (Baca Kitab Kuning)</li>
-            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Kajian Ilmu Nahwu & Shorof (Al-Miftah/Jurumiyah)</li>
-            <li class="flex items-center"><span class="text-emas mr-2">☪</span> Tasawuf & Fiqih Syafi'iyah</li>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-12 text-base md:text-lg">
+        <div class="bg-gradient-to-br from-green-50 to-white px-8 py-8 rounded-2xl border border-green-100 shadow-sm relative overflow-hidden" data-aos="fade-right">
+          <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-100 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-pesantren text-2xl mb-4 relative z-10">Program Utama Pon-Pes</h3>
+          <ul class="space-y-3 text-gray-700 relative z-10">
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">☪</span> <span>Tahfidz Mutqin Menuju 30 Juz</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">☪</span> <span>Qiro'atul Kutub (Baca Kitab Kuning)</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">☪</span> <span>Ilmu Nahwu & Shorof (Al-Miftah/Jurumiyah)</span></li>
+            <li class="flex items-start"><span class="text-emas mr-3 text-xl drop-shadow-sm">☪</span> <span>Tasawuf & Fiqih Syafi'iyah</span></li>
           </ul>
         </div>
-        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-300">
-          <h3 class="font-bold text-gray-800 text-xl mb-2">Sistem Belajar</h3>
-          <ul class="space-y-2 text-gray-600">
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Sorogan Kitab</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Bandongan Massal</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Mudzakaroh Mingguan</li>
-            <li class="flex items-center"><span class="text-gray-400 mr-2">✓</span> Setoran Hafalan Harian</li>
+        <div class="bg-gradient-to-br from-gray-50 to-white px-8 py-8 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden" data-aos="fade-left">
+          <div class="absolute -left-4 -bottom-4 w-24 h-24 bg-gray-200 rounded-full blur-2xl opacity-50 pointer-events-none"></div>
+          <h3 class="font-display font-bold text-gray-800 text-2xl mb-4 relative z-10">Sistem Belajar</h3>
+          <ul class="space-y-3 text-gray-600 relative z-10">
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Sorogan Kitab</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Bandongan Massal</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Mudzakaroh Mingguan</span></li>
+            <li class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> <span>Setoran Hafalan Harian</span></li>
           </ul>
         </div>
       </div>
@@ -46,11 +48,31 @@ import MainLayout from '../layouts/MainLayout.astro';
         Program ini mencetak da'i, Ustadz, dan Kyai masa depan yang faqih fiddin (paham agama mendalam) dan teguh dalam pendirian akidah Aswaja. Santri akan dibimbing secara intensif oleh dewan kyai secara langsung menyusuri matan kitab dari jenjang ibtidaiyah hingga ma'had 'ali (tingkatan tinggi).
       </p>
 
+      <div class="mt-12 text-lg" data-aos="fade-up">
+        <h3 class="font-display text-3xl font-bold text-pesantren mb-6 border-b-2 border-gray-100 pb-3">Visi & Misi Kepesantrenan</h3>
+        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+          <li><strong>Visi:</strong> Terwujudnya generasi ulama yang amil (mengamalkan ilmu), berakhlak mulia, dan berhaluan Ahlussunnah Wal Jama'ah an-Nahdliyah.</li>
+          <li><strong>Misi:</strong> Menyelenggarakan pendidikan tahfidz Al-Qur'an bersanad, mengkaji turats (kitab kuning) secara mendalam, serta membina karakter santri dengan adab Islami dan kemandirian.</li>
+        </ul>
+      </div>
+
+      <div class="mt-12 bg-gradient-to-r from-gray-50 to-gray-100 p-8 md:p-10 rounded-3xl border border-gray-200" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="font-display text-2xl font-bold text-gray-800 mb-6">Syarat Pendaftaran Santri Salaf</h3>
+        <ol class="list-decimal pl-5 text-gray-700 space-y-3 text-lg">
+          <li>Niat tulus lillahi ta'ala dan kesediaan mukim di asrama.</li>
+          <li>Mengisi formulir pendaftaran secara online atau datang langsung ke sekertariat.</li>
+          <li>Membawa pas foto ukuran 3x4 dan 4x6 (masing-masing 4 lembar).</li>
+          <li>Fotokopi Kartu Keluarga (KK), Akte Kelahiran, dan KTP Orang Tua (jika ada).</li>
+          <li>Sanggup mematuhi tata tertib pesantren dan mengikuti program kegiatan secara penuh.</li>
+        </ol>
+      </div>
+
       <!-- Pendaftaran Call to Action -->
-      <div class="mt-12 text-center pt-8 border-t border-gray-100 flex flex-col items-center not-prose">
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">Siapkan Diri Anda Sebagai Penerus Ulama</h3>
-        <a href="/pendaftaran?jalur=Pondok Pesantren" class="bg-emas text-pesantren hover:bg-yellow-400 font-bold px-10 py-4 rounded-full shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl inline-block text-lg">
-          Daftar Sebagai Santri Salaf Murni
+      <div class="mt-16 text-center pt-10 border-t border-gray-100 flex flex-col items-center" data-aos="zoom-in">
+        <h3 class="font-display text-3xl font-black text-gray-900 mb-6 tracking-tight">Siapkan Diri Anda Sebagai Penerus Ulama</h3>
+        <a href="/pendaftaran?jalur=Pondok Pesantren" class="bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 font-bold px-10 py-5 rounded-full shadow-xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl inline-flex items-center gap-3 text-lg group">
+          <span>Daftar Sebagai Santri Salaf Murni</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
         </a>
       </div>
     </div>
