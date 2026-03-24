@@ -112,7 +112,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         btn.disabled = true;
         if(btnText) btnText.textContent = 'Memproses...';
 
-        let uploadedFotoUrl = null;
+        let uploadedFotoUrl: string | null = null;
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           const file = fileInput.files[0];
           const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;

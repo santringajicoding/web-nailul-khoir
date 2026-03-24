@@ -171,7 +171,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         if(btnText) btnText.textContent = 'Menyimpan...';
 
         const formData = new FormData(formBerita);
-        let uploadedFotoUrl = null;
+        let uploadedFotoUrl: string | null = null;
 
         // Proses unggah gambar ke Supabase Storage
         if (fileInput && fileInput.files && fileInput.files.length > 0) {

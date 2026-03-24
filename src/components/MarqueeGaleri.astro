@@ -1,0 +1,73 @@
+---
+// src/components/MarqueeGaleri.astro
+
+// Kita menggunakan foto-foto placeholder sementara (gambar acak terkait edukasi/alam)
+// Nanti bisa diganti dengan foto asli kegiatan pondok dari URL Supabase/lokal
+const galeriFotos = [
+  "https://picsum.photos/seed/pondok1/400/300",
+  "https://picsum.photos/seed/pondok2/400/300",
+  "https://picsum.photos/seed/pondok3/400/300",
+  "https://picsum.photos/seed/pondok4/400/300",
+  "https://picsum.photos/seed/pondok5/400/300",
+  "https://picsum.photos/seed/pondok6/400/300"
+];
+
+// Untuk membuat efek infinite scroll yang mulus, array foto di-duplikasi
+const marqueeItems = [...galeriFotos, ...galeriFotos];
+---
+
+<section class="py-16 bg-white overflow-hidden border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center" data-aos="fade-up">
+    <h2 class="text-base text-emas font-bold tracking-wide uppercase">Galeri Kegiatan</h2>
+    <p class="mt-2 text-3xl font-display leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+      Sekilas Aktivitas Santri
+    </p>
+    <p class="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
+      Intip berbagai kegiatan positif, fasilitas, dan momen-momen istimewa di lingkungan Yayasan Pondok Pesantren Nailul Khoir.
+    </p>
+  </div>
+
+  <!-- Marquee Container -->
+  <div class="relative w-full flex overflow-x-hidden group">
+    <!-- Gradien pinggiran untuk efek fade (opsional) -->
+    <div class="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+    <!-- Track Animasi -->
+    <div class="animate-marquee flex gap-4 md:gap-6 w-max items-center py-4">
+      {marqueeItems.map((foto, index) => (
+        <div class="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-64 h-48 md:w-80 md:h-56 shrink-0 border border-gray-100 cursor-pointer">
+          <img 
+            src={foto} 
+            alt={`Galeri Kegiatan ${index + 1}`} 
+            class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+            loading="lazy" 
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <p class="text-white font-medium p-4 translate-y-4 hover:translate-y-0 transition-transform duration-300 text-sm">Lihat momen ini</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <style>
+    /* Keyframes dan Class untuk Animasi Berjalan (Marquee) */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); } 
+      /* Karena kita menduplikasi array, 50% berarti ia bergeser sejauh panjang array asli, 
+         sehingga ujungnya terhubung sempurna menjadi loop tak terbatas. */
+    }
+
+    .animate-marquee {
+      animation: marquee 35s linear infinite;
+      /* Membutuhkan width yang fit-content, di-handle by w-max * 2 secara logis oleh flex contents */
+    }
+
+    /* Fitur Opsional: Berhenti saat di-hover/disentuh */
+    .group:hover .animate-marquee {
+      animation-play-state: paused;
+    }
+  </style>
+</section>
