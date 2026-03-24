@@ -21,6 +21,7 @@
         <a href="/" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Beranda</a>
         <a href="/kontak" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Kontak Kami</a>
         <a href="/tentang" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Tentang Kami</a>
+        <a href="/faq" class="hover:text-emas px-3 py-2 rounded-md text-sm font-semibold transition-all hover:-translate-y-0.5 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-emas after:transition-all hover:after:w-3/4">Pusat Bantuan (FAQ)</a>
         <a href="/pendaftaran" class="ml-2 bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 px-6 py-2.5 rounded-full text-sm font-bold shadow-md transition-all hover:scale-105 hover:shadow-lg flex items-center gap-2">
           <span>Pendaftaran PPDB</span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
@@ -39,15 +40,29 @@
     </div>
   </div>
 
-  <!-- Mobile Menu Panel -->
-  <div id="mobileMenu" class="hidden md:hidden bg-green-900/95 backdrop-blur-lg border-t border-green-800 absolute w-full shadow-2xl">
-    <div class="px-4 pt-4 pb-8 space-y-2 flex flex-col">
-      <a href="/" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Beranda</a>
-      <a href="/kontak" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Kontak Kami</a>
-      <a href="/tentang" class="block px-4 py-3 rounded-xl text-base font-semibold text-white hover:bg-white/10 hover:text-emas transition-all">Tentang Kami</a>
-      <div class="pt-6 mt-4 border-t border-green-800/50">
-        <a href="/pendaftaran" class="flex justify-center items-center w-full bg-gradient-to-r from-emas to-yellow-500 text-pesantren hover:from-yellow-400 hover:to-yellow-300 px-4 py-4 rounded-xl text-base font-bold shadow-lg transition-all">
-          Mulai Pendaftaran
+  <!-- Mobile Menu Panel Premium -->
+  <div id="mobileMenu" class="hidden md:hidden bg-green-950/98 backdrop-blur-xl border-t border-green-800/50 absolute w-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300">
+    <div class="px-5 pt-6 pb-10 space-y-2 flex flex-col">
+      <a href="/" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-base font-bold text-white hover:bg-white/10 active:bg-white/20 transition-all border border-transparent active:border-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        Beranda
+      </a>
+      <a href="/kontak" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-base font-bold text-white hover:bg-white/10 active:bg-white/20 transition-all border border-transparent active:border-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        Kontak Kami
+      </a>
+      <a href="/tentang" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-base font-bold text-white hover:bg-white/10 active:bg-white/20 transition-all border border-transparent active:border-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        Tentang Kami
+      </a>
+      <a href="/faq" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-base font-bold text-white hover:bg-white/10 active:bg-white/20 transition-all border border-transparent active:border-white/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        Pusat Bantuan (FAQ)
+      </a>
+      
+      <div class="pt-6 mt-4 border-t border-green-800/50 px-2">
+        <a href="/pendaftaran" class="flex justify-center items-center w-full bg-gradient-to-r from-yellow-500 to-emas text-pesantren active:scale-95 px-4 py-5 rounded-2xl text-lg font-black shadow-xl transition-all ring-4 ring-yellow-500/10">
+          DAFTAR SEKARANG
         </a>
       </div>
     </div>

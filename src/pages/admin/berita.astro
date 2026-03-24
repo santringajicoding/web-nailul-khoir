@@ -6,7 +6,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
       <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Manajemen Berita</h2>
-      <p class="text-gray-600 mt-2 text-lg">Tambah, lihat, atau hapus publikasi Yayasan Nailul Khoir.</p>
+      <p class="text-gray-600 mt-2 text-lg">Tambah, edit, atau hapus publikasi Yayasan Nailul Khoir.</p>
     </div>
     <button id="btnToggleForm" class="bg-pesantren hover:bg-green-800 text-white px-5 py-3 rounded-xl font-bold font-medium shadow-md transition-all flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -23,11 +23,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Formulir Publikasi Baru</h3>
+    <h3 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Formulir Publikasi Baru</h3>
     
     <div id="alertFormName" class="hidden mb-4 p-3 rounded text-sm font-medium"></div>
 
     <form id="formBerita" class="space-y-4">
+      <input type="hidden" id="edit_id" name="edit_id" value="" />
+      <input type="hidden" id="old_foto_url" name="old_foto_url" value="" />
+      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1 md:col-span-2">
           <label class="block text-sm font-bold text-gray-700 mb-1">Judul Berita <span class="text-red-500">*</span></label>
@@ -35,7 +38,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         </div>
         
         <div class="col-span-1">
-          <label class="block text-sm font-bold text-gray-700 mb-1">Unggah Foto (Opsional)</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1" id="labelFoto">Unggah Foto (Opsional)</label>
           <input type="file" id="foto_file" name="foto_file" accept="image/*" class="w-full px-3 py-2 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
         </div>
 
@@ -50,7 +53,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         </div>
       </div>
 
-      <div class="pt-4 flex justify-end">
+      <div class="pt-4 flex justify-end gap-3">
+        <button type="button" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg shadow-sm transition-colors">Batal Edit</button>
         <button type="submit" id="btnSubmitBerita" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors flex items-center">
           <span id="btnSubmitText">Terbitkan Berita</span>
         </button>
@@ -84,6 +88,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     import { supabase } from '../../lib/supabase.js';
 
+    let allBeritaData: any[] = [];
+
     // Auth Check
     async function init() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -94,17 +100,35 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       loadBerita();
     }
 
-    // Toggle Formulir
+    // Toggle Formulir Elements
     const formContainer = document.getElementById('formContainer');
+    const formBerita = document.getElementById('formBerita') as HTMLFormElement;
     const btnToggle = document.getElementById('btnToggleForm');
     const btnClose = document.getElementById('btnCloseForm');
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+
+    const resetFormToCreate = () => {
+       formBerita?.reset();
+       (document.getElementById('edit_id') as HTMLInputElement).value = '';
+       (document.getElementById('old_foto_url') as HTMLInputElement).value = '';
+       (document.getElementById('formTitle') as HTMLElement).textContent = 'Formulir Publikasi Baru';
+       (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Terbitkan Berita';
+       (document.getElementById('labelFoto') as HTMLElement).textContent = 'Unggah Foto (Opsional)';
+       btnCancelEdit?.classList.add('hidden');
+    };
 
     if(btnToggle && formContainer && btnClose) {
       btnToggle.addEventListener('click', () => {
+        resetFormToCreate();
         formContainer.classList.remove('hidden');
         formContainer.scrollIntoView({ behavior: 'smooth' });
       });
       btnClose.addEventListener('click', () => {
+        formContainer.classList.add('hidden');
+        resetFormToCreate();
+      });
+      btnCancelEdit?.addEventListener('click', () => {
+        resetFormToCreate();
         formContainer.classList.add('hidden');
       });
     }
@@ -123,6 +147,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         grid.innerHTML = `<div class="col-span-full text-center text-red-500 font-bold p-4 bg-red-50 rounded">Gagal memuat: ${error.message}</div>`;
         return;
       }
+
+      allBeritaData = data || [];
 
       if (!data || data.length === 0) {
         grid.innerHTML = `<div class="col-span-full text-center text-gray-500 p-8 border-2 border-dashed border-gray-200 rounded-xl">Belum ada berita yang dipublikasikan.</div>`;
@@ -144,11 +170,12 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             <div class="text-xs text-emas font-bold mb-2 uppercase">${formatDate(item.tanggal_berita)} &bull; ${item.penulis}</div>
             <h4 class="font-bold text-gray-900 text-lg mb-2 line-clamp-2">${item.judul}</h4>
             <p class="text-gray-500 text-sm line-clamp-3 mb-4 flex-grow">${item.description}</p>
-            <div class="pt-4 border-t border-gray-100 flex justify-end">
+            <div class="pt-4 border-t border-gray-100 flex justify-end gap-2">
+              <button data-action="edit-berita" data-id="${item.id}" class="text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded text-sm font-bold flex items-center transition-colors">
+                 Edit
+              </button>
               <button data-action="hapus-berita" data-id="${item.id}" data-judul="${item.judul}" class="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded text-sm font-bold flex items-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>Hapus
+                Hapus
               </button>
             </div>
           </div>
@@ -156,8 +183,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       `).join('');
     }
 
-    // Submit Form
-    const formBerita = document.getElementById('formBerita') as HTMLFormElement;
+    // Submit Form (Handle Insert & Update)
     if (formBerita) {
       formBerita.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -171,9 +197,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         if(btnText) btnText.textContent = 'Menyimpan...';
 
         const formData = new FormData(formBerita);
+        const editId = formData.get('edit_id')?.toString();
+        const oldFotoUrl = formData.get('old_foto_url')?.toString();
         let uploadedFotoUrl: string | null = null;
 
-        // Proses unggah gambar ke Supabase Storage
+        // Proses unggah gambar baru ke Supabase Storage jika ada
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           const file = fileInput.files[0];
           const fileExt = file.name.split('.').pop();
@@ -191,37 +219,50 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-red-100 text-red-800';
              }
              btn.disabled = false;
-             if(btnText) btnText.textContent = 'Terbitkan Berita';
+             if(btnText) btnText.textContent = editId ? 'Simpan Perubahan' : 'Terbitkan Berita';
              return; // Hentikan eksekusi
           }
 
-          // Dapatkan URL Publik gambar
           const { data: publicUrlData } = supabase.storage.from('berita_images').getPublicUrl(fileName);
           uploadedFotoUrl = publicUrlData.publicUrl;
+        } else if (oldFotoUrl) {
+          // Jika tidak ada upload foto baru, pertahankan foto lama
+          uploadedFotoUrl = oldFotoUrl;
         }
 
-        if(btnText) btnText.textContent = 'Menyimpan Berita...';
+        if(btnText) btnText.textContent = 'Menyimpan Database...';
         
-        const newData = {
+        const dbPayload: any = {
           judul: formData.get('judul'),
           penulis: formData.get('penulis'),
           foto_url: uploadedFotoUrl,
           description: formData.get('description'),
-          tanggal_berita: new Date().toISOString()
         };
 
-        const { error } = await supabase.from('berita').insert([newData]);
+        let dbError;
 
-        if (error) {
+        if (editId) {
+          // Update Mode
+          const { error } = await supabase.from('berita').update(dbPayload).eq('id', editId);
+          dbError = error;
+        } else {
+          // Insert Mode
+          dbPayload.tanggal_berita = new Date().toISOString();
+          const { error } = await supabase.from('berita').insert([dbPayload]);
+          dbError = error;
+        }
+
+        if (dbError) {
           if (alertMsg) {
-             alertMsg.textContent = 'Gagal menyimpan: ' + error.message;
+             alertMsg.textContent = 'Gagal menyimpan: ' + dbError.message;
              alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-red-100 text-red-800';
           }
         } else {
-          formBerita.reset();
+          resetFormToCreate();
           if (alertMsg) {
-             alertMsg.textContent = 'Berita berhasil dipublikasikan!';
+             alertMsg.textContent = editId ? 'Perubahan berita berhasil disimpan!' : 'Berita berhasil dipublikasikan!';
              alertMsg.className = 'block mb-4 p-3 rounded text-sm font-bold bg-green-100 text-green-800';
+             alertMsg.classList.remove('hidden');
           }
           if(formContainer) {
             setTimeout(() => { formContainer.classList.add('hidden'); alertMsg!.className = 'hidden'; }, 2000);
@@ -234,21 +275,44 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       });
     }
 
-    // Event Delegation Grid Hapus
+    // Event Delegation Grid Aksi (Edit & Hapus)
     const gridBerita = document.getElementById('beritaGrid');
     if (gridBerita) {
       gridBerita.addEventListener('click', async (e) => {
         const target = (e.target as Element).closest('button');
         if (!target) return;
 
-        if (target.getAttribute('data-action') === 'hapus-berita') {
-          const id = target.getAttribute('data-id');
+        const action = target.getAttribute('data-action');
+        const id = target.getAttribute('data-id');
+
+        if (action === 'hapus-berita') {
           const judul = target.getAttribute('data-judul');
-          
-          if(confirm(`Yakin hapus berita berjudul: "${judul}"?`)) {
+          if(confirm(`Yakin hapus publikasi berjudul: "${judul}"?`)) {
             const { error } = await supabase.from('berita').delete().eq('id', id);
             if (error) alert('Gagal menghapus: ' + error.message);
             else loadBerita();
+          }
+        } 
+        else if (action === 'edit-berita') {
+          // Find item data
+          const itemToEdit = allBeritaData.find((item) => item.id === id);
+          if (itemToEdit) {
+             // Populate form
+             (document.getElementById('edit_id') as HTMLInputElement).value = itemToEdit.id;
+             (document.getElementById('judul') as HTMLInputElement).value = itemToEdit.judul;
+             (document.getElementById('penulis') as HTMLInputElement).value = itemToEdit.penulis || '';
+             (document.getElementById('description') as HTMLTextAreaElement).value = itemToEdit.description || '';
+             (document.getElementById('old_foto_url') as HTMLInputElement).value = itemToEdit.foto_url || '';
+             
+             // Update UI Form
+             (document.getElementById('formTitle') as HTMLElement).textContent = 'Edit Data Publikasi';
+             (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Perubahan';
+             (document.getElementById('labelFoto') as HTMLElement).textContent = 'Timpa Foto Lama (Biarkan kosong jika tidak mengubah foto)';
+             btnCancelEdit?.classList.remove('hidden');
+
+             // Open form
+             formContainer?.classList.remove('hidden');
+             formContainer?.scrollIntoView({ behavior: 'smooth' });
           }
         }
       });

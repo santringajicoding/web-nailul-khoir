@@ -1,0 +1,148 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { supabase } from '../../lib/supabase.js';
+
+export async function getStaticPaths() {
+  const { data } = await supabase.from('berita').select('id');
+  return (data || []).map((b: any) => ({
+    params: { id: b.id.toString() }
+  }));
+}
+
+const { id } = Astro.params;
+const { data: artikelData } = await supabase
+  .from('berita')
+  .select('*')
+  .eq('id', id)
+  .single();
+
+if (!artikelData) {
+  return Astro.redirect('/berita');
+}
+
+// Format Tanggal
+const formatTanggal = (dateStr: string) => {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('id-ID', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+
+// Memotong teks untuk SEO (Meta Description maksimal ~155 karakter)
+const truncateSeo = (str: string, length: number = 155) => {
+  if (!str) return '';
+  if (str.length > length) return str.substring(0, length) + '...';
+  return str;
+};
+
+// Mengambil 3 berita lain (random atau terbaru) untuk "Artikel Terkait"
+const { data: relatedData } = await supabase
+  .from('berita')
+  .select('id, judul, foto_url')
+  .neq('id', id)
+  .limit(3);
+  
+const artikelTerkait = relatedData || [];
+---
+
+<MainLayout 
+  title={artikelData.judul}
+  description={truncateSeo(artikelData.description)}
+  image={artikelData.foto_url || "/images/logo.png"}
+>
+  <article class="pt-36 sm:pt-40 md:pt-48 pb-16 bg-white min-h-screen">
+    
+    <!-- Header/Cover Artikel -->
+    <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-down">
+      <div class="mb-10 flex flex-wrap justify-center items-center gap-3 sm:gap-4">
+        <a href="/berita" class="group flex items-center gap-2 text-xs sm:text-sm font-bold text-gray-500 hover:text-pesantren bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-green-200 px-5 py-2.5 rounded-full transition-all duration-300 uppercase tracking-widest">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:-translate-x-1.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Indeks Berita
+        </a>
+        
+        <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-pesantren bg-green-50/80 border border-green-100/80 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.02)] tracking-widest uppercase">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+          {formatTanggal(artikelData.tanggal_berita)}
+        </div>
+
+        <div class="hidden sm:flex items-center gap-2 text-xs sm:text-sm font-bold text-emas bg-yellow-50/80 border border-yellow-100/80 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.02)] tracking-widest uppercase">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+          Publikasi Berita
+        </div>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-gray-900 leading-[1.15] mb-8 tracking-tight drop-shadow-sm">
+        {artikelData.judul}
+      </h1>
+      
+      <!-- Penulis / Info Opsional -->
+      <div class="flex items-center justify-center mb-10 text-gray-600 font-medium">
+        <img src="/images/logo.png" alt="Author" class="w-10 h-10 rounded-full border border-gray-200 shadow-sm mr-3 bg-white p-1" />
+        <div>
+          <p class="text-sm text-gray-900 text-left font-bold">Admin Pesantren</p>
+          <p class="text-xs text-gray-500">Divisi Publikasi & Humas</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Foto Utama/Cover -->
+    {artikelData.foto_url && (
+      <figure class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16" data-aos="zoom-in" data-aos-delay="100">
+        <div class="w-full aspect-[21/9] sm:aspect-[2/1] rounded-[2rem] overflow-hidden shadow-2xl relative border-4 border-gray-50">
+          <div class="absolute inset-0 bg-pesantren opacity-10 mix-blend-overlay z-10 pointer-events-none"></div>
+          <img src={artikelData.foto_url} alt={artikelData.judul} class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700" />
+        </div>
+        <figcaption class="text-center text-sm text-gray-400 mt-4 italic">Ilustrasi Laporan Kegiatan: {artikelData.judul}</figcaption>
+      </figure>
+    )}
+
+    <!-- Isi Bacaan Teks (Body) -->
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg md:prose-xl prose-green md:leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+      <div class="first-letter:text-6xl first-letter:font-black first-letter:text-pesantren first-letter:float-left first-letter:mr-3 first-letter:leading-none whitespace-pre-wrap text-gray-700 text-justify">
+        {artikelData.description}
+      </div>
+    </div>
+    
+    <!-- Pemisah (Separator) Akhir Artikel -->
+    <div class="max-w-3xl mx-auto px-4 mt-16 mb-12">
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-16 h-px bg-gray-200"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+        <div class="w-16 h-px bg-gray-200"></div>
+      </div>
+      <p class="text-center text-gray-400 text-sm mt-4 font-medium uppercase tracking-widest">Akhir dari Artikel</p>
+    </div>
+
+    <!-- Berita Terkait -->
+    {artikelTerkait.length > 0 && (
+      <aside class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-gray-50 rounded-3xl border border-gray-100" data-aos="fade-up">
+        <h3 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
+          <span class="w-2 h-8 bg-emas rounded-full block"></span>
+          Berita Terkait Lainnya
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {artikelTerkait.map(item => (
+            <a href={`/berita/${item.id}`} class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100/50 flex flex-col h-full hover:-translate-y-1">
+              <div class="h-32 bg-gray-200 overflow-hidden relative">
+                {item.foto_url ? (
+                  <img src={item.foto_url} alt={item.judul} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                ) : (
+                  <div class="w-full h-full bg-green-50 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pesantren opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+                  </div>
+                )}
+                <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+              </div>
+              <div class="p-4 flex-grow flex items-center">
+                <h4 class="font-bold text-gray-800 leading-snug line-clamp-3 group-hover:text-pesantren transition-colors">{item.judul}</h4>
+              </div>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
+  </article>
+</MainLayout>

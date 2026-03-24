@@ -39,28 +39,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     </form>
   </div>
 
-  <!-- Peringatan untuk Database -->
-  <div class="bg-yellow-50 border-l-4 border-emas p-6 rounded-r-2xl shadow-sm mb-8" id="databaseWarning">
-    <div class="flex flex-col sm:flex-row items-start justify-between">
-      <div class="flex items-start">
-        <div class="flex-shrink-0">
-          <svg class="h-6 w-6 text-emas" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <div class="ml-4">
-          <h3 class="text-sm font-bold text-yellow-800 uppercase tracking-wider">Persyaratan Database</h3>
-          <p class="mt-1 text-sm text-yellow-700 leading-relaxed">
-            Fitur pengaturan dinamis ini memanfaatkan Supabase. Anda diharuskan sudah membuat tabel baru bernama <strong>pengaturan_web</strong> di dashboard Supabase dengan spesifikasi: <br/><br/>
-             Kolom: <code class="bg-yellow-100 px-1 rounded text-yellow-900 font-mono">id</code> (int8, Primary Key), <code class="bg-yellow-100 px-1 rounded text-yellow-900 font-mono">key</code> (text), dan <code class="bg-yellow-100 px-1 rounded text-yellow-900 font-mono">value</code> (text).
-          </p>
-        </div>
-      </div>
-      <button onclick="document.getElementById('databaseWarning').style.display='none'" class="mt-4 sm:mt-0 text-yellow-600 hover:text-yellow-800 text-sm font-bold underline">
-        Tutup
-      </button>
-    </div>
-  </div>
+  <!-- Alert Persyaratan Database dihapus karena tabel sudah berhasil terhubung. -->
 
   <script>
     import { supabase } from '../../lib/supabase.js';

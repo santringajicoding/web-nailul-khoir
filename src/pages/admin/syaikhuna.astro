@@ -5,11 +5,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
       <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Data Profil Syaikhuna & Asatidz</h2>
-      <p class="text-gray-600 mt-2 text-lg">Kelola daftar profil kyai dan pengajar pesantren.</p>
+      <p class="text-gray-600 mt-2 text-lg">Kelola daftar profil pengasuh dan ustaz/guru pesantren.</p>
     </div>
     <button id="btnToggleForm" class="bg-pesantren hover:bg-green-800 text-white px-5 py-3 rounded-xl font-bold font-medium shadow-md transition-all flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+         <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
       Tambah Profil
     </button>
@@ -21,11 +21,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Input Profil Baru</h3>
+    <h3 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Input Profil Baru</h3>
     
     <div id="alertFormName" class="hidden mb-4 p-3 rounded text-sm font-medium"></div>
 
     <form id="formDataSyaikhuna" class="space-y-4">
+      <input type="hidden" id="edit_id" name="edit_id" value="" />
+      <input type="hidden" id="old_foto_url" name="old_foto_url" value="" />
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="col-span-1 md:col-span-2">
           <label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap & Gelar <span class="text-red-500">*</span></label>
@@ -33,7 +36,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         </div>
         
         <div class="col-span-1 md:col-span-2">
-          <label class="block text-sm font-bold text-gray-700 mb-1">Unggah Foto Profil (Disarankan Aspek Rasio 1:1)</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1" id="labelFoto">Unggah Foto Profil (Disarankan Aspek Rasio 1:1)</label>
           <input type="file" id="foto_file" name="foto_file" accept="image/*" class="w-full px-3 py-2 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
         </div>
 
@@ -43,7 +46,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         </div>
       </div>
 
-      <div class="pt-4 flex justify-end">
+      <div class="pt-4 flex justify-end gap-3">
+        <button type="button" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg shadow-sm transition-colors">Batal Edit</button>
         <button type="submit" id="btnSubmitData" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors flex items-center">
           <span id="btnSubmitText">Simpan Profil</span>
         </button>
@@ -67,6 +71,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     import { supabase } from '../../lib/supabase.js';
 
+    let allProfilData: any[] = [];
+
     async function init() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return window.location.replace('/admin/login');
@@ -74,8 +80,34 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     }
 
     const formContainer = document.getElementById('formContainer');
-    document.getElementById('btnToggleForm')?.addEventListener('click', () => { formContainer?.classList.remove('hidden'); formContainer?.scrollIntoView({ behavior: 'smooth' }); });
-    document.getElementById('btnCloseForm')?.addEventListener('click', () => { formContainer?.classList.add('hidden'); });
+    const formDataSyaikhuna = document.getElementById('formDataSyaikhuna') as HTMLFormElement;
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+
+    const resetFormToCreate = () => {
+       formDataSyaikhuna?.reset();
+       (document.getElementById('edit_id') as HTMLInputElement).value = '';
+       (document.getElementById('old_foto_url') as HTMLInputElement).value = '';
+       (document.getElementById('formTitle') as HTMLElement).textContent = 'Input Profil Baru';
+       (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Profil';
+       (document.getElementById('labelFoto') as HTMLElement).textContent = 'Unggah Foto Profil (Disarankan Aspek Rasio 1:1)';
+       btnCancelEdit?.classList.add('hidden');
+    };
+
+    document.getElementById('btnToggleForm')?.addEventListener('click', () => { 
+      resetFormToCreate();
+      formContainer?.classList.remove('hidden'); 
+      formContainer?.scrollIntoView({ behavior: 'smooth' }); 
+    });
+    
+    document.getElementById('btnCloseForm')?.addEventListener('click', () => { 
+      formContainer?.classList.add('hidden'); 
+      resetFormToCreate();
+    });
+
+    btnCancelEdit?.addEventListener('click', () => {
+      resetFormToCreate();
+      formContainer?.classList.add('hidden');
+    });
 
     async function loadData() {
       const grid = document.getElementById('dataGrid');
@@ -84,6 +116,9 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       const { data, error } = await supabase.from('syaikhuna').select('*');
 
       if (error) return grid.innerHTML = `<div class="col-span-full text-center text-red-500 p-4">Error: ${error.message}</div>`;
+      
+      allProfilData = data || [];
+      
       if (!data || data.length === 0) return grid.innerHTML = `<div class="col-span-full text-center text-gray-500 p-8 border-2 border-dashed rounded-xl">Belum ada profil pengajar.</div>`;
 
       grid.innerHTML = data.map(item => `
@@ -94,17 +129,17 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           <div class="p-5 flex-grow flex flex-col items-center">
             <h4 class="font-bold text-gray-900 text-lg mb-2">${item.nama}</h4>
             <p class="text-gray-500 text-sm mb-4 flex-grow whitespace-pre-wrap">${item.description}</p>
-            <div class="pt-4 border-t w-full border-gray-100 flex justify-center">
-              <button data-action="hapus-data" data-id="${item.id}" data-nama="${item.nama}" class="text-red-500 hover:bg-red-50 w-full py-1.5 rounded text-sm font-bold transition-colors">Hapus Profil</button>
+            <div class="pt-4 border-t w-full border-gray-100 flex justify-center gap-2">
+              <button data-action="edit-data" data-id="${item.id}" class="text-blue-600 hover:bg-blue-50 w-full py-1.5 rounded text-sm font-bold transition-colors">Edit</button>
+              <button data-action="hapus-data" data-id="${item.id}" data-nama="${item.nama}" class="text-red-500 hover:bg-red-50 w-full py-1.5 rounded text-sm font-bold transition-colors">Hapus</button>
             </div>
           </div>
         </div>
       `).join('');
     }
 
-    const form = document.getElementById('formDataSyaikhuna') as HTMLFormElement;
-    if (form) {
-      form.addEventListener('submit', async (e) => {
+    if (formDataSyaikhuna) {
+      formDataSyaikhuna.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnSubmitData') as HTMLButtonElement;
         const btnText = document.getElementById('btnSubmitText');
@@ -114,31 +149,60 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         btn.disabled = true;
         if(btnText) btnText.textContent = 'Memproses...';
 
+        const formData = new FormData(formDataSyaikhuna);
+        const editId = formData.get('edit_id')?.toString();
+        const oldFotoUrl = formData.get('old_foto_url')?.toString();
         let uploadedFotoUrl: string | null = null;
+
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           const file = fileInput.files[0];
           const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
           const { data: uploadData, error: uploadError } = await supabase.storage.from('berita_images').upload(fileName, file);
+          
           if (uploadError) {
-             if (alertMsg) { alertMsg.textContent = 'Gagal unggah foto: ' + uploadError.message; alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800'; }
-             btn.disabled = false; if(btnText) btnText.textContent = 'Simpan Profil'; return;
+             if (alertMsg) { 
+               alertMsg.textContent = 'Gagal unggah foto: ' + uploadError.message; 
+               alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800'; 
+               alertMsg.classList.remove('hidden');
+             }
+             btn.disabled = false; 
+             if(btnText) btnText.textContent = editId ? 'Simpan Perubahan' : 'Simpan Profil'; 
+             return;
           }
           const { data: publicUrlData } = supabase.storage.from('berita_images').getPublicUrl(fileName);
           uploadedFotoUrl = publicUrlData.publicUrl;
+        } else if (oldFotoUrl) {
+          uploadedFotoUrl = oldFotoUrl;
         }
 
-        const formData = new FormData(form);
-        const { error } = await supabase.from('syaikhuna').insert([{
+        const dbPayload: any = {
           nama: formData.get('nama'),
           foto_url: uploadedFotoUrl,
           description: formData.get('description')
-        }]);
+        };
 
-        if (error) {
-          if (alertMsg) { alertMsg.textContent = 'Gagal menyimpan: ' + error.message; alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800'; }
+        let dbError;
+        if (editId) {
+          const { error } = await supabase.from('syaikhuna').update(dbPayload).eq('id', editId);
+          dbError = error;
         } else {
-          form.reset();
-          if (alertMsg) { alertMsg.textContent = 'Berhasil disimpan!'; alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-green-100 text-green-800'; }
+          const { error } = await supabase.from('syaikhuna').insert([dbPayload]);
+          dbError = error;
+        }
+
+        if (dbError) {
+          if (alertMsg) { 
+            alertMsg.textContent = 'Gagal menyimpan: ' + dbError.message; 
+            alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800'; 
+            alertMsg.classList.remove('hidden');
+          }
+        } else {
+          resetFormToCreate();
+          if (alertMsg) { 
+            alertMsg.textContent = editId ? 'Data berhasil diperbarui!' : 'Berhasil disimpan!'; 
+            alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-green-100 text-green-800'; 
+            alertMsg.classList.remove('hidden');
+          }
           setTimeout(() => { formContainer?.classList.add('hidden'); alertMsg!.className = 'hidden'; }, 1500);
           loadData();
         }
@@ -151,11 +215,33 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     if (gridData) {
       gridData.addEventListener('click', async (e) => {
         const target = (e.target as Element).closest('button');
-        if (!target || target.getAttribute('data-action') !== 'hapus-data') return;
+        if (!target) return;
         
-        if(confirm(`Yakin ingin mengeluarkan profil "${target.getAttribute('data-nama')}" dari web publik?`)) {
-          const { error } = await supabase.from('syaikhuna').delete().eq('id', target.getAttribute('data-id'));
-          if (error) alert('Gagal hapus: ' + error.message); else loadData();
+        const action = target.getAttribute('data-action');
+        const id = target.getAttribute('data-id');
+
+        if (action === 'hapus-data') {
+          if(confirm(`Yakin mengeluarkan profil "${target.getAttribute('data-nama')}"?`)) {
+            const { error } = await supabase.from('syaikhuna').delete().eq('id', id);
+            if (error) alert('Gagal hapus: ' + error.message); else loadData();
+          }
+        } 
+        else if (action === 'edit-data') {
+          const itemToEdit = allProfilData.find(item => item.id === id);
+          if (itemToEdit) {
+            (document.getElementById('edit_id') as HTMLInputElement).value = itemToEdit.id;
+            (document.getElementById('nama') as HTMLInputElement).value = itemToEdit.nama;
+            (document.getElementById('description') as HTMLTextAreaElement).value = itemToEdit.description || '';
+            (document.getElementById('old_foto_url') as HTMLInputElement).value = itemToEdit.foto_url || '';
+            
+            (document.getElementById('formTitle') as HTMLElement).textContent = 'Edit Data Profil';
+            (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Perubahan';
+            (document.getElementById('labelFoto') as HTMLElement).textContent = 'Timpa Foto Profil (Kosongkan jika tidak mengubah)';
+            
+            btnCancelEdit?.classList.remove('hidden');
+            formContainer?.classList.remove('hidden');
+            formContainer?.scrollIntoView({ behavior: 'smooth' });
+          }
         }
       });
     }
