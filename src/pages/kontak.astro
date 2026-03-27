@@ -162,6 +162,15 @@ import MainLayout from '../layouts/MainLayout.astro';
         const alertBox = document.getElementById('alertBox');
         const alertIcon = document.getElementById('alertIcon');
         const alertMsg = document.getElementById('alertMessage');
+        
+        const showError = (msg: string) => {
+            if (alertBox && alertIcon && alertMsg) {
+                alertBox.className = 'mb-6 p-5 rounded-2xl font-medium flex items-start gap-3 border shadow-sm transition-all duration-300 transform bg-red-50 border-red-200 text-red-800';
+                alertIcon.innerHTML = `<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+                alertMsg.innerHTML = `<strong>Pesan Tidak Valid!</strong><br><span class="text-sm">${msg}</span>`;
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
 
         // Text Inputs
         const namaInput = document.getElementById('nama_pengirim') as HTMLInputElement;
@@ -180,17 +189,23 @@ import MainLayout from '../layouts/MainLayout.astro';
            return; 
         }
 
-        if (!nama || !kontak || !pesan) {
-           return;
-        }
+        // Validasi UX Kuat
+        if (nama.length < 3) return showError('Nama lengkap terlalu pendek (minimal 3 karakter).');
+        if (!/^[a-zA-Z\s]+$/.test(nama)) return showError('Nama hanya boleh berisi huruf dan spasi.');
+        
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(kontak);
+        const isPhone = /^(08|628|\+628)[0-9]{7,13}$/.test(kontak);
+        if (!isEmail && !isPhone) return showError('Mohon isi dengan format Email valid atau No. WhatsApp (contoh: 0812...).');
+        
+        if (pesan.length < 10) return showError('Isi pesan terlalu singkat (minimal 10 karakter). Berikan pesan yang jelas agar kami dapat membantu.');
 
         // Tampilan Loading UI
+        if (alertBox) { alertBox.classList.add('hidden'); }
         if (btnText) btnText.innerHTML = 'Menyimpan...';
         if (btnIcon) btnIcon.classList.add('hidden');
         if (btnSpinner) btnSpinner.classList.remove('hidden');
         btnSubmit.disabled = true;
         btnSubmit.classList.add('opacity-70', 'cursor-not-allowed', 'scale-[0.98]');
-        if (alertBox) { alertBox.classList.add('hidden'); alertBox.className = alertBox.className.replace(/bg-\w+-50 border-\w+-200 text-\w+-800/g, ''); }
 
         // Operasi POST / API Call Supabase
         const { error } = await supabase
@@ -215,16 +230,14 @@ import MainLayout from '../layouts/MainLayout.astro';
         if (error) {
           console.error('Error insert message:', error);
           if (alertBox && alertIcon && alertMsg) {
-             alertBox.classList.remove('hidden');
-             alertBox.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+             alertBox.className = 'mb-6 p-5 rounded-2xl font-medium flex items-start gap-3 border shadow-sm transition-all duration-300 transform bg-red-50 border-red-200 text-red-800';
              alertIcon.innerHTML = `<svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
              alertMsg.innerHTML = `<strong>Koneksi Terputus!</strong><br>Gagal mengirim pesan (${error.message})`;
           }
         } else {
           formPesan.reset(); // Kosongkan formulir
           if (alertBox && alertIcon && alertMsg) {
-             alertBox.classList.remove('hidden');
-             alertBox.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+             alertBox.className = 'mb-6 p-5 rounded-2xl font-medium flex items-start gap-3 border shadow-sm transition-all duration-300 transform bg-green-50 border-green-200 text-green-800';
              alertIcon.innerHTML = `<svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
              alertMsg.innerHTML = `<strong>Pesan Terkirim!</strong><br>Terima kasih <strong>${nama}</strong>. Kami akan merespon ke WhatsApp/Email Anda segera.`;
           }

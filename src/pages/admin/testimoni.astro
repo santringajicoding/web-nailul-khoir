@@ -1,0 +1,231 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Kelola Testimoni">
+  
+  <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Manajemen Testimoni</h2>
+      <p class="text-gray-600 mt-2 text-lg">Kelola apa yang orang katakan tentang Yayasan Nailul Khoir.</p>
+    </div>
+    <button id="btnToggleForm" class="bg-pesantren hover:bg-green-800 text-white px-5 py-3 rounded-xl font-bold font-medium shadow-md transition-all flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+      Tambah Testimoni
+    </button>
+  </div>
+
+  <!-- Form Testimoni (Hidden by default) -->
+  <div id="formContainer" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8 relative">
+    <button id="btnCloseForm" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h3 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Formulir Testimoni Baru</h3>
+    
+    <div id="alertForm" class="hidden mb-4 p-3 rounded text-sm font-medium"></div>
+
+    <form id="formTestimoni" class="space-y-4">
+      <input type="hidden" id="edit_id" name="edit_id" value="" />
+      <input type="hidden" id="old_foto_url" name="old_foto_url" value="" />
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+          <input type="text" id="nama" name="nama" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Ex: Bapak Ahmad">
+        </div>
+        
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Peran / Status <span class="text-red-500">*</span></label>
+          <input type="text" id="peran" name="peran" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Ex: Wali Santri SMPIT / Alumni 2020">
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1" id="labelFoto">Foto Profil (Opsional)</label>
+          <input type="file" id="foto_file" name="foto_file" accept="image/*" class="w-full px-3 py-2 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
+        </div>
+
+        <div class="col-span-1 md:col-span-2">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Pesan Testimoni <span class="text-red-500">*</span></label>
+          <textarea id="teks" name="teks" required rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none resize-none" placeholder="Tuliskan pengalaman atau kesan terhadap Yayasan..."></textarea>
+        </div>
+      </div>
+
+      <div class="pt-4 flex justify-end gap-3">
+        <button type="button" id="btnCancelEdit" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg shadow-sm transition-colors">Batal</button>
+        <button type="submit" id="btnSubmit" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors flex items-center">
+          <span id="btnSubmitText">Simpan Testimoni</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Data Grid -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+      <div class="font-bold text-gray-700">Daftar Testimoni</div>
+      <button id="btnRefresh" class="bg-white text-pesantren border border-pesantren hover:bg-green-50 px-4 py-2 rounded-xl text-sm font-bold transition-colors">Segarkan</button>
+    </div>
+
+    <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      <div class="col-span-full py-12 text-center text-gray-500 animate-pulse">Menghubungkan ke Database...</div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase.js';
+
+    let allData: any[] = [];
+
+    const loadData = async () => {
+      const grid = document.getElementById('dataGrid');
+      if(!grid) return;
+
+      const { data, error } = await supabase.from('testimoni').select('*').order('created_at', { ascending: false });
+
+      if (error) {
+        grid.innerHTML = `<div class="col-span-full text-center text-red-500 p-8">Gagal memuat: ${error.message}</div>`;
+        return;
+      }
+
+      allData = data || [];
+
+      if (allData.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-gray-500 p-12 border-2 border-dashed rounded-3xl">Belum ada testimoni.</div>`;
+        return;
+      }
+
+      grid.innerHTML = allData.map(item => `
+        <div class="bg-white border text-left border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all p-6 flex flex-col relative">
+           <div class="flex items-center gap-4 mb-4">
+              <img src="${item.foto_url || 'https://ui-avatars.com/api/?name=' + item.nama}" class="w-12 h-12 rounded-full object-cover border-2 border-emas shadow-sm" />
+              <div>
+                <h4 class="font-bold text-gray-900">${item.nama}</h4>
+                <p class="text-xs text-pesantren font-medium">${item.peran}</p>
+              </div>
+           </div>
+           <p class="text-gray-600 text-sm italic line-clamp-4 flex-grow">"${item.teks}"</p>
+           <div class="mt-6 pt-4 border-t border-gray-50 flex justify-end gap-2">
+              <button data-action="edit" data-id="${item.id}" class="text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded text-xs font-bold transition-colors">Edit</button>
+              <button data-action="hapus" data-id="${item.id}" data-name="${item.nama}" class="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded text-xs font-bold transition-colors">Hapus</button>
+           </div>
+        </div>
+      `).join('');
+    };
+
+    const formContainer = document.getElementById('formContainer');
+    const formTestimoni = document.getElementById('formTestimoni') as HTMLFormElement;
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+
+    const resetForm = () => {
+       formTestimoni?.reset();
+       (document.getElementById('edit_id') as HTMLInputElement).value = '';
+       (document.getElementById('old_foto_url') as HTMLInputElement).value = '';
+       (document.getElementById('formTitle') as HTMLElement).textContent = 'Formulir Testimoni Baru';
+       (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Testimoni';
+       (document.getElementById('labelFoto') as HTMLElement).textContent = 'Foto Profil (Opsional)';
+       btnCancelEdit?.classList.add('hidden');
+    };
+
+    document.getElementById('btnToggleForm')?.addEventListener('click', () => {
+      resetForm();
+      formContainer?.classList.remove('hidden');
+      formContainer?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('btnCloseForm')?.addEventListener('click', () => formContainer?.classList.add('hidden'));
+    btnCancelEdit?.addEventListener('click', () => { resetForm(); formContainer?.classList.add('hidden'); });
+
+    if (formTestimoni) {
+      formTestimoni.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit') as HTMLButtonElement;
+        const alertMsg = document.getElementById('alertForm');
+        const fileInput = document.getElementById('foto_file') as HTMLInputElement;
+        
+        btn.disabled = true;
+        
+        const formData = new FormData(formTestimoni);
+        const editId = formData.get('edit_id')?.toString();
+        const oldFotoUrl = formData.get('old_foto_url')?.toString();
+        let finalFotoUrl = oldFotoUrl;
+
+        if (fileInput.files && fileInput.files.length > 0) {
+           const file = fileInput.files[0];
+           const fileName = `testi-${Date.now()}-${file.name}`;
+           const { data: uploadData, error: uploadError } = await supabase.storage.from('berita_images').upload(fileName, file);
+           if (!uploadError) {
+             const { data: publicUrl } = supabase.storage.from('berita_images').getPublicUrl(fileName);
+             finalFotoUrl = publicUrl.publicUrl;
+           }
+        }
+
+        const payload = {
+          nama: formData.get('nama'),
+          peran: formData.get('peran'),
+          teks: formData.get('teks'),
+          foto_url: finalFotoUrl
+        };
+
+        let err;
+        if (editId) {
+          const { error } = await supabase.from('testimoni').update(payload).eq('id', editId);
+          err = error;
+        } else {
+          const { error } = await supabase.from('testimoni').insert([payload]);
+          err = error;
+        }
+
+        if (err) {
+          alert('Error: ' + err.message);
+        } else {
+          resetForm();
+          formContainer?.classList.add('hidden');
+          loadData();
+        }
+        btn.disabled = false;
+      });
+    }
+
+    const grid = document.getElementById('dataGrid');
+    if (grid) {
+      grid.addEventListener('click', async (e) => {
+        const target = (e.target as Element).closest('button');
+        if (!target) return;
+        const action = target.getAttribute('data-action');
+        const id = target.getAttribute('data-id');
+
+        if (action === 'hapus') {
+          if(confirm(`Hapus testimoni dari ${target.getAttribute('data-name')}?`)) {
+            await supabase.from('testimoni').delete().eq('id', id);
+            loadData();
+          }
+        } else if (action === 'edit') {
+          const item = allData.find(i => i.id === id);
+          if (item) {
+            (document.getElementById('edit_id') as HTMLInputElement).value = item.id;
+            (document.getElementById('nama') as HTMLInputElement).value = item.nama;
+            (document.getElementById('peran') as HTMLInputElement).value = item.peran;
+            (document.getElementById('teks') as HTMLTextAreaElement).value = item.teks;
+            (document.getElementById('old_foto_url') as HTMLInputElement).value = item.foto_url || '';
+            
+            (document.getElementById('formTitle') as HTMLElement).textContent = 'Edit Testimoni';
+            (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Perubahan';
+            (document.getElementById('labelFoto') as HTMLElement).textContent = 'Timpa Foto (Opsional)';
+            
+            btnCancelEdit?.classList.remove('hidden');
+            formContainer?.classList.remove('hidden');
+            formContainer?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      document.getElementById('btnRefresh')?.addEventListener('click', loadData);
+    });
+  </script>
+</AdminLayout>

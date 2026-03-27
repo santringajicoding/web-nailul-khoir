@@ -1,0 +1,42 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Halaman Tidak Ditemukan">
+  <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center -mt-20 px-4 text-center">
+    
+    <div class="relative w-full max-w-lg mx-auto" data-aos="zoom-in">
+      <!-- Glow effect -->
+      <div class="absolute -inset-4 bg-gradient-to-r from-green-400 to-emas rounded-full blur-3xl opacity-20 animate-pulse"></div>
+      
+      <!-- Content -->
+      <div class="relative bg-white/60 backdrop-blur-xl border border-white p-12 rounded-[3rem] shadow-2xl flex flex-col items-center">
+        <div class="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pesantren to-green-600 drop-shadow-sm mb-4">
+          404
+        </div>
+        
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 tracking-tight">
+          Halaman Tidak Ditemukan
+        </h1>
+        
+        <p class="text-gray-500 mb-10 max-w-md">
+          Afwan, tautan yang Anda tuju mungkin rusak, telah dipindahkan, atau tidak bernah ada di dalam sistem kami.
+        </p>
+
+        <a href="/" class="inline-flex items-center justify-center gap-3 px-8 py-4 text-white font-bold bg-pesantren hover:bg-green-800 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          Kembali ke Beranda
+        </a>
+
+        <div class="mt-8 pt-8 border-t border-gray-200/50 w-full flex justify-center space-x-6 text-sm">
+          <a href="/berita" class="text-green-600 font-bold hover:text-emas transition-colors">Lihat Berita</a>
+          <span class="text-gray-300">•</span>
+          <a href="/kajian" class="text-green-600 font-bold hover:text-emas transition-colors">Jadwal Kajian</a>
+          <span class="text-gray-300">•</span>
+          <a href="/kontak" class="text-green-600 font-bold hover:text-emas transition-colors">Hubungi Kami</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</MainLayout>

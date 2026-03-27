@@ -1,0 +1,21 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Mencegah tumpukan pada layar kecil */
+  padding: 10px;
+}
+
+.navbar-item {
+  margin: 0 10px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .navbar-item {
+    margin: 5px 0;
+  }
+}

@@ -9,11 +9,12 @@ interface Props {
 
 const { judul, foto_url, description, tanggal, id } = Astro.props;
 
-// Helper to truncate text
+// Helper to truncate text dan strip HTML
 const truncate = (str: string, length: number) => {
   if (!str) return '';
-  if (str.length > length) return str.substring(0, length) + '...';
-  return str;
+  const stripped = str.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').trim();
+  if (stripped.length > length) return stripped.substring(0, length) + '...';
+  return stripped;
 };
 
 // Format tanggal jika ada

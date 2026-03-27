@@ -63,6 +63,16 @@
     const errorAlert = document.getElementById('errorAlert');
     const errorText = document.getElementById('errorText');
 
+    // Tampilkan authError dari localStorage jika ada
+    const sessionErr = window.sessionStorage.getItem('authError');
+    if (sessionErr) {
+      if (errorAlert && errorText) {
+         errorAlert.classList.remove('hidden');
+         errorText.textContent = sessionErr;
+      }
+      window.sessionStorage.removeItem('authError');
+    }
+
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();

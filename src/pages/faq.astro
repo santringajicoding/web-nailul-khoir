@@ -135,11 +135,12 @@ const faqs = [
 
           // Menutup semua accordion lain yang terbuka (Opsional, agar rapi)
           document.querySelectorAll('.faq-content').forEach(c => {
-             if (c.id !== targetId) {
-                c.style.maxHeight = '0px';
-                c.style.opacity = '0';
-                c.previousElementSibling?.setAttribute('aria-expanded', 'false');
-                const otherIcon = c.previousElementSibling?.querySelector('.faq-icon');
+             const contentItem = c as HTMLElement;
+             if (contentItem.id !== targetId) {
+                contentItem.style.maxHeight = '0px';
+                contentItem.style.opacity = '0';
+                contentItem.previousElementSibling?.setAttribute('aria-expanded', 'false');
+                const otherIcon = contentItem.previousElementSibling?.querySelector('.faq-icon');
                 if (otherIcon) otherIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />`;
                 if(otherIcon) otherIcon.classList.remove('rotate-90');
              }
@@ -149,8 +150,9 @@ const faqs = [
           if (isExpanded) {
             button.setAttribute('aria-expanded', 'false');
             if (content) {
-              content.style.maxHeight = '0px';
-              content.style.opacity = '0';
+              const el = content as HTMLElement;
+              el.style.maxHeight = '0px';
+              el.style.opacity = '0';
             }
             // Icon Plus
             if(icon) {
@@ -161,8 +163,9 @@ const faqs = [
             button.setAttribute('aria-expanded', 'true');
             if (content) {
               // Set to scrollHeight untuk membiarkan CSS transition bekerja
-              content.style.maxHeight = content.scrollHeight + 'px';
-              content.style.opacity = '1';
+              const el = content as HTMLElement;
+              el.style.maxHeight = el.scrollHeight + 'px';
+              el.style.opacity = '1';
             }
             // Icon Minus
             if(icon) {

@@ -1,0 +1,23 @@
+{
+  "short_name": "Nailul Khoir",
+  "name": "Yayasan Pondok Pesantren Nailul Khoir",
+  "description": "Lembaga pendidikan Islam SMPIT, SMK, dan Pesantren Salaf.",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "theme_color": "#15803d",
+  "orientation": "portrait-primary",
+  "categories": ["education", "news"]
+}

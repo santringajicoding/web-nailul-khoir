@@ -11,8 +11,38 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
-      Tambah Segmen Profil
+      Tambah Sejarah / Profil
     </button>
+  </div>
+
+  <!-- Visi & Misi Editor Section -->
+  <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-8">
+    <div class="flex items-center gap-3 mb-6 border-b pb-4">
+        <div class="bg-emas/10 p-2 rounded-lg text-emas">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 uppercase tracking-tight">Manajemen Visi & Misi</h3>
+    </div>
+    
+    <div id="alertVisiMisi" class="hidden mb-6 p-4 rounded-xl font-bold text-sm"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-3">
+            <label class="block text-[13px] font-black text-gray-500 uppercase tracking-widest pl-1">Visi Yayasan</label>
+            <textarea id="visi_text" rows="4" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-pesantren/10 focus:border-pesantren outline-none transition-all font-medium leading-relaxed" placeholder="Tuliskan visi pesantren disini..."></textarea>
+        </div>
+        <div class="space-y-3">
+            <label class="block text-[13px] font-black text-gray-500 uppercase tracking-widest pl-1">Misi Yayasan (Gunakan baris baru untuk tiap poin/list)</label>
+            <textarea id="misi_text" rows="4" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-4 focus:ring-pesantren/10 focus:border-pesantren outline-none transition-all font-medium leading-relaxed" placeholder="Tuliskan poin-poin misi disini..."></textarea>
+        </div>
+    </div>
+    
+    <div class="mt-8 pt-6 border-t border-gray-50 flex justify-end">
+        <button id="btnSaveVisiMisi" class="bg-emas hover:bg-yellow-600 text-gray-900 font-black px-10 py-4 rounded-2xl shadow-lg shadow-emas/20 transition-all hover:-translate-y-1 active:scale-95 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+            SIMPAN VISI & MISI
+        </button>
+    </div>
   </div>
 
   <div id="formContainer" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8 relative">
@@ -68,10 +98,53 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     import { supabase } from '../../lib/supabase.js';
 
     async function init() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return window.location.replace('/admin/login');
       loadData();
+      await loadVisiMisi();
     }
+
+    async function loadVisiMisi() {
+        const { data } = await supabase.from('pengaturan_web').select('*').in('key', ['visi_yayasan', 'misi_yayasan']);
+        if (data) {
+            data.forEach(item => {
+                const el = document.getElementById(item.key === 'visi_yayasan' ? 'visi_text' : 'misi_text') as HTMLTextAreaElement;
+                if (el) el.value = item.value;
+            });
+        }
+    }
+
+    document.getElementById('btnSaveVisiMisi')?.addEventListener('click', async () => {
+        const btn = document.getElementById('btnSaveVisiMisi') as HTMLButtonElement;
+        const alertBox = document.getElementById('alertVisiMisi');
+        const visi = (document.getElementById('visi_text') as HTMLTextAreaElement).value;
+        const misi = (document.getElementById('misi_text') as HTMLTextAreaElement).value;
+
+        btn.disabled = true;
+        btn.textContent = 'Menyimpan...';
+
+        const settings = [
+            { key: 'visi_yayasan', value: visi },
+            { key: 'misi_yayasan', value: misi }
+        ];
+
+        const { error } = await supabase.from('pengaturan_web').upsert(settings, { onConflict: 'key' });
+
+        if (error) {
+            if (alertBox) {
+                alertBox.textContent = 'Gagal menyimpan Visi & Misi: ' + error.message;
+                alertBox.className = 'mb-6 p-4 rounded-xl font-bold text-sm bg-red-100 text-red-800';
+                alertBox.classList.remove('hidden');
+            }
+        } else {
+            if (alertBox) {
+                alertBox.textContent = 'Visi & Misi Berhasil Diperbarui!';
+                alertBox.className = 'mb-6 p-4 rounded-xl font-bold text-sm bg-green-100 text-green-800';
+                alertBox.classList.remove('hidden');
+                setTimeout(() => alertBox.classList.add('hidden'), 3000);
+            }
+        }
+        btn.disabled = false;
+        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg> SIMPAN VISI & MISI`;
+    });
 
     const formContainer = document.getElementById('formContainer');
     document.getElementById('btnToggleForm')?.addEventListener('click', () => { formContainer?.classList.remove('hidden'); formContainer?.scrollIntoView({ behavior: 'smooth' }); });

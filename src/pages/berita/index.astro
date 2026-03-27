@@ -3,11 +3,13 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import CardBerita from '../../components/CardBerita.astro';
 import { supabase } from '../../lib/supabase.js';
 
-// Mengambil SEMUA berita terbaru dari tabel Supabase
+// Mengambil 9 berita terbaru untuk tampilan awal (Pre-rendered SSG)
+const PAGE_SIZE = 9;
 const { data: beritaData, error } = await supabase
   .from('berita')
   .select('*')
-  .order('tanggal_berita', { ascending: false });
+  .order('tanggal_berita', { ascending: false })
+  .limit(PAGE_SIZE);
 
 const beritaList = beritaData || [];
 ---
@@ -37,9 +39,9 @@ const beritaList = beritaData || [];
   <div class="bg-gray-50 py-16 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {beritaList.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="beritaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {beritaList.map((berita, i) => (
-             <div class="h-full flex hover:-translate-y-2 transition-transform duration-500" data-aos="fade-up" data-aos-delay={(i % 6) * 100}>
+             <div class="h-full flex berita-card hover:-translate-y-2 transition-transform duration-500" data-aos="fade-up" data-delay={(i % PAGE_SIZE) * 100}>
                <CardBerita 
                  id={berita.id}
                  judul={berita.judul} 
@@ -49,6 +51,18 @@ const beritaList = beritaData || [];
                />
              </div>
           ))}
+        </div>
+        
+        <!-- Load More Container -->
+        <div class="mt-16 text-center" id="loadMoreContainer">
+          {beritaList.length === PAGE_SIZE && (
+            <button id="btnLoadMore" class="inline-flex items-center justify-center px-10 py-4 text-sm md:text-base font-bold text-pesantren bg-white border-2 border-pesantren/20 rounded-full hover:bg-pesantren hover:text-white transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group">
+              <span id="loadMoreText">Muat Lebih Banyak</span>
+              <svg id="loadMoreIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              <!-- Spinner (Hidden by default) -->
+              <svg id="loadMoreSpinner" class="animate-spin h-5 w-5 ml-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+          )}
         </div>
       ) : (
         <div class="bg-white rounded-3xl p-16 text-center border border-gray-100 shadow-sm max-w-2xl mx-auto" data-aos="fade-in">
@@ -61,4 +75,110 @@ const beritaList = beritaData || [];
       )}
     </div>
   </div>
+  <script>
+    import { supabase } from '../../lib/supabase.js';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btnLoadMore = document.getElementById('btnLoadMore') as HTMLButtonElement;
+      const grid = document.getElementById('beritaGrid');
+      
+      let pageNumber = 1;
+      const PAGE_SIZE = 9;
+
+      if (!btnLoadMore || !grid) return;
+
+      btnLoadMore.addEventListener('click', async () => {
+        const textSpan = document.getElementById('loadMoreText');
+        const iconSpan = document.getElementById('loadMoreIcon');
+        const spinnerSpan = document.getElementById('loadMoreSpinner');
+
+        // Loading State
+        if (textSpan) textSpan.textContent = "Memuat data...";
+        if (iconSpan) iconSpan.classList.add('hidden');
+        if (spinnerSpan) spinnerSpan.classList.remove('hidden');
+        btnLoadMore.disabled = true;
+
+        const rangeStart = pageNumber * PAGE_SIZE;
+        const rangeEnd = rangeStart + PAGE_SIZE - 1;
+
+        // Fetch berita selanjutnya
+        const { data, error } = await supabase
+          .from('berita')
+          .select('*')
+          .order('tanggal_berita', { ascending: false })
+          .range(rangeStart, rangeEnd);
+
+        if (error) {
+          alert('Gagal mengambil berita: ' + error.message);
+        } else if (data && data.length > 0) {
+          // Buat format HTML Card (Simulasi komponen Astro tapi native DOM)
+          const stripHtml = (html) => {
+             let doc = new DOMParser().parseFromString(html, 'text/html');
+             return doc.body.textContent || "";
+          };
+
+          const truncate = (str, n) => {
+             return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
+          };
+
+          const delayMultiplier = 100;
+
+          data.forEach((berita, index) => {
+            const tgl = new Date(berita.tanggal_berita).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            const plainDesc = stripHtml(berita.description);
+            const shortDesc = truncate(plainDesc, 140);
+            const imageUrl = berita.foto_url || '/images/hero-bg.jpg';
+
+            const cardHtml = `
+              <div class="h-full flex hover:-translate-y-2 transition-transform duration-500 opacity-0 transform translate-y-8" style="animation: gracefulReveal 0.6s forwards ${index * delayMultiplier}ms">
+                <!-- Struktur menyerupai CardBerita.astro -->
+                <a href="/berita/${berita.id}" class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col w-full hover:border-pesantren/20">
+                  <div class="relative h-64 overflow-hidden bg-gray-100">
+                    <img src="${imageUrl}" alt="${berita.judul}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1" loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                    <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between text-white/90">
+                      <div class="flex items-center text-xs font-bold uppercase tracking-wider backdrop-blur-md bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1.5 text-emas" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        ${tgl}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative bg-white group-hover:bg-green-50/10 transition-colors">
+                    <div class="absolute top-0 right-8 -translate-y-1/2 w-12 h-12 bg-white rounded-2xl shadow-lg border border-gray-50 flex items-center justify-center transform group-hover:-translate-y-3/4 transition-transform duration-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pesantren" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+                    </div>
+                    <div class="w-12 h-1.5 bg-emas rounded-full mb-6 transition-all duration-300 group-hover:w-20"></div>
+                    <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-4 leading-tight group-hover:text-pesantren transition-colors tracking-tight line-clamp-2">
+                       ${berita.judul}
+                    </h3>
+                    <p class="text-gray-500 line-clamp-3 mb-8 flex-grow font-medium leading-relaxed">
+                       ${shortDesc}
+                    </p>
+                    <div class="mt-auto inline-flex items-center text-sm font-bold text-pesantren tracking-wide group-hover:text-green-700 transition-colors">
+                      Baca Selengkapnya
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform group-hover:translate-x-3 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', cardHtml);
+          });
+          pageNumber++;
+          
+          if (data.length < PAGE_SIZE) {
+            btnLoadMore.style.display = 'none'; // Habis
+          }
+        } else {
+          btnLoadMore.style.display = 'none'; // Tidak ada sisa
+        }
+
+        // Return state
+        if (textSpan) textSpan.textContent = "Muat Lebih Banyak";
+        if (iconSpan) iconSpan.classList.remove('hidden');
+        if (spinnerSpan) spinnerSpan.classList.add('hidden');
+        btnLoadMore.disabled = false;
+      });
+    });
+  </script>
 </MainLayout>

@@ -8,6 +8,9 @@ DROP TABLE IF EXISTS kajian CASCADE;
 DROP TABLE IF EXISTS pendaftaran CASCADE;
 DROP TABLE IF EXISTS pesan_masuk CASCADE;
 DROP TABLE IF EXISTS pengaturan_web CASCADE;
+DROP TABLE IF EXISTS galeri CASCADE;
+DROP TABLE IF EXISTS donasi CASCADE;
+DROP TABLE IF EXISTS testimoni CASCADE;
 
 -- 1. Tabel tentang_kami
 CREATE TABLE tentang_kami (
@@ -23,7 +26,8 @@ CREATE TABLE syaikhuna (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nama VARCHAR NOT NULL,
     foto_url TEXT,
-    description TEXT
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- 3. Tabel berita
@@ -41,7 +45,8 @@ CREATE TABLE kajian (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     judul VARCHAR NOT NULL,
     foto_url TEXT,
-    description TEXT
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- 5. Tabel pendaftaran
@@ -51,6 +56,7 @@ CREATE TABLE pendaftaran (
     nama_wali VARCHAR NOT NULL,
     alamat TEXT NOT NULL,
     no_hp VARCHAR NOT NULL,
+    jalur VARCHAR,
     status VARCHAR DEFAULT 'Tertunda',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -72,6 +78,37 @@ CREATE TABLE pengaturan_web (
     value TEXT NOT NULL
 );
 
+-- 8. Tabel galeri
+CREATE TABLE galeri (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR NOT NULL,
+    deskripsi TEXT,
+    foto_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 9. Tabel donasi
+CREATE TABLE donasi (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama_donatur VARCHAR NOT NULL,
+    kontak VARCHAR NOT NULL,
+    jumlah DECIMAL NOT NULL,
+    metode VARCHAR,
+    status VARCHAR DEFAULT 'Tertunda',
+    bukti_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 10. Tabel testimoni
+CREATE TABLE testimoni (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama VARCHAR NOT NULL,
+    peran VARCHAR NOT NULL,
+    teks TEXT NOT NULL,
+    foto_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Aktifkan Row Level Security (RLS) di semua tabel
 ALTER TABLE tentang_kami ENABLE ROW LEVEL SECURITY;
 ALTER TABLE syaikhuna ENABLE ROW LEVEL SECURITY;
@@ -80,6 +117,9 @@ ALTER TABLE kajian ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pendaftaran ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pesan_masuk ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pengaturan_web ENABLE ROW LEVEL SECURITY;
+ALTER TABLE galeri ENABLE ROW LEVEL SECURITY;
+ALTER TABLE donasi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE testimoni ENABLE ROW LEVEL SECURITY;
 
 -- KEBIAJAKAN KEAMANAN (POLICIES)
 
@@ -88,11 +128,14 @@ CREATE POLICY "Anonim bisa melihat tentang_kami" ON tentang_kami FOR SELECT TO a
 CREATE POLICY "Anonim bisa melihat syaikhuna" ON syaikhuna FOR SELECT TO anon USING (true);
 CREATE POLICY "Anonim bisa melihat berita" ON berita FOR SELECT TO anon USING (true);
 CREATE POLICY "Anonim bisa melihat kajian" ON kajian FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa melihat galeri" ON galeri FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa melihat testimoni" ON testimoni FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa membaca pengaturan" ON pengaturan_web FOR SELECT TO anon USING (true);
 
--- B. Tabel Pendaftaran & Pesan (Anonim hanya bisa Insert)
+-- B. Tabel Pendaftaran & Pesan & Donasi (Anonim hanya bisa Insert)
 CREATE POLICY "Anonim bisa mendaftar" ON pendaftaran FOR INSERT TO anon WITH CHECK (true);
 CREATE POLICY "Anonim bisa mengirim pesan" ON pesan_masuk FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Anonim bisa membaca pengaturan" ON pengaturan_web FOR SELECT TO anon USING (true);
+CREATE POLICY "Anonim bisa mengirim donasi" ON donasi FOR INSERT TO anon WITH CHECK (true);
 
 -- C. Akses Penuh untuk Admin (Authenticated)
 CREATE POLICY "Admin full access tentang_kami" ON tentang_kami FOR ALL TO authenticated USING (true) WITH CHECK (true);
@@ -102,3 +145,6 @@ CREATE POLICY "Admin full access kajian" ON kajian FOR ALL TO authenticated USIN
 CREATE POLICY "Admin full access pendaftaran" ON pendaftaran FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Admin full access pesan_masuk" ON pesan_masuk FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Admin full access pengaturan_web" ON pengaturan_web FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access galeri" ON galeri FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access donasi" ON donasi FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access testimoni" ON testimoni FOR ALL TO authenticated USING (true) WITH CHECK (true);

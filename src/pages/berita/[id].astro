@@ -34,8 +34,9 @@ const formatTanggal = (dateStr: string) => {
 // Memotong teks untuk SEO (Meta Description maksimal ~155 karakter)
 const truncateSeo = (str: string, length: number = 155) => {
   if (!str) return '';
-  if (str.length > length) return str.substring(0, length) + '...';
-  return str;
+  const stripped = str.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').trim();
+  if (stripped.length > length) return stripped.substring(0, length) + '...';
+  return stripped;
 };
 
 // Mengambil 3 berita lain (random atau terbaru) untuk "Artikel Terkait"
@@ -52,6 +53,9 @@ const artikelTerkait = relatedData || [];
   title={artikelData.judul}
   description={truncateSeo(artikelData.description)}
   image={artikelData.foto_url || "/images/logo.png"}
+  type="article"
+  publishDate={new Date(artikelData.tanggal_berita).toISOString()}
+  author={artikelData.penulis || "Admin Pesantren"}
 >
   <article class="pt-36 sm:pt-40 md:pt-48 pb-16 bg-white min-h-screen">
     
@@ -101,9 +105,7 @@ const artikelTerkait = relatedData || [];
 
     <!-- Isi Bacaan Teks (Body) -->
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg md:prose-xl prose-green md:leading-relaxed" data-aos="fade-up" data-aos-delay="200">
-      <div class="first-letter:text-6xl first-letter:font-black first-letter:text-pesantren first-letter:float-left first-letter:mr-3 first-letter:leading-none whitespace-pre-wrap text-gray-700 text-justify">
-        {artikelData.description}
-      </div>
+      <div class="text-gray-700 text-justify" set:html={artikelData.description}></div>
     </div>
     
     <!-- Pemisah (Separator) Akhir Artikel -->

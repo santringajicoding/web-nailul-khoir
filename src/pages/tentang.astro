@@ -9,6 +9,12 @@ const profilList = tentangData || [];
 // Ambil data Syaikhuna (Asatidz) - Wajib dinamis dari Admin
 const { data: syaikhunaData } = await supabase.from('syaikhuna').select('*');
 const asatidzList = syaikhunaData || [];
+
+// Ambil Visi & Misi dari pengaturan_web
+const { data: configData } = await supabase.from('pengaturan_web').select('*').in('key', ['visi_yayasan', 'misi_yayasan']);
+const visi = configData?.find(c => c.key === 'visi_yayasan')?.value || "Mencetak insan kamil yang beriman, bertakwa, berakhlakul karimah, berilmu amaliah, dan beramal ilmiah berlandaskan aqidah Ahlussunnah Wal Jama'ah.";
+const misiRaw = configData?.find(c => c.key === 'misi_yayasan')?.value || "Menyelenggarakan pendidikan pesantren salaf dan formal.\nMembina karakter santri dengan adab islami.\nMembekali keterampilan teknologi.";
+const misiList = misiRaw.split('\n').filter(m => m.trim() !== '');
 ---
 
 <MainLayout title="Profil & Tentang Kami">
@@ -51,7 +57,7 @@ const asatidzList = syaikhunaData || [];
             </div>
             <h2 class="text-3xl font-black text-gray-900 mb-4 tracking-tight">Visi Yayasan</h2>
             <p class="text-lg text-gray-600 leading-relaxed font-medium">
-              "Mencetak insan kamil yang beriman, bertakwa, berakhlakul karimah, berilmu amaliah, dan beramal ilmiah berlandaskan aqidah Ahlussunnah Wal Jama'ah, serta mampu menjawab tantangan zaman di era globalisasi."
+              "{visi}"
             </p>
           </div>
         </div>
@@ -68,18 +74,12 @@ const asatidzList = syaikhunaData || [];
             </div>
             <h2 class="text-3xl font-black text-gray-900 mb-4 tracking-tight">Misi Yayasan</h2>
             <ul class="text-lg text-gray-600 leading-relaxed font-medium space-y-3">
-              <li class="flex items-start">
-                <span class="text-emas mr-3 font-bold">1.</span>
-                <span>Menyelenggarakan pendidikan pesantren salaf dan pendidikan formal (SMP/SMK) yang terpadu.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-emas mr-3 font-bold">2.</span>
-                <span>Membina karakter santri dengan kedisiplinan, kemandirian, dan adab islami sehari-hari.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-emas mr-3 font-bold">3.</span>
-                <span>Membekali keterampilan teknologi &amp; wirausaha agar santri siap terjun ke masyarakat.</span>
-              </li>
+              {misiList.map((item, idx) => (
+                <li class="flex items-start">
+                  <span class="text-emas mr-3 font-bold">{idx + 1}.</span>
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -105,7 +105,7 @@ const asatidzList = syaikhunaData || [];
                   {item.judul}
                   <div class="h-1.5 w-24 bg-emas mt-3 rounded-full"></div>
                 </h2>
-                <div class="text-gray-600 leading-loose text-lg whitespace-pre-wrap">{item.description}</div>
+                <div class="text-gray-600 leading-loose text-lg" set:html={item.description}></div>
               </div>
             </div>
           ))}

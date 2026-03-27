@@ -1,18 +1,36 @@
 ---
 // src/components/MarqueeGaleri.astro
 
-// Kita menggunakan foto-foto placeholder sementara (gambar acak terkait edukasi/alam)
-// Nanti bisa diganti dengan foto asli kegiatan pondok dari URL Supabase/lokal
-const galeriFotos = [
-  "https://picsum.photos/seed/pondok1/400/300",
-  "https://picsum.photos/seed/pondok2/400/300",
-  "https://picsum.photos/seed/pondok3/400/300",
-  "https://picsum.photos/seed/pondok4/400/300",
-  "https://picsum.photos/seed/pondok5/400/300",
-  "https://picsum.photos/seed/pondok6/400/300"
-];
+import { supabase } from '../lib/supabase.js';
 
-// Untuk membuat efek infinite scroll yang mulus, array foto di-duplikasi
+// Mengambil galeri asli dari database
+const { data: dbGaleri, error } = await supabase.from('galeri').select('*').order('created_at', { ascending: false });
+
+interface GaleriItem {
+  url?: string;
+  foto_url?: string;
+  alt?: string;
+  judul?: string;
+  deskripsi?: string;
+}
+
+// Fallback gambar acak (Jaga-jaga jika tabel galeri belum terbuat atau kosong)
+let galeriFotos: GaleriItem[] = [];
+
+if (dbGaleri && dbGaleri.length > 0) {
+  galeriFotos = dbGaleri;
+} else {
+  galeriFotos = [
+    { url: "https://picsum.photos/seed/pondok1/400/300", alt: "Galeri Placeholder" },
+    { url: "https://picsum.photos/seed/pondok2/400/300", alt: "Galeri Placeholder" },
+    { url: "https://picsum.photos/seed/pondok3/400/300", alt: "Galeri Placeholder" },
+    { url: "https://picsum.photos/seed/pondok4/400/300", alt: "Galeri Placeholder" },
+    { url: "https://picsum.photos/seed/pondok5/400/300", alt: "Galeri Placeholder" },
+    { url: "https://picsum.photos/seed/pondok6/400/300", alt: "Galeri Placeholder" }
+  ];
+}
+
+// Untuk efek infinite scroll mulus, array foto wajib di-duplikasi (minimal 2 lapis)
 const marqueeItems = [...galeriFotos, ...galeriFotos];
 ---
 
@@ -36,15 +54,22 @@ const marqueeItems = [...galeriFotos, ...galeriFotos];
     <!-- Track Animasi -->
     <div class="animate-marquee flex gap-4 md:gap-6 w-max items-center py-4">
       {marqueeItems.map((foto, index) => (
-        <div class="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-64 h-48 md:w-80 md:h-56 shrink-0 border border-gray-100 cursor-pointer">
+        <div class="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-64 h-48 md:w-80 md:h-56 shrink-0 border border-gray-100 cursor-pointer group">
           <img 
-            src={foto} 
-            alt={`Galeri Kegiatan ${index + 1}`} 
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+            src={foto.url || foto.foto_url} 
+            alt={foto.alt || foto.judul || `Galeri Kegiatan ${index + 1}`} 
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy" 
           />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-            <p class="text-white font-medium p-4 translate-y-4 hover:translate-y-0 transition-transform duration-300 text-sm">Lihat momen ini</p>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div class="p-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 w-full">
+              <p class="text-white font-black text-sm sm:text-base leading-tight drop-shadow-md truncate">
+                {foto.judul || "Lihat momen ini"}
+              </p>
+              {foto.deskripsi && (
+                 <p class="text-gray-300 text-xs mt-1 line-clamp-2">{foto.deskripsi}</p>
+              )}
+            </div>
           </div>
         </div>
       ))}

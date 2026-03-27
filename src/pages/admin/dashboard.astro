@@ -1,388 +1,372 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 ---
-<AdminLayout title="Dashboard Utama">
+<AdminLayout title="Dashboard Analytics">
   
-  <div class="mb-8">
-    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Data Pendaftar Santri</h2>
-    <p class="text-gray-600 mt-2 text-lg">Manajemen pendaftaran santri baru Yayasan Nailul Khoir.</p>
+  <div class="mb-10">
+    <h2 class="text-4xl font-display font-black text-gray-900 tracking-tight">Ringkasan Analisis</h2>
+    <p class="text-gray-500 mt-2 text-lg font-light">Pantau pertumbuhan santri dan performa publikasi website secara langsung.</p>
+  </div>
+
+  <!-- Statistik Utama (Grid Cards) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 mb-10">
+    
+    <!-- Pendaftar Keseluruhan -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-gray-50 rounded-full -mr-8 -mt-8 group-hover:bg-gray-100 transition-colors"></div>
+        <div class="bg-gray-100 w-12 h-12 rounded-2xl flex items-center justify-center text-gray-600 mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Pendaftar</p>
+            <span class="text-3xl font-display font-black text-gray-900" id="statTotalPendaftar">0</span>
+        </div>
+    </div>
+
+    <!-- Pendaftar SMP -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-full -mr-8 -mt-8 group-hover:bg-blue-100 transition-colors"></div>
+        <div class="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">SMPIT</p>
+            <span class="text-3xl font-display font-black text-gray-900" id="statSMP">0</span>
+        </div>
+    </div>
+
+    <!-- Pendaftar SMK -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-orange-50 rounded-full -mr-8 -mt-8 group-hover:bg-orange-100 transition-colors"></div>
+        <div class="bg-orange-100 w-12 h-12 rounded-2xl flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-orange-400 uppercase tracking-widest mb-1">SMK IT</p>
+            <span class="text-3xl font-display font-black text-gray-900" id="statSMK">0</span>
+        </div>
+    </div>
+
+    <!-- Pendaftar Pondok -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-green-50 rounded-full -mr-8 -mt-8 group-hover:bg-green-100 transition-colors"></div>
+        <div class="bg-green-100 w-12 h-12 rounded-2xl flex items-center justify-center text-green-700 mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-1">Pondok</p>
+            <span class="text-3xl font-display font-black text-gray-900" id="statPondok">0</span>
+        </div>
+    </div>
+
+    <!-- Total Donasi -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 bg-emas/5 rounded-full -mr-8 -mt-8 group-hover:bg-emas/10 transition-colors"></div>
+        <div class="bg-emas/10 w-12 h-12 rounded-2xl flex items-center justify-center text-emas mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Donasi</p>
+            <span class="text-xl font-display font-black text-gray-900" id="statDonasi">Rp 0</span>
+        </div>
+    </div>
+
+    <!-- Pesan Belum Dibaca -->
+    <div class="bg-white rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.03)] p-6 border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+        <div id="unreadIndicator" class="absolute top-4 right-4 w-2 h-2 bg-red-500 rounded-full animate-ping hidden"></div>
+        <div class="bg-red-50 w-12 h-12 rounded-2xl flex items-center justify-center text-red-500 mb-4 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Pesan Inbox</p>
+            <span class="text-3xl font-display font-black text-gray-900" id="statPesan">0</span>
+        </div>
+    </div>
+
+  </div>
+
+  <!-- Charts & Activity Split -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+    
+    <!-- Grafik Pertumbuhan Pendaftar (8 Col) -->
+    <div class="lg:col-span-8 bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
+      <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+        <div>
+          <h3 class="text-xl font-bold text-gray-800">Tren Pendaftaran</h3>
+          <p class="text-sm text-gray-400">Grafik 30 hari terakhir</p>
+        </div>
+        <select id="chartTimeline" class="text-xs font-bold bg-gray-50 border-none rounded-lg px-3 py-2 outline-none cursor-pointer">
+          <option value="30">30 Hari</option>
+          <option value="7">7 Hari</option>
+        </select>
+      </div>
+      <div class="p-8 h-80 w-full">
+        <canvas id="registrationChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Pendaftar Terbaru (4 Col) -->
+    <div class="lg:col-span-4 bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden flex flex-col">
+       <div class="p-8 border-b border-gray-50 bg-gray-50/30">
+          <h3 class="text-xl font-bold text-gray-800">Aktivitas Baru</h3>
+          <p class="text-sm text-gray-400">Pendaftar santri terakhir</p>
+       </div>
+       <div id="recentList" class="p-4 flex-1 overflow-y-auto max-h-[360px] space-y-3">
+          <!-- Item list will be injected here -->
+          <div class="animate-pulse flex flex-col gap-4 p-4">
+             <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+             <div class="h-3 bg-gray-100 rounded w-1/2"></div>
+          </div>
+       </div>
+       <a href="/admin/ppdb" class="p-4 text-center text-sm font-bold text-pesantren hover:bg-green-50 transition-colors border-t border-gray-50">
+          Lihat Semua Data
+       </a>
+    </div>
+
+    <!-- Demografi Program (4 Col) -->
+    <div class="lg:col-span-4 bg-white rounded-[2rem] shadow-xl border border-gray-100 p-8 flex flex-col">
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Program Studi</h3>
+        <p class="text-sm text-gray-400 mb-6">Persentase Pilihan Santri</p>
+        <div class="flex-1 min-h-[250px] relative">
+            <canvas id="programChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Ringkasan Konten (8 Col) - Mini Stats Section -->
+    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-[2rem] p-8 text-white flex items-center justify-between border border-gray-700">
+            <div>
+               <p class="text-gray-400 text-sm mb-1">Berita Publik</p>
+               <h4 class="text-4xl font-display font-black" id="miniBerita">0</h4>
+            </div>
+            <a href="/admin/berita" class="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            </a>
+        </div>
+        <div class="bg-gradient-to-br from-indigo-900 to-indigo-800 rounded-[2rem] p-8 text-white flex items-center justify-between border border-indigo-700">
+            <div>
+               <p class="text-indigo-300 text-sm mb-1">Total Testimoni</p>
+               <h4 class="text-4xl font-display font-black" id="miniTesti">0</h4>
+            </div>
+             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+             </div>
+        </div>
+    </div>
+
   </div>
 
   <style>
-    @media print {
-      /* Sembunyikan semua elemen kecuali tabel saat diprint/PDF */
-      body * { visibility: hidden; }
-      #printableArea, #printableArea * { visibility: visible; }
-      #printableArea { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
-      .overflow-x-auto { overflow: visible !important; }
-      .print-hide { display: none !important; }
-      /* Bersihkan margin */
-      @page { margin: 1cm; size: landscape; }
-    }
+    /* Custom Scrollbar for Recent List */
+    #recentList::-webkit-scrollbar { width: 4px; }
+    #recentList::-webkit-scrollbar-track { background: transparent; }
+    #recentList::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
   </style>
 
-  <!-- Statistik Pendaftar (Grid Cards) -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 print-hide relative z-10">
-    <!-- Total Semua -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-pesantren flex items-center justify-between hover:shadow-xl transition-shadow">
-      <div>
-        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Pendaftar</p>
-        <p class="text-3xl font-black text-gray-800 mt-2" id="statTotal">0</p>
-      </div>
-      <div class="bg-green-100 p-3 rounded-full text-pesantren">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-      </div>
-    </div>
-    
-    <!-- Total SMPIT -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 flex items-center justify-between hover:shadow-xl transition-shadow">
-      <div>
-        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Pendaftar SMP</p>
-        <p class="text-3xl font-black text-blue-600 mt-2" id="statSMP">0</p>
-      </div>
-      <div class="bg-blue-100 p-3 rounded-full text-blue-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-      </div>
-    </div>
-
-    <!-- Total SMK -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-emas flex items-center justify-between hover:shadow-xl transition-shadow">
-      <div>
-        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Pendaftar SMK</p>
-        <p class="text-3xl font-black text-yellow-600 mt-2" id="statSMK">0</p>
-      </div>
-      <div class="bg-yellow-100 p-3 rounded-full text-yellow-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-      </div>
-    </div>
-
-    <!-- Total Pondok -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-l-4 border-green-700 flex items-center justify-between hover:shadow-xl transition-shadow">
-      <div>
-        <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">Santri Pondok</p>
-        <p class="text-3xl font-black text-green-700 mt-2" id="statPondok">0</p>
-      </div>
-      <div class="bg-green-100 p-3 rounded-full text-green-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-      </div>
-    </div>
-  </div>
-
-  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100" id="printableArea">
-    <!-- Header Tabel Tools -->
-    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 print-hide">
-      <!-- Tabs Filter -->
-      <div class="flex flex-wrap gap-2" id="filterTabs">
-        <button data-filter="Semua" class="tab-btn active bg-pesantren text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">Semua</button>
-        <button data-filter="SMPIT" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">SMPIT</button>
-        <button data-filter="SMK" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">SMK</button>
-        <button data-filter="Pondok Pesantren" class="tab-btn bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors focus:outline-none">Pondok</button>
-      </div>
-
-      <!-- Aksi Ekspor & Segarkan -->
-      <div class="flex flex-wrap gap-2 w-full xl:w-auto">
-        <button id="btnExportCSV" class="flex-1 xl:flex-none bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-          Exel/CSV
-        </button>
-        <button id="btnExportPDF" class="flex-1 xl:flex-none bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-          PDF / Cetak
-        </button>
-        <button id="btnRefresh" class="flex-1 xl:flex-none bg-gray-800 hover:bg-gray-900 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-          Segarkan
-        </button>
-      </div>
-    </div>
-
-    <div class="overflow-x-auto min-h-[400px]">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-white">
-          <tr>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Waktu Daftar</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Nama Santri</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Program Pilihan</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Nama Wali</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Kontak WhatsApp</th>
-            <th scope="col" class="px-6 py-4 text-left text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Status</th>
-            <th scope="col" class="print-hide px-6 py-4 text-center text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-50">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="pendaftarTableBody" class="bg-white divide-y divide-gray-100">
-          <tr>
-            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-              <div class="flex flex-col items-center justify-center">
-                <svg class="animate-spin h-10 w-10 text-pesantren mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <p class="font-medium text-lg">Menyinkronkan data dengan database...</p>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     import { supabase } from '../../lib/supabase.js';
+    declare const Chart: any;
 
-    // Auth Guard - Proteksi Halaman
-    async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.replace('/admin/login');
-        return null;
-      }
-      return session;
-    }
+    let myLineChart: any = null;
+    let myPieChart: any = null;
 
-    // Format tanggal cantik
-    function formatDate(dateStr: string) {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
-    }
+    // Fungsi utama load data
+    const loadDashboard = async () => {
+        try {
+            // 1. Fetch Parallel Data
+            const [
+                { data: pendaftar },
+                { count: beritaCount },
+                { count: unreadPesan },
+                { count: testiCount },
+                { data: donasiData }
+            ] = await Promise.all([
+                supabase.from('pendaftaran').select('*').order('created_at', { ascending: false }),
+                supabase.from('berita').select('*', { count: 'exact', head: true }),
+                supabase.from('pesan_masuk').select('*', { count: 'exact', head: true }).eq('status_baca', false),
+                supabase.from('testimoni').select('*', { count: 'exact', head: true }),
+                supabase.from('donasi').select('*')
+            ]);
 
-    let allData: any[] = [];
-    let currentFilter = 'Semua';
+            // 2. Kalkulasi Statistik
+            const totalPendaftar = pendaftar?.length || 0;
+            const smpitCount = pendaftar?.filter(p => p.jalur === 'SMPIT').length || 0;
+            const smkCount = pendaftar?.filter(p => p.jalur === 'SMK').length || 0;
+            const pondokCount = pendaftar?.filter(p => p.jalur === 'Pondok Pesantren').length || 0;
+            const unreadInbox = unreadPesan || 0;
+            
+            // Total Donasi Terverifikasi
+            const verifDonasiArr = donasiData?.filter(d => d.status === 'Terverifikasi') || [];
+            const sumDonasi = verifDonasiArr.reduce((acc, curr) => acc + Number(curr.jumlah), 0);
 
-    // Render Data Function
-    const renderTable = () => {
-      const tbody = document.getElementById('pendaftarTableBody');
-      if (!tbody) return;
+            // 3. Update DOM Elements
+            const updateText = (id: string, val: string) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
 
-      // Filter Data
-      const filteredData = currentFilter === 'Semua' 
-        ? allData 
-        : allData.filter(item => item.jalur === currentFilter);
+            updateText('statTotalPendaftar', totalPendaftar.toString());
+            updateText('statSMP', smpitCount.toString());
+            updateText('statSMK', smkCount.toString());
+            updateText('statPondok', pondokCount.toString());
+            updateText('statPesan', unreadInbox.toString());
+            updateText('miniBerita', (beritaCount || 0).toString());
+            updateText('miniTesti', (testiCount || 0).toString());
+            
+            // Format IDR Rupiah
+            updateText('statDonasi', new Intl.NumberFormat('id-ID', { 
+                style: 'currency', 
+                currency: 'IDR', 
+                maximumFractionDigits: 0 
+            }).format(sumDonasi));
 
-      if (!filteredData || filteredData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-16 text-center text-gray-500 font-medium text-lg">Tidak ada data pendaftar untuk Program / Filter ini.</td></tr>`;
-        return;
-      }
+            // Indicator Pesan & Donasi (Badge Merah)
+            const msgPing = document.getElementById('unreadIndicator');
+            if (unreadInbox > 0) msgPing?.classList.remove('hidden'); else msgPing?.classList.add('hidden');
 
-      // Helper untuk warna status
-      const getStatusStyle = (status: string) => {
-        if(status === 'Diterima') return 'bg-green-100 text-green-800 border-green-300';
-        if(status === 'Ditolak') return 'bg-red-100 text-red-800 border-red-300';
-        return 'bg-yellow-50 text-yellow-700 border-yellow-200';
-      };
+            // 4. Update Akvititas Terbaru (PPDB)
+            const recentBox = document.getElementById('recentList');
+            if (recentBox && pendaftar) {
+                if (pendaftar.length === 0) {
+                    recentBox.innerHTML = `<div class="p-8 text-center text-gray-400 text-sm italic">Belum ada aktivitas pendaftaran.</div>`;
+                } else {
+                    recentBox.innerHTML = pendaftar.slice(0, 7).map(p => `
+                        <div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-green-50/50 transition-colors border border-transparent hover:border-green-100 group">
+                            <div class="w-10 h-10 rounded-full bg-pesantren/10 text-pesantren flex items-center justify-center font-black text-sm group-hover:bg-pesantren group-hover:text-white transition-colors">
+                            ${p.nama_santri.charAt(0)}
+                            </div>
+                            <div class="flex-1">
+                                <h5 class="text-sm font-bold text-gray-800">${p.nama_santri}</h5>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">${p.jalur}</p>
+                                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                    <span class="text-[10px] ${p.status === 'Tertunda' ? 'text-amber-600' : 'text-green-600'} font-black uppercase">${p.status}</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-bold">${new Date(p.created_at).toLocaleDateString('id-ID', {day:'2-digit', month:'short'})}</span>
+                        </div>
+                    `).join('');
+                }
+            }
 
-      // Helper warna Jalur
-      const getJalurStyle = (jalur: string) => {
-        if(jalur === 'SMPIT') return 'bg-blue-100 text-blue-800 font-bold';
-        if(jalur === 'SMK') return 'bg-orange-100 text-orange-800 font-bold';
-        if(jalur === 'Pondok Pesantren') return 'bg-pesantren text-white font-bold';
-        return 'bg-gray-100 text-gray-800 font-medium';
-      };
+            // 5. Update Charts
+            if (typeof Chart !== 'undefined') {
+                renderCharts(pendaftar || []);
+            }
 
-      tbody.innerHTML = filteredData.map(item => `
-        <tr class="hover:bg-green-50 transition-colors duration-150 group">
-          <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-500 font-medium">${formatDate(item.created_at)}</td>
-          <td class="px-6 py-5">
-            <div class="text-base font-extrabold text-gray-900 mb-1 group-hover:text-pesantren transition-colors">${item.nama_santri}</div>
-            <div class="text-xs text-gray-500 line-clamp-2 pr-4 leading-relaxed" title="${item.alamat}">
-              <span class="font-bold text-gray-600">Alamat:</span> ${item.alamat}
-            </div>
-          </td>
-          <td class="px-6 py-5 whitespace-nowrap">
-            <span class="px-3 py-1.5 text-xs rounded-lg ${getJalurStyle(item.jalur)} shadow-sm border border-transparent">
-              ${item.jalur || 'Jalur Tidak Diketahui'}
-            </span>
-          </td>
-          <td class="px-6 py-5 whitespace-nowrap text-sm font-bold text-gray-700">${item.nama_wali}</td>
-          <td class="px-6 py-5 whitespace-nowrap">
-            <a href="https://wa.me/${item.no_hp.replace(/^0/, '62')}" target="_blank" 
-               class="inline-flex items-center px-4 py-2 rounded-full text-xs font-bold bg-green-50 text-green-700 hover:bg-green-600 hover:text-white transition-all shadow-sm border border-green-200 hover:border-transparent">
-              ${item.no_hp}
-            </a>
-          </td>
-          <td class="px-6 py-5 whitespace-nowrap">
-             <span class="px-3 py-1.5 inline-flex text-xs leading-5 font-bold rounded-full border ${getStatusStyle(item.status)}">
-              ${item.status}
-            </span>
-          </td>
-          <td class="print-hide px-6 py-5 whitespace-nowrap text-center text-sm font-medium">
-            <div class="flex items-center justify-center space-x-2">
-              ${item.status !== 'Diterima' ? 
-                `<button data-action="terima" data-id="${item.id}" class="text-white bg-pesantren hover:bg-green-800 px-3 py-1.5 rounded-md text-xs shadow-sm transition-colors" title="Terima Santri">Terima</button>` 
-                : ''}
-              ${item.status !== 'Ditolak' ? 
-                `<button data-action="tolak" data-id="${item.id}" class="text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md text-xs shadow-sm transition-colors" title="Tolak Status">Tolak</button>` 
-                : ''}
-              <button data-action="hapus" data-id="${item.id}" data-name="${item.nama_santri}" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1.5 rounded-md transition-colors" title="Hapus Data">
-                Hapus
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    };
-
-    // Load Data Function (Fetch dari Supabase)
-    const loadData = async () => {
-      const session = await checkAuth();
-      if (!session) return;
-
-      const tbody = document.getElementById('pendaftarTableBody');
-      if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-gray-500"><svg class="animate-spin mx-auto h-8 w-8 text-pesantren mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Memuat data...</td></tr>`;
-
-      const { data, error } = await supabase
-        .from('pendaftaran')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Database Error:', error);
-        if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-red-600 font-bold bg-red-50">Gagal memuat data: ${error.message}</td></tr>`;
-        return;
-      }
-
-      allData = data || [];
-      renderTable();
-
-      // Perhitungan Statistik Total
-      const statTotal = document.getElementById('statTotal');
-      const statSMP = document.getElementById('statSMP');
-      const statSMK = document.getElementById('statSMK');
-      const statPondok = document.getElementById('statPondok');
-
-      if (statTotal) statTotal.textContent = allData.length.toString();
-      if (statSMP) statSMP.textContent = allData.filter(i => i.jalur === 'SMPIT').length.toString();
-      if (statSMK) statSMK.textContent = allData.filter(i => i.jalur === 'SMK').length.toString();
-      if (statPondok) statPondok.textContent = allData.filter(i => i.jalur === 'Pondok Pesantren').length.toString();
-    };
-
-    // Fungsi Update Status
-    const updateStatus = async (id: string, newStatus: string) => {
-      const { error } = await supabase
-        .from('pendaftaran')
-        .update({ status: newStatus })
-        .eq('id', id);
-      
-      if (error) {
-        alert('Gagal memperbarui status: ' + error.message);
-      } else {
-        loadData(); // Refresh UI
-      }
-    };
-
-    // Fungsi Hapus Data
-    const deleteData = async (id: string, nama: string) => {
-      if(confirm(`Yakin ingin menghapus data calon santri secara permanen bernama: ${nama}?`)) {
-        const { error } = await supabase
-          .from('pendaftaran')
-          .delete()
-          .eq('id', id);
-        
-        if (error) {
-          alert('Gagal menghapus data: ' + error.message);
-        } else {
-          loadData(); // Refresh UI
+        } catch (err) {
+            console.error('Dash Error:', err);
         }
-      }
     };
 
-    // Fungsi Export CSV/Excel
-    const exportCSV = () => {
-      const filteredData = currentFilter === 'Semua' ? allData : allData.filter(item => item.jalur === currentFilter);
-      if (filteredData.length === 0) {
-        alert('Tidak ada data untuk diekspor!');
-        return;
-      }
+    const renderCharts = (data: any[]) => {
+        // --- LINE CHART: TREND PENDAFTARAN ---
+        const ctxL = document.getElementById('registrationChart') as HTMLCanvasElement;
+        if (!ctxL) return;
 
-      // Headers CSV
-      const headers = ['Waktu_Daftar', 'Nama_Santri', 'Program_Jalur', 'Nama_Wali', 'No_WhatsApp', 'Alamat', 'Status'];
-      const csvRows = [headers.join(',')];
+        const timeline = 30; // 30 hari terakhir
+        const dailyStats = [...Array(timeline)].map((_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - (timeline - 1 - i));
+            return { 
+                dateStr: d.toISOString().split('T')[0], 
+                label: d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }), 
+                count: 0 
+            };
+        });
 
-      // Format Data ke CSV
-      filteredData.forEach(row => {
-        const values = [
-          `"${new Date(row.created_at).toLocaleString('id-ID')}"`,
-          `"${row.nama_santri}"`,
-          `"${row.jalur || 'Tidak Diketahui'}"`,
-          `"${row.nama_wali}"`,
-          `"${row.no_hp}"`,
-          `"${row.alamat.replace(/\n/g, ' ')}"`, // Hapus enter di alamat
-          `"${row.status}"`
-        ];
-        csvRows.push(values.join(','));
-      });
+        data.forEach(p => {
+            const pDate = new Date(p.created_at).toISOString().split('T')[0];
+            const found = dailyStats.find(s => s.dateStr === pDate);
+            if (found) found.count++;
+        });
 
-      // Bikin file blob untuk didownload
-      const csvData = csvRows.join('\n');
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('hidden', '');
-      a.setAttribute('href', url);
-      a.setAttribute('download', `Laporan_Pendaftar_${currentFilter.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`);
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+        if (myLineChart) myLineChart.destroy();
+        myLineChart = new Chart(ctxL, {
+            type: 'line',
+            data: {
+                labels: dailyStats.map(s => s.label),
+                datasets: [{
+                    label: 'Pendaftaran',
+                    data: dailyStats.map(s => s.count),
+                    borderColor: '#15803d',
+                    backgroundColor: 'rgba(21, 128, 61, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#15803d',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1, color: '#9ca3af', font: { size: 10 } }, grid: { color: '#f3f4f6' } },
+                    x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { display: false } }
+                }
+            }
+        });
+
+        // --- DONUT CHART: PROGRAM STUDI ---
+        const ctxP = document.getElementById('programChart') as HTMLCanvasElement;
+        if (!ctxP) return;
+
+        const jalurCounts = {
+            'SMPIT': data.filter(p => p.jalur === 'SMPIT').length,
+            'SMK': data.filter(p => p.jalur === 'SMK').length,
+            'Pondok': data.filter(p => p.jalur === 'Pondok Pesantren').length
+        };
+
+        if (myPieChart) myPieChart.destroy();
+        myPieChart = new Chart(ctxP, {
+            type: 'doughnut',
+            data: {
+                labels: ['SMPIT', 'SMK IT', 'Pondok'],
+                datasets: [{
+                    data: [jalurCounts.SMPIT, jalurCounts.SMK, jalurCounts.Pondok],
+                    backgroundColor: ['#3b82f6', '#f59e0b', '#15803d'],
+                    borderWidth: 8,
+                    borderColor: '#ffffff',
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 30, font: { size: 12, weight: 'bold' } } }
+                }
+            }
+        });
     };
 
-    // Jalankan saat script dimuat
-    document.addEventListener('DOMContentLoaded', () => {
-      loadData();
-      
-      // Setup Tombol Filter Tabs
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          // Ganti kelas aktif
-          tabBtns.forEach(b => {
-            b.classList.remove('bg-pesantren', 'text-white');
-            b.classList.add('bg-white', 'text-gray-700');
-          });
-          const targetBtn = e.target as HTMLButtonElement;
-          targetBtn.classList.remove('bg-white', 'text-gray-700');
-          targetBtn.classList.add('bg-pesantren', 'text-white');
-          
-          // Set Filter State dan Render Ulang
-          currentFilter = targetBtn.getAttribute('data-filter') || 'Semua';
-          renderTable();
+    // --- REALTIME SUBSCRIPTION (Supabase Magic) ---
+    const subscribeRealtime = () => {
+        const tables = ['pendaftaran', 'pesan_masuk', 'donasi', 'berita', 'testimoni'];
+        
+        tables.forEach(table => {
+            supabase
+                .channel(`public:${table}`)
+                .on('postgres_changes', { event: '*', schema: 'public', table: table }, () => {
+                    console.log(`Change detected in ${table}, refreshing dashboard...`);
+                    loadDashboard();
+                })
+                .subscribe();
         });
-      });
+    };
 
-      // Tombol Aksi Laporan & Segarkan
-      const btnRefresh = document.getElementById('btnRefresh');
-      if (btnRefresh) btnRefresh.addEventListener('click', loadData);
-
-      const btnExportCSV = document.getElementById('btnExportCSV');
-      if (btnExportCSV) btnExportCSV.addEventListener('click', exportCSV);
-
-      const btnExportPDF = document.getElementById('btnExportPDF');
-      if (btnExportPDF) {
-        btnExportPDF.addEventListener('click', () => {
-           window.print(); // Memanggil dialog cetak sistem operasi
-        });
-      }
-
-      // Event Delegation untuk Tabel Aksi (Update/Delete)
-      const tbody = document.getElementById('pendaftarTableBody');
-      if (tbody) {
-        tbody.addEventListener('click', (e) => {
-          const target = (e.target as Element).closest('button');
-          if (!target) return;
-
-          const action = target.getAttribute('data-action');
-          const id = target.getAttribute('data-id');
-          const name = target.getAttribute('data-name');
-
-          if (!id) return;
-
-          if (action === 'terima') {
-            updateStatus(id, 'Diterima');
-          } else if (action === 'tolak') {
-            updateStatus(id, 'Ditolak');
-          } else if (action === 'hapus') {
-            deleteData(id, name || 'Santri');
-          }
-        });
-      }
+    // --- INITIALIZE ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadDashboard();
+        subscribeRealtime();
     });
   </script>
 </AdminLayout>

@@ -1,0 +1,128 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { supabase } from '../lib/supabase.js';
+
+// Ambil data galeri dari Supabase
+const { data: galeriData, error } = await supabase
+  .from('galeri')
+  .select('*')
+  .order('created_at', { ascending: false });
+
+const description = "Koleksi dokumentasi kegiatan, fasilitas, dan momen-momen berharga di Yayasan Pondok Pesantren Nailul Khoir Majalengka.";
+---
+
+<MainLayout title="Galeri Kegiatan - PP Nailul Khoir" description={description}>
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-20 bg-pesantren overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+      <div class="absolute bottom-0 right-0 w-96 h-96 bg-emas rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <h1 class="text-4xl md:text-6xl font-display font-black text-white mb-6" data-aos="fade-down">
+        Galeri <span class="text-emas">Kegiatan</span>
+      </h1>
+      <p class="text-xl text-green-100 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+        Jelajahi momen-momen istimewa dan aktivitas santri kami melalui lensa kamera.
+      </p>
+    </div>
+  </section>
+
+  <!-- Galeri Grid -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      {error && (
+        <div class="text-center py-20 bg-red-50 rounded-3xl border border-red-100">
+          <p class="text-red-600 font-bold">Gagal memuat galeri: {error.message}</p>
+        </div>
+      )}
+
+      {!error && (!galeriData || galeriData.length === 0) && (
+        <div class="text-center py-32 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p class="text-gray-500 text-xl font-medium">Belum ada foto dalam galeri saat ini.</p>
+        </div>
+      )}
+
+      {galeriData && galeriData.length > 0 && (
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+          {galeriData.map((item, index) => (
+            <div 
+              class="break-inside-avoid group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer"
+              data-aos="fade-up"
+              data-aos-delay={index % 3 * 100}
+              onclick={`openLightbox('${item.foto_url}', '${item.judul.replace(/'/g, "\\'")}', '${(item.deskripsi || '').replace(/'/g, "\\'")}')`}
+            >
+              <img 
+                src={item.foto_url} 
+                alt={item.judul}
+                class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <h3 class="text-white font-bold text-lg leading-tight mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  {item.judul}
+                </h3>
+                {item.deskripsi && (
+                   <p class="text-gray-300 text-sm line-clamp-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+                     {item.deskripsi}
+                   </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white hover:text-emas transition-colors z-[110]">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <div class="relative max-w-5xl w-full h-full flex flex-col items-center justify-center gap-6">
+      <img id="lightboxImg" src="" alt="" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl" />
+      <div class="text-center text-white max-w-2xl">
+        <h2 id="lightboxTitle" class="text-2xl font-black mb-2"></h2>
+        <p id="lightboxDesc" class="text-gray-400"></p>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    function openLightbox(url, title, desc) {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightboxImg');
+      const titleEl = document.getElementById('lightboxTitle');
+      const descEl = document.getElementById('lightboxDesc');
+
+      img.src = url;
+      titleEl.innerText = title;
+      descEl.innerText = desc || '';
+
+      lightbox.classList.remove('hidden');
+      setTimeout(() => lightbox.classList.add('opacity-100'), 10);
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      lightbox.classList.remove('opacity-100');
+      setTimeout(() => lightbox.classList.add('hidden'), 300);
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</MainLayout>

@@ -42,7 +42,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
         <div class="col-span-1 md:col-span-2">
           <label class="block text-sm font-bold text-gray-700 mb-1">Keterangan / Jadwal Rutin <span class="text-red-500">*</span></label>
-          <textarea id="description" name="description" rows="5" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none resize-y" placeholder="Setiap Ba'da Subuh. Pemateri: ..."></textarea>
+          <textarea id="description" name="description" required class="hidden"></textarea>
+          <div class="bg-white rounded-lg border border-gray-300 overflow-hidden">
+             <div id="quill-editor" class="h-48 sm:h-64 w-full bg-gray-50 text-gray-800 text-base border-0"></div>
+          </div>
         </div>
       </div>
 
@@ -72,10 +75,21 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     import { supabase } from '../../lib/supabase.js';
 
     let allKajianData: any[] = [];
+    let quill: any = null;
 
-    async function init() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return window.location.replace('/admin/login');
+    function init() {
+      if ((window as any).Quill) {
+        quill = new (window as any).Quill('#quill-editor', {
+          theme: 'snow',
+          placeholder: 'Tuliskan detail kajian kaya (Rich Text) disini...',
+          modules: { toolbar: [ [{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline', 'strike'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['link', 'clean'] ] }
+        });
+        quill.on('text-change', () => {
+          const descInput = document.getElementById('description') as HTMLTextAreaElement;
+          const html = quill.root.innerHTML;
+          descInput.value = html === '<p><br></p>' ? '' : html;
+        });
+      }
       loadData();
     }
 
@@ -90,6 +104,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
        (document.getElementById('formTitle') as HTMLElement).textContent = 'Input Info Kajian Baru';
        (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Kajian';
        (document.getElementById('labelFoto') as HTMLElement).textContent = 'Unggah Poster/Banner (Opsional)';
+       if(quill) quill.setContents([]);
        btnCancelEdit?.classList.add('hidden');
     };
 
@@ -128,7 +143,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           </div>
           <div class="p-5 flex-grow flex flex-col">
             <h4 class="font-bold text-gray-900 text-lg mb-2 line-clamp-2">${item.judul}</h4>
-            <p class="text-gray-500 text-sm mb-4 flex-grow whitespace-pre-wrap">${item.description}</p>
+            <p class="text-gray-500 text-sm mb-4 flex-grow line-clamp-3">${item.description ? item.description.replace(/<[^>]*>?/gm, '') : ''}</p>
             <div class="pt-4 border-t border-gray-100 flex justify-end gap-2">
               <button data-action="edit-data" data-id="${item.id}" class="text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded text-sm font-bold transition-colors">Edit</button>
               <button data-action="hapus-data" data-id="${item.id}" data-nama="${item.judul}" class="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded text-sm font-bold transition-colors">Hapus</button>
@@ -233,6 +248,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             (document.getElementById('judul') as HTMLInputElement).value = itemToEdit.judul;
             (document.getElementById('description') as HTMLTextAreaElement).value = itemToEdit.description || '';
             (document.getElementById('old_foto_url') as HTMLInputElement).value = itemToEdit.foto_url || '';
+            if(quill) quill.clipboard.dangerouslyPasteHTML(itemToEdit.description || '');
             
             (document.getElementById('formTitle') as HTMLElement).textContent = 'Edit Kajian';
             (document.getElementById('btnSubmitText') as HTMLElement).textContent = 'Simpan Perubahan';

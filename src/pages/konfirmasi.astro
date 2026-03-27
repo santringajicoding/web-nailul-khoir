@@ -1,0 +1,60 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Konfirmasi Penerimaan - Nailul Khoir">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 p-6 pt-24">
+    <div class="max-w-md w-full bg-white rounded-3xl p-8 shadow-2xl border border-gray-100 text-center">
+      <div id="loader" class="flex flex-col items-center">
+         <div class="w-16 h-16 border-4 border-pesantren border-t-transparent rounded-full animate-spin mb-4"></div>
+         <h1 class="text-xl font-black text-gray-800 mb-2">Menyiapkan Dokumen...</h1>
+         <p class="text-gray-500 text-sm">Sedang mengambil surat resmi dari server Nailul Khoir.</p>
+      </div>
+
+      <div id="errorMsg" class="hidden">
+         <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+         </div>
+         <h1 class="text-xl font-bold text-gray-800 mb-2">Dokumen Tidak Ditemukan</h1>
+         <p class="text-gray-500 text-sm mb-6">Maaf, Surat Bukti Penerimaan belum siap atau link tidak valid.</p>
+         <a href="/" class="px-6 py-2.5 bg-pesantren text-white rounded-xl font-bold inline-block hover:bg-green-800 transition-all">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../lib/supabase.js';
+
+    const prepare = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      const loader = document.getElementById('loader');
+      const errorMsg = document.getElementById('errorMsg');
+
+      if(!id) {
+         loader?.classList.add('hidden');
+         errorMsg?.classList.remove('hidden');
+         return;
+      }
+
+      try {
+         // Get the public URL from storage
+         const fileName = `ppdb/Bukti_${id}.pdf`;
+         const { data } = supabase.storage.from('berita_images').getPublicUrl(fileName);
+         
+         if(data && data.publicUrl) {
+            // Check if file exists (optional, but good for logic)
+            // Redirect immediately
+            window.location.href = data.publicUrl;
+         } else {
+            throw new Error('Not found');
+         }
+      } catch (err) {
+         loader?.classList.add('hidden');
+         errorMsg?.classList.remove('hidden');
+      }
+    };
+
+    prepare();
+  </script>
+</MainLayout>

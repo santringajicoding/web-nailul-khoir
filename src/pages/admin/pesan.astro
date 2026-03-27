@@ -54,12 +54,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     }
 
     const loadPesan = async () => {
-      // 1. Cek sesi
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.replace('/admin/login');
-        return;
-      }
+      // 1. Cek sesi dihapus karena AdminLayout yang validasi
 
       const tbody = document.getElementById('pesanTableBody');
       const unreadBadge = document.getElementById('unreadBadge');
@@ -108,12 +103,21 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
           </td>
           <td class="px-6 py-5 whitespace-nowrap text-center text-sm">
             <div class="flex flex-col items-center justify-center space-y-2">
+              <div class="flex gap-2 w-full">
+                <button data-action="wa" data-id="${item.id}" data-nama="${item.nama}" data-kontak="${item.kontak}" data-pesan="${item.pesan.substring(0, 50)}" class="flex-1 bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg transition-transform hover:scale-105 active:scale-95 shadow-sm" title="Balas via WhatsApp">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.512-2.96-2.626-.087-.114-.694-.924-.694-1.763 0-.839.44-.1.839.541 1.13.087.144.111.416.111.621 0 .205.111.416.111.621-.034.08-.073.123-.111.166-.038.044-.082.094-.122.144-.041.056-.057.108-.027.158.03.05.133.218.286.354.197.174.453.308.642.365.189.057.299.049.414-.082.114-.131.488-.574.621-.77.133-.197.265-.164.448-.098.182.066 1.156.545 1.355.644.2.099.332.148.38.23.049.082.049.477-.095.882z"/></svg>
+                </button>
+                <button data-action="email" data-id="${item.id}" data-nama="${item.nama}" data-kontak="${item.kontak}" data-pesan="${item.pesan.substring(0, 50)}" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-transform hover:scale-105 active:scale-95 shadow-sm" title="Balas via Email">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </button>
+              </div>
+
               ${!item.status_baca ? 
-                `<button data-action="baca" data-id="${item.id}" class="w-full text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md text-xs font-bold shadow-sm transition-colors">Tandai Dibaca</button>` 
+                `<button data-action="baca" data-id="${item.id}" class="w-full text-white bg-gray-800 hover:bg-black px-3 py-1.5 rounded-md text-xs font-bold shadow-sm transition-colors border border-gray-700">Tandai Dibaca</button>` 
                 : 
                 `<span class="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-md w-full block">Telah Dibaca</span>`
               }
-              <button data-action="hapus" data-id="${item.id}" class="w-full text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-transparent px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
+              <button data-action="hapus" data-id="${item.id}" class="w-full text-red-600 hover:text-white bg-transparent hover:bg-red-600 border border-red-200 hover:border-transparent px-3 py-1.5 rounded-md text-xs font-bold transition-colors">
                 Hapus
               </button>
             </div>
@@ -122,10 +126,28 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       `).join('');
     };
 
+    // --- FUNGSI BALAS OTOMATIS ---
+    const balasWA = async (id: string, nama: string, kontak: string, snippet: string) => {
+        const text = encodeURIComponent(`Assalamu'alaikum Wr. Wb. Bapak/Ibu *${nama}*,\n\nTerima kasih telah menghubungi *Yayasan Pondok Pesantren Nailul Khoir*. Kami telah menerima pesan Anda mengenai: _"${snippet}..."_\n\nBerikut adalah jawaban/tanggapan dari kami:\n\n`);
+        const phone = kontak.replace(/[^0-9]/g, '');
+        const targetPhone = phone.startsWith('0') ? '62' + phone.substring(1) : phone;
+        
+        window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+        updateStatusBaca(id, false); // Tandai dibaca tanpa reload
+    };
+
+    const balasEmail = async (id: string, nama: string, kontak: string, snippet: string) => {
+        const subject = encodeURIComponent('Tanggapan Pesan - Yayasan Nailul Khoir');
+        const body = encodeURIComponent(`Assalamu'alaikum Wr. Wb. Bapak/Ibu ${nama},\n\nTerima kasih telah menghubungi Yayasan Pondok Pesantren Nailul Khoir.\n\nKami telah membaca pesan Anda mengenai: "${snippet}..."\n\nBerikut adalah tanggapan kami:\n\n------------------\n\nSalam Takdzim,\nAdmin Yayasan Nailul Khoir`);
+        
+        window.location.href = `mailto:${kontak}?subject=${subject}&body=${body}`;
+        updateStatusBaca(id, false);
+    };
+
     // Fungsi Aksi
-    const updateStatusBaca = async (id: string) => {
+    const updateStatusBaca = async (id: string, reload = true) => {
       const { error } = await supabase.from('pesan_masuk').update({ status_baca: true }).eq('id', id);
-      if (!error) loadPesan();
+      if (!error && reload) loadPesan();
     };
 
     const deletePesan = async (id: string) => {
@@ -149,10 +171,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
           const action = target.getAttribute('data-action');
           const id = target.getAttribute('data-id');
+          const nama = target.getAttribute('data-nama') || '';
+          const kontak = target.getAttribute('data-kontak') || '';
+          const snippet = target.getAttribute('data-pesan') || '';
 
           if (!id) return;
           if (action === 'baca') updateStatusBaca(id);
           if (action === 'hapus') deletePesan(id);
+          if (action === 'wa') balasWA(id, nama, kontak, snippet);
+          if (action === 'email') balasEmail(id, nama, kontak, snippet);
         });
       }
     });
