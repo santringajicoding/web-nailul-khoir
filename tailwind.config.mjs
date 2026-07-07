@@ -8,8 +8,8 @@ export default {
                 display: ['Outfit', 'sans-serif'],
             },
             colors: {
-                pesantren: '#15803d',
-                emas: '#fbbf24'
+                pesantren: '#064e3b',
+                emas: '#dfb15b'
             }
         },
     },
