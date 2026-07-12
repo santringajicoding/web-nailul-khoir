@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nailulkhoir-cache-v4';
+const CACHE_NAME = 'nailulkhoir-cache-v5';
 const urlsToCache = [
   '/',
   '/manifest.json',
