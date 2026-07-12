@@ -10,17 +10,17 @@
             <img src="/images/logo.png" alt="Logo PP Nailul Khoir" class="h-10 sm:h-12 lg:h-14 w-auto object-contain" />
           </div>
           <div class="flex flex-col justify-center leading-tight max-w-[160px] sm:max-w-none">
-            <span class="font-display font-medium text-[8px] sm:text-[10px] lg:text-[12px] tracking-normal sm:tracking-[0.25em] text-emas group-hover:text-white transition-colors uppercase">Yayasan Pondok Pesantren</span>
-            <span class="font-display font-black text-sm sm:text-lg lg:text-[22px] tracking-tight text-white transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] uppercase">
+            <span class="font-display font-medium text-[8px] sm:text-[10px] lg:text-[9px] xl:text-[12px] tracking-normal sm:tracking-wider xl:tracking-[0.25em] text-emas group-hover:text-white transition-colors uppercase">Yayasan Pondok Pesantren</span>
+            <span class="font-display font-black text-sm sm:text-lg lg:text-base xl:text-[22px] tracking-tight text-white transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] uppercase">
               Nailul <span class="text-emas whitespace-nowrap">Khoir</span>
             </span>
-            <span class="text-[7px] sm:text-[9px] font-bold text-green-400 mt-0.5 tracking-normal sm:tracking-[0.3em] uppercase opacity-70">Banjaran - Majalengka</span>
+            <span class="text-[7px] sm:text-[9px] lg:text-[8px] xl:text-[9px] font-bold text-green-400 mt-0.5 tracking-normal sm:tracking-wider xl:tracking-[0.3em] uppercase opacity-70">Banjaran - Majalengka</span>
           </div>
         </a>
       </div>
       
       <!-- Desktop Menu - Mengatur Jarak Lebih Proporsional -->
-      <div class="hidden lg:flex items-center gap-2 xl:gap-6 ml-10 xl:ml-16">
+      <div class="hidden lg:flex items-center gap-1.5 xl:gap-6 ml-4 xl:ml-16 flex-shrink-0">
         <a href="/" class="nav-link group">
           BERANDA
           <span class="nav-underline"></span>
@@ -50,7 +50,7 @@
           <span class="nav-underline"></span>
         </a>
         
-        <div class="flex items-center gap-3 ml-4 xl:ml-8">
+        <div class="flex items-center gap-1.5 xl:gap-3 ml-2 xl:ml-8 flex-shrink-0">
             <a href="/donasi" class="donasi-btn group/donasi">
                 <span class="donasi-dot"></span>
                 DONASI
@@ -76,7 +76,7 @@
 
   <style>
     .nav-link {
-        @apply relative text-white/80 hover:text-white py-2 text-[14px] font-display font-bold tracking-widest transition-all duration-300;
+        @apply relative text-white/80 hover:text-white py-2 text-[11px] xl:text-[14px] font-display font-bold tracking-wider xl:tracking-widest transition-all duration-300;
     }
     .nav-underline {
         @apply absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-emas to-yellow-200 opacity-0 transition-all duration-500 ease-out rounded-full;
@@ -85,13 +85,13 @@
         @apply w-full opacity-100;
     }
     .donasi-btn {
-        @apply px-6 py-2.5 rounded-2xl text-[13px] font-display font-black border border-emas/40 text-emas hover:bg-emas hover:text-[#064e3b] hover:scale-105 active:scale-95 transition-all duration-500 flex items-center gap-2 shadow-lg shadow-emas/5;
+        @apply px-3 py-2 xl:px-6 xl:py-2.5 rounded-xl xl:rounded-2xl text-[11px] xl:text-[13px] font-display font-black border border-emas/40 text-emas hover:bg-emas hover:text-[#064e3b] hover:scale-105 active:scale-95 transition-all duration-500 flex items-center gap-1.5 xl:gap-2 shadow-lg shadow-emas/5;
     }
     .donasi-dot {
         @apply w-2.5 h-2.5 rounded-full bg-emas animate-pulse;
     }
     .ppdb-btn {
-        @apply bg-gradient-to-br from-yellow-400 via-emas to-yellow-600 text-[#064e3b] px-7 py-3 rounded-2xl text-[13px] font-display font-black shadow-[0_15px_30px_rgba(234,179,8,0.25)] hover:shadow-[0_20px_40px_rgba(234,179,8,0.45)] hover:scale-105 active:scale-95 transition-all duration-500 border border-yellow-300/50 flex items-center gap-2 uppercase tracking-wider;
+        @apply bg-gradient-to-br from-yellow-400 via-emas to-yellow-600 text-[#064e3b] px-4 py-2.5 xl:px-7 xl:py-3 rounded-xl xl:rounded-2xl text-[11px] xl:text-[13px] font-display font-black shadow-[0_15px_30px_rgba(234,179,8,0.25)] hover:shadow-[0_20px_40px_rgba(234,179,8,0.45)] hover:scale-105 active:scale-95 transition-all duration-500 border border-yellow-300/50 flex items-center gap-1.5 xl:gap-2 uppercase tracking-wide xl:tracking-wider;
     }
   </style>
 
