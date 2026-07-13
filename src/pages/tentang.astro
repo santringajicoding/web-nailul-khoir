@@ -139,6 +139,86 @@ const misiList = misiRaw.split('\n').filter(m => m.trim() !== '');
     </div>
   </section>
 
+  <!-- FASILITAS PESANTREN (Interactive Gallery / Mini Virtual Tour) -->
+  <section class="py-24 bg-white relative overflow-hidden border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <span class="inline-block py-1.5 px-4 rounded-full bg-yellow-50 border border-yellow-200 text-emas text-sm font-bold tracking-widest mb-4">
+          TUR VIRTUAL FASILITAS
+        </span>
+        <h2 class="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight mb-6">
+          Sarana & Fasilitas Pesantren
+        </h2>
+        <p class="text-xl text-gray-600">
+          Mendukung kenyamanan ibadah, kenyamanan tinggal, dan efektivitas proses belajar mengajar santri.
+        </p>
+        <div class="h-1.5 w-32 bg-pesantren mx-auto mt-8 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Fasilitas 1 -->
+        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="0">
+          <div class="h-56 w-full overflow-hidden relative shrink-0">
+            <img src="/images/hero-bg.jpg" alt="Masjid Jami'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter saturate-[80%]" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <span class="absolute bottom-4 left-4 bg-emas text-[#031c14] text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Pusat Ibadah</span>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Masjid Jami' Nailul Khoir</h3>
+              <p class="text-gray-600 text-sm leading-relaxed">Pusat pelaksanaan ibadah salat berjamaah, pembacaan wirid, dan pengajian kitab kuning.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fasilitas 2 -->
+        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="100">
+          <div class="h-56 w-full overflow-hidden relative shrink-0">
+            <img src="/images/hero-bg.jpg" alt="Lab Komputer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter hue-rotate-15" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <span class="absolute bottom-4 left-4 bg-blue-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Teknologi</span>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Laboratorium Komputer</h3>
+              <p class="text-gray-600 text-sm leading-relaxed">Laboratorium modern ber-AC dengan rasio PC 1:1 untuk praktek software engineering RPL & TKJ.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fasilitas 3 -->
+        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="200">
+          <div class="h-56 w-full overflow-hidden relative shrink-0">
+            <img src="/images/hero-bg.jpg" alt="Asrama Santri" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-95" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <span class="absolute bottom-4 left-4 bg-pesantren text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Asrama</span>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Asrama Pondok</h3>
+              <p class="text-gray-600 text-sm leading-relaxed">Kamar tinggal santri yang rapi dan terpisah antara asrama putra dan putri dengan pengawasan 24 jam.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fasilitas 4 -->
+        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="300">
+          <div class="h-56 w-full overflow-hidden relative shrink-0">
+            <img src="/images/hero-bg.jpg" alt="Ruang Kelas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter contrast-125" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <span class="absolute bottom-4 left-4 bg-orange-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Ruang Belajar</span>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Ruang Kelas Smart</h3>
+              <p class="text-gray-600 text-sm leading-relaxed">Ruang belajar teori berlantai keramik yang bersih dan dilengkapi papan tulis kaca serta proyektor lcd.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- DEWAN ASATIDZ / PENGASUH (CMS Dinamis) -->
   <section class="py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden border-t border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
