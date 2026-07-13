@@ -49,10 +49,10 @@ const description = "Koleksi dokumentasi kegiatan, fasilitas, dan momen-momen be
       )}
 
       {galeriData && galeriData.length > 0 && (
-        <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
           {galeriData.map((item, index) => (
             <div 
-              class="break-inside-avoid group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer"
+              class="break-inside-avoid mb-6 group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer"
               data-aos="fade-up"
               data-aos-delay={index % 3 * 100}
               onclick={`openLightbox('${item.foto_url}', '${item.judul.replace(/'/g, "\\'")}', '${(item.deskripsi || '').replace(/'/g, "\\'")}')`}
