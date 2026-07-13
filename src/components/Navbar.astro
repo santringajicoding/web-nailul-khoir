@@ -11,25 +11,25 @@
             <img src="/images/logo.png" alt="Logo PP Nailul Khoir" class="h-full w-auto object-contain drop-shadow-[0_2px_10px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-all duration-500" />
           </div>
           
-          <!-- Logo Text Details (Coded to match official header design logo) -->
-          <div class="flex flex-col justify-center text-left leading-none relative z-10 transition-all duration-500 group-hover:translate-x-0.5">
+          <!-- Logo Text Details (Coded to match official header design logo - Centered layout) -->
+          <div class="flex flex-col justify-center items-center text-center leading-none relative z-10 transition-all duration-500">
             <!-- 1. Arabic Calligraphy Line -->
-            <span class="font-sans font-medium text-[8px] sm:text-[10px] lg:text-[9.5px] xl:text-[11.5px] text-green-300 tracking-wide leading-none select-none">مَعْهَدُ التَّرْبِيَّةِ الإِسْلَامِيَّةِ نَيْلُ الْخَيْرِ</span>
+            <span id="brand-arabic" class="font-sans font-medium text-[8px] sm:text-[10px] lg:text-[9.5px] xl:text-[11.5px] text-green-300 tracking-wide leading-none select-none">مَعْهَدُ التَّرْبِيَّةِ الإِسْلَامِيَّةِ نَيْلُ الْخَيْرِ</span>
             
             <!-- 2. Yayasan Pondok Pesantren -->
-            <span class="font-display font-bold text-[6px] sm:text-[8px] lg:text-[7.5px] xl:text-[9px] tracking-[0.12em] sm:tracking-[0.2em] text-white/90 uppercase mt-0.5 sm:mt-1 leading-none">Yayasan Pondok Pesantren</span>
+            <span id="brand-subtitle" class="font-display font-bold text-[6px] sm:text-[8px] lg:text-[7.5px] xl:text-[9px] tracking-[0.12em] sm:tracking-[0.2em] text-white/90 uppercase mt-0.5 sm:mt-1 leading-none">Yayasan Pondok Pesantren</span>
             
             <!-- 3. NAILUL KHOIR Title -->
-            <span class="font-display font-black text-sm sm:text-lg lg:text-base xl:text-xl uppercase tracking-tight flex items-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1 leading-none">
-              <span class="text-[#dfb15b] transition-all duration-500 group-hover:text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Nailul</span>
-              <span class="text-green-400 transition-all duration-500 group-hover:text-green-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Khoir</span>
+            <span class="font-display font-black text-sm sm:text-lg lg:text-base xl:text-xl uppercase tracking-tight flex items-center justify-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1 leading-none">
+              <span id="brand-title-1" class="text-[#dfb15b] transition-all duration-500 group-hover:text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Nailul</span>
+              <span id="brand-title-2" class="text-green-400 transition-all duration-500 group-hover:text-green-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Khoir</span>
             </span>
             
-            <!-- 4. Underline Divider -->
-            <div class="h-[1px] w-full bg-gradient-to-r from-[#dfb15b] via-green-400 to-transparent my-0.5 sm:my-1 opacity-60"></div>
+            <!-- 4. Underline Divider (Centered gradient) -->
+            <div class="h-[1px] w-full max-w-[120px] sm:max-w-[160px] bg-gradient-to-r from-transparent via-[#dfb15b]/80 to-transparent my-0.5 sm:my-1 opacity-60"></div>
             
             <!-- 5. Address / Location -->
-            <span class="font-display font-bold text-[5px] sm:text-[7px] lg:text-[6px] xl:text-[7.5px] text-white/60 tracking-[0.05em] sm:tracking-[0.15em] uppercase leading-none">Panyingangan - Banjaran - Majalengka</span>
+            <span id="brand-address" class="font-display font-bold text-[5px] sm:text-[7px] lg:text-[6px] xl:text-[7.5px] text-white/60 tracking-[0.05em] sm:tracking-[0.15em] uppercase leading-none">Panyingangan - Banjaran - Majalengka</span>
           </div>
 
           <!-- Periodic Shimmer Shine Overlay covering the whole brand block on a loop -->
@@ -121,6 +121,21 @@
     .group:hover .hover-shine {
       animation: shine-once 0.8s ease-in-out forwards;
     }
+
+    .animate-slide-left {
+      animation: slide-left-char 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slide-left-char {
+      0% {
+        opacity: 0;
+        transform: translateX(15px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
   </style>
 
   <!-- Mobile Menu Panel Premium -->
@@ -211,5 +226,26 @@
     
     window.addEventListener('scroll', adjustNavbar);
     adjustNavbar(); // Jalankan sekali saat load
+
+    // Script Animasi Setiap Huruf Geser dari Kanan ke Kiri secara Halus
+    const animateTextCharacters = (id: string, delayOffset: number) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.textContent || "";
+      el.innerHTML = "";
+      [...text].forEach((char, idx) => {
+        const span = document.createElement("span");
+        span.textContent = char === " " ? "\u00A0" : char;
+        span.className = "inline-block opacity-0 translate-x-[15px] animate-slide-left";
+        span.style.animationDelay = `${delayOffset + idx * 0.02}s`;
+        el.appendChild(span);
+      });
+    };
+
+    animateTextCharacters("brand-arabic", 0.1);
+    animateTextCharacters("brand-subtitle", 0.35);
+    animateTextCharacters("brand-title-1", 0.6);
+    animateTextCharacters("brand-title-2", 0.75);
+    animateTextCharacters("brand-address", 0.95);
   });
 </script>
