@@ -5,16 +5,13 @@
     <div class="flex justify-between h-24">
       <!-- Brand Section -->
       <div class="flex items-center flex-shrink-0">
-        <a href="/" class="flex-shrink-0 flex items-center gap-3 lg:gap-2 xl:gap-3 2xl:gap-4 group">
-          <div class="bg-white p-2 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.2)] group-hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] transition-all duration-700 group-hover:rotate-[10deg] transform">
-            <img src="/images/logo.png" alt="Logo PP Nailul Khoir" class="h-10 sm:h-12 lg:h-14 w-auto object-contain" />
-          </div>
-          <div class="flex flex-col justify-center leading-tight max-w-[160px] sm:max-w-none">
-            <span class="font-display font-medium text-[8px] sm:text-[10px] lg:text-[7.5px] xl:text-[9px] 2xl:text-[12px] tracking-normal sm:tracking-wider 2xl:tracking-[0.25em] text-emas group-hover:text-white transition-colors uppercase">Yayasan Pondok Pesantren</span>
-            <span class="font-display font-black text-sm sm:text-lg lg:text-[13px] xl:text-base 2xl:text-[22px] tracking-tight text-white transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] uppercase">
-              Nailul <span class="text-emas whitespace-nowrap">Khoir</span>
-            </span>
-            <span class="text-[7px] sm:text-[9px] lg:text-[7px] xl:text-[8px] 2xl:text-[9px] font-bold text-green-400 mt-0.5 tracking-normal sm:tracking-wider 2xl:tracking-[0.3em] uppercase opacity-70">Banjaran - Majalengka</span>
+        <a href="/" class="flex-shrink-0 relative group flex items-center">
+          <!-- Glassmorphic White Container with Glow -->
+          <div class="bg-white/95 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl shadow-[0_0_25px_rgba(255,255,255,0.2)] border border-white/40 overflow-hidden relative transition-all duration-500 hover:scale-[1.03] flex items-center justify-center h-14 sm:h-16 lg:h-18">
+            <img src="/images/logo-navbar.png" alt="Logo PP Nailul Khoir" class="h-full w-auto object-contain relative z-10" />
+            
+            <!-- Periodic Shimmer Shine Overlay -->
+            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full animate-shine-loop pointer-events-none z-20"></div>
           </div>
         </a>
       </div>
@@ -75,6 +72,18 @@
   </div>
 
   <style>
+    .animate-shine-loop {
+      animation: shine-loop 4.5s infinite ease-in-out;
+    }
+
+    @keyframes shine-loop {
+      0%, 70% {
+        transform: translateX(-150%) skewX(-25deg);
+      }
+      100% {
+        transform: translateX(150%) skewX(-25deg);
+      }
+    }
   </style>
 
   <!-- Mobile Menu Panel Premium -->
