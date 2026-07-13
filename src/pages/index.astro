@@ -46,7 +46,7 @@ try {
     <!-- Latar Belakang Cerah nan Premium -->
     <div class="absolute inset-0 z-0">
       <!-- 1. Menampilkan Warna Wajar & Lebih Terang (Tanpa Grayscale) -->
-      <img src={heroBgUrl} alt="Latar Belakang Pesantren" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+      <img id="heroBgImage" src={heroBgUrl} alt="Latar Belakang Pesantren" class="absolute inset-0 w-full h-full object-cover opacity-60" />
       
       <!-- 2. Overlay Gradasi Gelap Elegan (Membantu teks kontras tanpa menutupi foto utuh) -->
       <div class="absolute inset-0 bg-gradient-to-b from-[#031c14]/90 via-[#031c14]/50 to-[#fbfbf9]"></div>
@@ -432,5 +432,25 @@ try {
         }, 3500); // 3.5 detik per rotasi
       }
     });
+
+    import { supabase } from '../lib/supabase.js';
+
+    async function loadDynamicHero() {
+      try {
+        const { data } = await supabase
+          .from('pengaturan_web')
+          .select('value')
+          .eq('key', 'hero_bg_url')
+          .single();
+        if (data && data.value) {
+          const img = document.getElementById('heroBgImage') as HTMLImageElement;
+          if (img) img.src = data.value;
+        }
+      } catch (e) {
+        console.error("Gagal memuat latar belakang dinamis:", e);
+      }
+    }
+
+    loadDynamicHero();
   </script>
 </MainLayout>
