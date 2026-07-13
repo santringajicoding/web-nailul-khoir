@@ -208,12 +208,99 @@ import MainLayout from '../layouts/MainLayout.astro';
       // Logic submit ke Supabase
       const form = document.getElementById('formPendaftaran') as HTMLFormElement;
       const noHpInput = document.getElementById('no_hp') as HTMLInputElement;
+      const namaSantriInput = document.getElementById('nama_santri') as HTMLInputElement;
+      const namaWaliInput = document.getElementById('nama_wali') as HTMLInputElement;
+      const alamatInput = document.getElementById('alamat') as HTMLTextAreaElement;
+      const selectJalurEl = document.getElementById('jalur') as HTMLSelectElement;
 
-      // Auto format No. HP (Numeric only)
-      noHpInput?.addEventListener('input', (e) => {
-        const target = e.target as HTMLInputElement;
-        target.value = target.value.replace(/[^0-9]/g, '');
+      // Helper function to show/hide validation borders
+      const validateField = (input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, isValid: boolean) => {
+         if (isValid) {
+            input.classList.remove('border-gray-200', 'border-red-500', 'focus:border-pesantren');
+            input.classList.add('border-green-500', 'focus:border-green-500');
+         } else {
+            input.classList.remove('border-gray-200', 'border-green-500', 'focus:border-pesantren');
+            input.classList.add('border-red-500', 'focus:border-red-500');
+         }
+      };
+
+      const validateNamaSantri = () => {
+         const val = namaSantriInput.value.trim();
+         const ok = val.length >= 3 && /^[a-zA-Z\s]+$/.test(val);
+         validateField(namaSantriInput, ok);
+         return ok;
+      };
+
+      const validateNamaWali = () => {
+         const val = namaWaliInput.value.trim();
+         const ok = val.length >= 3 && /^[a-zA-Z\s]+$/.test(val);
+         validateField(namaWaliInput, ok);
+         return ok;
+      };
+
+      const validateNoHp = () => {
+         const val = noHpInput.value.trim();
+         const ok = /^(08|628|\+628)[0-9]{7,13}$/.test(val);
+         validateField(noHpInput, ok);
+         return ok;
+      };
+
+      const validateAlamat = () => {
+         const val = alamatInput.value.trim();
+         const ok = val.length >= 15;
+         validateField(alamatInput, ok);
+         return ok;
+      };
+
+      const validateJalur = () => {
+         const val = selectJalurEl.value;
+         const ok = val !== "";
+         validateField(selectJalurEl, ok);
+         return ok;
+      };
+
+      // Register Blur/Input Listeners
+      namaSantriInput?.addEventListener('blur', validateNamaSantri);
+      namaSantriInput?.addEventListener('input', () => {
+         if (namaSantriInput.classList.contains('border-green-500') || namaSantriInput.classList.contains('border-red-500')) {
+            validateNamaSantri();
+         }
       });
+
+      namaWaliInput?.addEventListener('blur', validateNamaWali);
+      namaWaliInput?.addEventListener('input', () => {
+         if (namaWaliInput.classList.contains('border-green-500') || namaWaliInput.classList.contains('border-red-500')) {
+            validateNamaWali();
+         }
+      });
+
+      noHpInput?.addEventListener('blur', validateNoHp);
+      noHpInput?.addEventListener('input', () => {
+         noHpInput.value = noHpInput.value.replace(/[^0-9]/g, '');
+         if (noHpInput.classList.contains('border-green-500') || noHpInput.classList.contains('border-red-500')) {
+            validateNoHp();
+         }
+      });
+
+      alamatInput?.addEventListener('blur', validateAlamat);
+      alamatInput?.addEventListener('input', () => {
+         if (alamatInput.classList.contains('border-green-500') || alamatInput.classList.contains('border-red-500')) {
+            validateAlamat();
+         }
+      });
+
+      selectJalurEl?.addEventListener('change', validateJalur);
+
+      // Helper to clear validation borders
+      const clearValidationBorders = () => {
+         const fields = [namaSantriInput, namaWaliInput, noHpInput, alamatInput, selectJalurEl];
+         fields.forEach(f => {
+            if (f) {
+               f.classList.remove('border-green-500', 'border-red-500', 'focus:border-green-500', 'focus:border-red-500');
+               f.classList.add('border-gray-200', 'focus:border-pesantren');
+            }
+         });
+      };
       
       form?.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -264,19 +351,18 @@ import MainLayout from '../layouts/MainLayout.astro';
             status: 'Tertunda' // Default status verifikasi
         };
 
-        // Manual Validation (User Experience)
-        if (!dataPayload.jalur) return showError('Mohon pilih program pendidikan yang diinginkan.');
-        if (dataPayload.nama_santri.length < 3) return showError('Nama santri terlalu pendek (minimal 3 huruf).');
-        if (!/^[a-zA-Z\s]+$/.test(dataPayload.nama_santri)) return showError('Nama santri hanya boleh berisi huruf dan spasi.');
+        // Trigger all validation visuals
+        const jOk = validateJalur();
+        const sOk = validateNamaSantri();
+        const wOk = validateNamaWali();
+        const hOk = validateNoHp();
+        const aOk = validateAlamat();
         
-        if (dataPayload.nama_wali.length < 3) return showError('Nama wali/orang tua terlalu pendek (minimal 3 huruf).');
-        if (!/^[a-zA-Z\s]+$/.test(dataPayload.nama_wali)) return showError('Nama wali/orang tua hanya boleh berisi huruf dan spasi.');
-        
-        if (!/^(08|628|\+628)[0-9]{7,13}$/.test(dataPayload.no_hp)) { 
-            return showError('Nomor WhatsApp harus valid (Diawali 08/628/+, min 9 digit).'); 
-        }
-        
-        if (dataPayload.alamat.length < 15) return showError('Detail alamat harus lengkap agar panitia mudah melakukan verifikasi lokasi.');
+        if (!jOk) return showError('Mohon pilih program pendidikan yang diinginkan.');
+        if (!sOk) return showError('Nama santri minimal 3 huruf dan hanya boleh berisi huruf/spasi.');
+        if (!wOk) return showError('Nama wali/orang tua minimal 3 huruf dan hanya boleh berisi huruf/spasi.');
+        if (!hOk) return showError('Nomor WhatsApp harus valid (Diawali 08/628/+, min 9 digit).');
+        if (!aOk) return showError('Detail alamat harus lengkap (minimal 15 karakter) agar panitia mudah melakukan verifikasi lokasi.');
 
         // Start Loading State (Tutup alert yang ada)
         if (alertWrapper) { alertWrapper.classList.add('hidden'); }
@@ -310,6 +396,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             }
             
             form.reset();
+            clearValidationBorders();
             
         } catch (error: any) {
             showError(error.message);

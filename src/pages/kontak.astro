@@ -149,6 +149,76 @@ import MainLayout from '../layouts/MainLayout.astro';
   document.addEventListener('DOMContentLoaded', () => {
     const formPesan = document.getElementById('formPesan') as HTMLFormElement;
     
+    const namaInput = document.getElementById('nama_pengirim') as HTMLInputElement;
+    const kontakInput = document.getElementById('kontak_pengirim') as HTMLInputElement;
+    const pesanInput = document.getElementById('isi_pesan') as HTMLTextAreaElement;
+    const botCheckInput = document.getElementById('bot_check') as HTMLInputElement;
+
+    const validateField = (input: HTMLInputElement | HTMLTextAreaElement, isValid: boolean) => {
+       if (isValid) {
+          input.classList.remove('border-gray-200', 'border-red-500', 'focus:border-pesantren');
+          input.classList.add('border-green-500', 'focus:border-green-500');
+       } else {
+          input.classList.remove('border-gray-200', 'border-green-500', 'focus:border-pesantren');
+          input.classList.add('border-red-500', 'focus:border-red-500');
+       }
+    };
+
+    const validateNama = () => {
+       const val = namaInput.value.trim();
+       const ok = val.length >= 3 && /^[a-zA-Z\s]+$/.test(val);
+       validateField(namaInput, ok);
+       return ok;
+    };
+
+    const validateKontak = () => {
+       const val = kontakInput.value.trim();
+       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+       const isPhone = /^(08|628|\+628)[0-9]{7,13}$/.test(val);
+       const ok = isEmail || isPhone;
+       validateField(kontakInput, ok);
+       return ok;
+    };
+
+    const validatePesan = () => {
+       const val = pesanInput.value.trim();
+       const ok = val.length >= 10;
+       validateField(pesanInput, ok);
+       return ok;
+    };
+
+    // Listeners
+    namaInput?.addEventListener('blur', validateNama);
+    namaInput?.addEventListener('input', () => {
+       if (namaInput.classList.contains('border-green-500') || namaInput.classList.contains('border-red-500')) {
+          validateNama();
+       }
+    });
+
+    kontakInput?.addEventListener('blur', validateKontak);
+    kontakInput?.addEventListener('input', () => {
+       if (kontakInput.classList.contains('border-green-500') || kontakInput.classList.contains('border-red-500')) {
+          validateKontak();
+       }
+    });
+
+    pesanInput?.addEventListener('blur', validatePesan);
+    pesanInput?.addEventListener('input', () => {
+       if (pesanInput.classList.contains('border-green-500') || pesanInput.classList.contains('border-red-500')) {
+          validatePesan();
+       }
+    });
+
+    const clearValidationBorders = () => {
+       const fields = [namaInput, kontakInput, pesanInput];
+       fields.forEach(f => {
+          if (f) {
+             f.classList.remove('border-green-500', 'border-red-500', 'focus:border-green-500', 'focus:border-red-500');
+             f.classList.add('border-gray-200', 'focus:border-pesantren');
+          }
+       });
+    };
+    
     if (formPesan) {
       formPesan.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -172,12 +242,6 @@ import MainLayout from '../layouts/MainLayout.astro';
             }
         };
 
-        // Text Inputs
-        const namaInput = document.getElementById('nama_pengirim') as HTMLInputElement;
-        const kontakInput = document.getElementById('kontak_pengirim') as HTMLInputElement;
-        const pesanInput = document.getElementById('isi_pesan') as HTMLTextAreaElement;
-        const botCheckInput = document.getElementById('bot_check') as HTMLInputElement;
-
         // Data Cleanup
         const nama = namaInput.value.trim();
         const kontak = kontakInput.value.trim();
@@ -189,15 +253,14 @@ import MainLayout from '../layouts/MainLayout.astro';
            return; 
         }
 
-        // Validasi UX Kuat
-        if (nama.length < 3) return showError('Nama lengkap terlalu pendek (minimal 3 karakter).');
-        if (!/^[a-zA-Z\s]+$/.test(nama)) return showError('Nama hanya boleh berisi huruf dan spasi.');
-        
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(kontak);
-        const isPhone = /^(08|628|\+628)[0-9]{7,13}$/.test(kontak);
-        if (!isEmail && !isPhone) return showError('Mohon isi dengan format Email valid atau No. WhatsApp (contoh: 0812...).');
-        
-        if (pesan.length < 10) return showError('Isi pesan terlalu singkat (minimal 10 karakter). Berikan pesan yang jelas agar kami dapat membantu.');
+        // Validasi UX Real-Time
+        const nOk = validateNama();
+        const kOk = validateKontak();
+        const pOk = validatePesan();
+
+        if (!nOk) return showError('Nama lengkap minimal 3 karakter dan hanya boleh berisi huruf/spasi.');
+        if (!kOk) return showError('Format kontak harus berupa Email valid atau No. WhatsApp aktif (contoh: 0812...).');
+        if (!pOk) return showError('Isi pesan terlalu singkat (minimal 10 karakter). Berikan pesan yang jelas agar kami dapat membantu.');
 
         // Tampilan Loading UI
         if (alertBox) { alertBox.classList.add('hidden'); }
@@ -236,6 +299,7 @@ import MainLayout from '../layouts/MainLayout.astro';
           }
         } else {
           formPesan.reset(); // Kosongkan formulir
+          clearValidationBorders();
           if (alertBox && alertIcon && alertMsg) {
              alertBox.className = 'mb-6 p-5 rounded-2xl font-medium flex items-start gap-3 border shadow-sm transition-all duration-300 transform bg-green-50 border-green-200 text-green-800';
              alertIcon.innerHTML = `<svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
