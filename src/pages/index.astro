@@ -77,6 +77,10 @@ try {
           animation: gradientMove 15s ease infinite;
         }
 
+        .font-arabic-calligraphy {
+          font-family: 'Aref Ruqaa', 'Amiri', serif;
+        }
+
         .islamic-pattern {
           background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23dfb15b' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M20 0l4.5 11 11-4.5-4.5 11 11 4.5-11 4.5 4.5 11-11-4.5-4.5 11-4.5-11-11 4.5 4.5-11-11-4.5 11-4.5-4.5-11 11 4.5z'/%3E%3C/g%3E%3C/svg%3E");
         }
@@ -150,8 +154,8 @@ try {
         <div class="relative overflow-hidden inline-flex items-center justify-center bg-white/5 backdrop-blur-xl px-8 py-3 sm:py-3.5 rounded-full border border-white/10 shadow-[0_0_40px_rgba(223,177,91,0.15)] w-[280px] sm:w-[340px] md:w-[400px] h-12 sm:h-14 group">
           <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#dfb15b]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
           
-          <div id="welcome-text" class="absolute flex items-center justify-center gap-2 sm:gap-3 transition-all duration-[800ms] ease-[cubic-bezier(0.87,0,0.13,1)] transform translate-y-0 opacity-100 blur-none scale-100 w-full text-[#dfb15b] font-bold tracking-[0.15em] sm:tracking-[0.25em] text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_0_10px_rgba(223,177,91,0.3)]">
-            <span>Selamat Datang Di</span>
+          <div id="welcome-text" class="absolute flex items-center justify-center gap-2 sm:gap-3 transition-all duration-[800ms] ease-[cubic-bezier(0.87,0,0.13,1)] transform translate-y-0 opacity-100 blur-none scale-100 w-full text-[#dfb15b] font-bold font-arabic-calligraphy text-lg sm:text-xl md:text-2xl normal-case tracking-normal drop-shadow-[0_0_10px_rgba(223,177,91,0.3)]">
+            <span>أَهْلًا وَسَهْلًا</span>
           </div>
         </div>
 
@@ -398,8 +402,13 @@ try {
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Data Teks Multi-Bahasa Modern
-      const languages = ["Selamat Datang Di", "Wilujeng Sumping Di", "Sugeng Rawuh Ing"];
+      // Data Teks Multi-Bahasa Modern dengan Dukungan Kaligrafi Arab
+      const languages = [
+        { text: "أَهْلًا وَسَهْلًا", isArabic: true },
+        { text: "Selamat Datang Di", isArabic: false },
+        { text: "Wilujeng Sumping Di", isArabic: false },
+        { text: "Sugeng Rawuh Ing", isArabic: false }
+      ];
       let currentIndex = 0;
       
       const welcomeContainer = document.getElementById("welcome-text");
@@ -414,7 +423,17 @@ try {
           setTimeout(() => {
             // 2. Ubah Teks saat container tidak terlihat
             currentIndex = (currentIndex + 1) % languages.length;
-            welcomeTextSpan.textContent = languages[currentIndex];
+            const current = languages[currentIndex];
+            welcomeTextSpan.textContent = current.text;
+            
+            // Toggle classes based on isArabic untuk menjaga proporsi huruf
+            if (current.isArabic) {
+              welcomeContainer.classList.add("font-arabic-calligraphy", "text-lg", "sm:text-xl", "md:text-2xl", "normal-case", "tracking-normal");
+              welcomeContainer.classList.remove("text-xs", "sm:text-sm", "md:text-base", "uppercase", "tracking-[0.15em]", "sm:tracking-[0.25em]");
+            } else {
+              welcomeContainer.classList.remove("font-arabic-calligraphy", "text-lg", "sm:text-xl", "md:text-2xl", "normal-case", "tracking-normal");
+              welcomeContainer.classList.add("text-xs", "sm:text-sm", "md:text-base", "uppercase", "tracking-[0.15em]", "sm:tracking-[0.25em]");
+            }
             
             // 3. Reset posisi ke bawah tanah SEKETIKA tanpa animasi
             welcomeContainer.style.transition = 'none';
