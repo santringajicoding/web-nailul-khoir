@@ -111,7 +111,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
       const grid = document.getElementById('dataGrid');
       if (!grid) return;
 
-      const { data, error } = await supabase.from('syaikhuna').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('syaikhuna').select('*').order('nama', { ascending: true });
 
       if (error) return grid.innerHTML = `<div class="col-span-full text-center text-red-500 p-4">Error: ${error.message}</div>`;
       
