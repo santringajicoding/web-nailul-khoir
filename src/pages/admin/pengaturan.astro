@@ -156,11 +156,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         
         const { error: uploadError } = await supabase.storage
           .from('berita_images')
-          .upload(`system/${fileName}`, file, { cacheControl: '3600', upsert: true });
+          .upload(fileName, file, { cacheControl: '3600', upsert: true });
 
         if (uploadError) throw uploadError;
         
-        const { data: { publicUrl } } = supabase.storage.from('berita_images').getPublicUrl(`system/${fileName}`);
+        const { data: { publicUrl } } = supabase.storage.from('berita_images').getPublicUrl(fileName);
 
         const { error: dbError } = await supabase.from('pengaturan_web').upsert({ key: 'hero_bg_url', value: publicUrl }, { onConflict: 'key' });
         if (dbError) throw dbError;
@@ -220,11 +220,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
         const { error: uploadError } = await supabase.storage
           .from('berita_images')
-          .upload(`system/${fileName}`, file, { cacheControl: '3600', upsert: true });
+          .upload(fileName, file, { cacheControl: '3600', upsert: true });
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage.from('berita_images').getPublicUrl(`system/${fileName}`);
+        const { data: { publicUrl } } = supabase.storage.from('berita_images').getPublicUrl(fileName);
 
         const { error: dbError } = await supabase.from('pengaturan_web').upsert({ key: 'brosur_pdf_url', value: publicUrl }, { onConflict: 'key' });
         if (dbError) throw dbError;
