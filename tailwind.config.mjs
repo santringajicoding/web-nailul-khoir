@@ -8,7 +8,7 @@ export default {
                 display: ['Outfit', 'sans-serif'],
             },
             colors: {
-                pesantren: '#064e3b',
+                pesantren: '#128c7e',
                 emas: '#dfb15b'
             }
         },
