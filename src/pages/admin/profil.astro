@@ -45,6 +45,74 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     </div>
   </div>
 
+  <!-- SECTION 2: MANAJEMEN SARANA & FASILITAS -->
+  <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-8">
+    <div class="flex items-center justify-between border-b pb-4 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="bg-pesantren/10 p-2 rounded-lg text-pesantren">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+        </div>
+        <h3 class="text-xl font-black text-gray-800 uppercase tracking-tight">Manajemen Sarana & Fasilitas</h3>
+      </div>
+      <button id="btnToggleFasilitasForm" class="bg-pesantren hover:bg-green-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition-all flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        Tambah Fasilitas
+      </button>
+    </div>
+
+    <!-- Alert Fasilitas -->
+    <div id="alertFasilitas" class="hidden mb-6 p-4 rounded-xl font-bold text-sm"></div>
+
+    <!-- Form Input Fasilitas (Hidden by default) -->
+    <div id="formFasilitasContainer" class="hidden bg-gray-50 p-6 rounded-2xl border border-gray-200 mb-8 relative">
+      <button id="btnCloseFasilitasForm" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h4 id="formFasilitasTitle" class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Tambah Fasilitas Baru</h4>
+      
+      <form id="formFasilitas" class="space-y-4">
+        <input type="hidden" id="fac_id" name="fac_id" value="" />
+        <input type="hidden" id="fac_old_foto_url" name="fac_old_foto_url" value="" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">Nama Fasilitas <span class="text-red-500">*</span></label>
+            <input type="text" id="fac_nama" name="fac_nama" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Contoh: Gedung Rektorat / Lapangan Basket">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">Kategori / Label <span class="text-red-500">*</span></label>
+            <input type="text" id="fac_kategori" name="fac_kategori" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Contoh: Asrama, Ruang Belajar, Olahraga">
+          </div>
+          <div class="col-span-1 md:col-span-2">
+            <label class="block text-sm font-bold text-gray-700 mb-1" id="labelFasilitasFoto">Unggah Foto Fasilitas (Opsional)</label>
+            <input type="file" id="fac_foto_file" name="fac_foto_file" accept="image/*" class="w-full px-3 py-2 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
+          </div>
+          <div class="col-span-1 md:col-span-2">
+            <label class="block text-sm font-bold text-gray-700 mb-1">Deskripsi Singkat <span class="text-red-500">*</span></label>
+            <textarea id="fac_deskripsi" name="fac_deskripsi" rows="3" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none resize-none" placeholder="Jelaskan kegunaan atau kapasitas fasilitas tersebut..."></textarea>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-end gap-3">
+          <button type="button" id="btnCancelFasilitasEdit" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg shadow-sm transition-colors">Batal</button>
+          <button type="submit" id="btnSubmitFasilitas" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2 px-6 rounded-lg shadow transition-colors">
+            <span id="btnSubmitFasilitasText">Simpan Fasilitas</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Grid Tampilan Fasilitas -->
+    <div id="fasilitasGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="col-span-full text-center text-gray-500 py-6">Memuat data fasilitas...</div>
+    </div>
+  </div>
+
+
   <div id="formContainer" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8 relative">
     <button id="btnCloseForm" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,9 +165,42 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     import { supabase } from '../../lib/supabase.js';
 
+    let fasilitasList: any[] = [];
+    const defaultFasilitas = [
+      {
+        id: "fac-1",
+        nama: "Masjid Jami' Nailul Khoir",
+        kategori: "Pusat Ibadah",
+        deskripsi: "Pusat pelaksanaan ibadah salat berjamaah, pembacaan wirid, dan pengajian kitab kuning.",
+        foto_url: "/images/hero-bg.jpg"
+      },
+      {
+        id: "fac-2",
+        nama: "Laboratorium Komputer",
+        kategori: "Teknologi",
+        deskripsi: "Laboratorium modern ber-AC dengan rasio PC 1:1 untuk praktek software engineering RPL & TKJ.",
+        foto_url: "/images/hero-bg.jpg"
+      },
+      {
+        id: "fac-3",
+        nama: "Asrama Pondok",
+        kategori: "Asrama",
+        deskripsi: "Kamar tinggal santri yang rapi dan terpisah antara asrama putra dan putri dengan pengawasan 24 jam.",
+        foto_url: "/images/hero-bg.jpg"
+      },
+      {
+        id: "fac-4",
+        nama: "Ruang Kelas Smart",
+        kategori: "Ruang Belajar",
+        deskripsi: "Ruang belajar teori berlantai keramik yang bersih dan dilengkapi papan tulis kaca serta proyektor lcd.",
+        foto_url: "/images/hero-bg.jpg"
+      }
+    ];
+
     async function init() {
       loadData();
       await loadVisiMisi();
+      await loadFasilitas();
     }
 
     async function loadVisiMisi() {
@@ -146,6 +247,202 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg> SIMPAN VISI & MISI`;
     });
 
+    // --- FASILITAS METHODS ---
+    async function loadFasilitas() {
+      const grid = document.getElementById('fasilitasGrid');
+      if (!grid) return;
+
+      const { data, error } = await supabase.from('pengaturan_web').select('value').eq('key', 'sarana_fasilitas').single();
+      
+      if (data && data.value) {
+        try {
+          fasilitasList = JSON.parse(data.value);
+        } catch (e) {
+          fasilitasList = [...defaultFasilitas];
+        }
+      } else {
+        fasilitasList = [...defaultFasilitas];
+      }
+
+      if (fasilitasList.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-8 border-2 border-dashed rounded-xl">Belum ada data fasilitas.</div>`;
+        return;
+      }
+
+      grid.innerHTML = fasilitasList.map(item => `
+        <div class="bg-white border text-left border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col group relative">
+          <div class="h-40 bg-gray-100 w-full overflow-hidden">
+            <img src="${item.foto_url || '/images/hero-bg.jpg'}" class="w-full h-full object-cover" />
+          </div>
+          <div class="p-4 flex-grow flex flex-col justify-between">
+            <div>
+              <span class="bg-emas/10 text-emas text-[10px] font-black uppercase px-2 py-0.5 rounded-full inline-block mb-2">${item.kategori || 'Fasilitas'}</span>
+              <h4 class="font-bold text-gray-900 text-base mb-1 line-clamp-1">${item.nama}</h4>
+              <p class="text-gray-500 text-xs line-clamp-2">${item.deskripsi}</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 mt-3 flex justify-end gap-2">
+              <button data-action="edit-fac" data-id="${item.id}" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs font-bold transition-colors">Edit</button>
+              <button data-action="delete-fac" data-id="${item.id}" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs font-bold transition-colors">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const formFasilitasContainer = document.getElementById('formFasilitasContainer');
+    const formFasilitas = document.getElementById('formFasilitas') as HTMLFormElement;
+    const btnCancelFasilitasEdit = document.getElementById('btnCancelFasilitasEdit');
+
+    const resetFasilitasForm = () => {
+      formFasilitas?.reset();
+      (document.getElementById('fac_id') as HTMLInputElement).value = '';
+      (document.getElementById('fac_old_foto_url') as HTMLInputElement).value = '';
+      (document.getElementById('formFasilitasTitle') as HTMLElement).textContent = 'Tambah Fasilitas Baru';
+      (document.getElementById('btnSubmitFasilitasText') as HTMLElement).textContent = 'Simpan Fasilitas';
+      (document.getElementById('labelFasilitasFoto') as HTMLElement).textContent = 'Unggah Foto Fasilitas (Opsional)';
+      btnCancelFasilitasEdit?.classList.add('hidden');
+    };
+
+    document.getElementById('btnToggleFasilitasForm')?.addEventListener('click', () => {
+      resetFasilitasForm();
+      formFasilitasContainer?.classList.remove('hidden');
+      formFasilitasContainer?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('btnCloseFasilitasForm')?.addEventListener('click', () => {
+      formFasilitasContainer?.classList.add('hidden');
+      resetFasilitasForm();
+    });
+
+    btnCancelFasilitasEdit?.addEventListener('click', () => {
+      formFasilitasContainer?.classList.add('hidden');
+      resetFasilitasForm();
+    });
+
+    if (formFasilitas) {
+      formFasilitas.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmitFasilitas') as HTMLButtonElement;
+        const btnText = document.getElementById('btnSubmitFasilitasText');
+        const alertMsg = document.getElementById('alertFasilitas');
+        const fileInput = document.getElementById('fac_foto_file') as HTMLInputElement;
+
+        btn.disabled = true;
+        if (btnText) btnText.textContent = 'Memproses...';
+
+        const editId = (document.getElementById('fac_id') as HTMLInputElement).value;
+        const oldFotoUrl = (document.getElementById('fac_old_foto_url') as HTMLInputElement).value;
+        let finalFotoUrl = oldFotoUrl || '/images/hero-bg.jpg';
+
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `fasilitas-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`;
+          const { data: uploadData, error: uploadError } = await supabase.storage.from('berita_images').upload(fileName, file);
+
+          if (uploadError) {
+            if (alertMsg) {
+              alertMsg.textContent = 'Gagal unggah foto: ' + uploadError.message;
+              alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800';
+              alertMsg.classList.remove('hidden');
+            }
+            btn.disabled = false;
+            if (btnText) btnText.textContent = 'Simpan Fasilitas';
+            return;
+          }
+
+          const { data: publicUrlData } = supabase.storage.from('berita_images').getPublicUrl(fileName);
+          finalFotoUrl = publicUrlData.publicUrl;
+        }
+
+        const nama = (document.getElementById('fac_nama') as HTMLInputElement).value.trim();
+        const kategori = (document.getElementById('fac_kategori') as HTMLInputElement).value.trim();
+        const deskripsi = (document.getElementById('fac_deskripsi') as HTMLTextAreaElement).value.trim();
+
+        if (editId) {
+          const idx = fasilitasList.findIndex(item => item.id === editId);
+          if (idx !== -1) {
+            fasilitasList[idx] = { id: editId, nama, kategori, deskripsi, foto_url: finalFotoUrl };
+          }
+        } else {
+          const newId = `fac-${Date.now()}`;
+          fasilitasList.push({ id: newId, nama, kategori, deskripsi, foto_url: finalFotoUrl });
+        }
+
+        const { error: dbError } = await supabase.from('pengaturan_web').upsert({
+          key: 'sarana_fasilitas',
+          value: JSON.stringify(fasilitasList)
+        }, { onConflict: 'key' });
+
+        if (dbError) {
+          if (alertMsg) {
+            alertMsg.textContent = 'Gagal menyimpan ke database: ' + dbError.message;
+            alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-red-100 text-red-800';
+            alertMsg.classList.remove('hidden');
+          }
+        } else {
+          resetFasilitasForm();
+          if (alertMsg) {
+            alertMsg.textContent = 'Data fasilitas berhasil disimpan!';
+            alertMsg.className = 'block mb-4 p-3 rounded font-bold bg-green-100 text-green-800';
+            alertMsg.classList.remove('hidden');
+          }
+          setTimeout(() => {
+            formFasilitasContainer?.classList.add('hidden');
+            if (alertMsg) alertMsg.classList.add('hidden');
+          }, 1500);
+          loadFasilitas();
+        }
+
+        btn.disabled = false;
+        if (btnText) btnText.textContent = 'Simpan Fasilitas';
+      });
+    }
+
+    const fasGrid = document.getElementById('fasilitasGrid');
+    if (fasGrid) {
+      fasGrid.addEventListener('click', async (e) => {
+        const target = (e.target as Element).closest('button');
+        if (!target) return;
+
+        const action = target.getAttribute('data-action');
+        const id = target.getAttribute('data-id');
+
+        if (action === 'edit-fac') {
+          const item = fasilitasList.find(f => f.id === id);
+          if (item) {
+            (document.getElementById('fac_id') as HTMLInputElement).value = item.id;
+            (document.getElementById('fac_old_foto_url') as HTMLInputElement).value = item.foto_url || '';
+            (document.getElementById('fac_nama') as HTMLInputElement).value = item.nama;
+            (document.getElementById('fac_kategori') as HTMLInputElement).value = item.kategori || '';
+            (document.getElementById('fac_deskripsi') as HTMLTextAreaElement).value = item.deskripsi || '';
+
+            (document.getElementById('formFasilitasTitle') as HTMLElement).textContent = 'Edit Fasilitas';
+            (document.getElementById('btnSubmitFasilitasText') as HTMLElement).textContent = 'Simpan Perubahan';
+            (document.getElementById('labelFasilitasFoto') as HTMLElement).textContent = 'Unggah Foto Baru untuk Menggantikan';
+            
+            btnCancelFasilitasEdit?.classList.remove('hidden');
+            formFasilitasContainer?.classList.remove('hidden');
+            formFasilitasContainer?.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else if (action === 'delete-fac') {
+          if (confirm('Hapus fasilitas ini secara permanen dari website?')) {
+            fasilitasList = fasilitasList.filter(f => f.id !== id);
+            const { error } = await supabase.from('pengaturan_web').upsert({
+              key: 'sarana_fasilitas',
+              value: JSON.stringify(fasilitasList)
+            }, { onConflict: 'key' });
+
+            if (error) {
+              alert('Gagal menghapus: ' + error.message);
+            } else {
+              loadFasilitas();
+            }
+          }
+        }
+      });
+    }
+
+    // --- SEJARAH METHODS ---
     const formContainer = document.getElementById('formContainer');
     document.getElementById('btnToggleForm')?.addEventListener('click', () => { formContainer?.classList.remove('hidden'); formContainer?.scrollIntoView({ behavior: 'smooth' }); });
     document.getElementById('btnCloseForm')?.addEventListener('click', () => { formContainer?.classList.add('hidden'); });

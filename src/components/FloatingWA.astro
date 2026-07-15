@@ -102,8 +102,12 @@
         if (waSetting && waSetting.value) {
           const formatted = waSetting.value.replace(/[^0-9]/g, '');
           const waAdmin = document.getElementById('waAdminPusat') as HTMLAnchorElement;
+          const waPPDB = document.getElementById('waAdminPPDB') as HTMLAnchorElement;
           if (waAdmin) {
             waAdmin.href = `https://wa.me/${formatted}?text=Assalamualaykum%20Admin%20Nailul%20Khoir,%20saya%20ingin%20bertanya%20seputar%20informasi%20pesantren.`;
+          }
+          if (waPPDB) {
+            waPPDB.href = `https://wa.me/${formatted}?text=Assalamualaykum%20Panitia%20PPDB%20Nailul%20Khoir,%20saya%20ingin%20bertanya%20seputar%20pendaftaran%20santri%20baru.`;
           }
         }
       } catch (e) {

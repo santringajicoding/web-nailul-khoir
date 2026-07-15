@@ -2,19 +2,23 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import { supabase } from '../lib/supabase.js';
 
-// Ambil brosur pdf url dari database
+// Ambil data pengaturan dinamis
 let brosurUrl = '/brosur-ppdb.pdf';
+let contactWa = '6285794405083';
+
 try {
-  const { data } = await supabase
+  const { data: configData } = await supabase
     .from('pengaturan_web')
-    .select('value')
-    .eq('key', 'brosur_pdf_url')
-    .single();
-  if (data && data.value) {
-    brosurUrl = data.value;
+    .select('*');
+
+  if (configData) {
+    configData.forEach(item => {
+      if (item.key === 'brosur_pdf_url') brosurUrl = item.value;
+      if (item.key === 'contact_wa') contactWa = item.value;
+    });
   }
 } catch (err) {
-  console.error("Gagal mengambil brosur url:", err);
+  console.error("Gagal mengambil pengaturan:", err);
 }
 ---
 
@@ -78,7 +82,7 @@ try {
                   <h4 class="font-bold text-white text-lg">Pusat Bantuan</h4>
                   <p class="text-green-100/70 text-sm mt-1">Jika ada kesulitan saat mengisi, chat kami (Hari kerja: 08:00 - 15:00 WIB).</p>
                </div>
-               <a href="https://wa.me/6285794405083" target="_blank" class="absolute inset-0 z-20" title="Bantuan Chat WA"></a>
+               <a href={`https://wa.me/${contactWa}`} target="_blank" class="absolute inset-0 z-20" title="Bantuan Chat WA"></a>
             </div>
 
             <!-- Unduh Brosur PDF -->

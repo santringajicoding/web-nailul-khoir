@@ -1,6 +1,6 @@
 ---
 ---
-<nav id="mainNavbar" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[1400px] bg-[#052914]/90 backdrop-blur-xl text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] z-[100] border border-white/10 rounded-[24px] transition-all duration-500">
+<nav id="mainNavbar" class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[1400px] bg-green-950 text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] z-[100] border border-white/10 rounded-[24px] transition-all duration-500">
   <div class="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-4 xl:px-6 2xl:px-10">
     <div class="flex justify-between h-16 sm:h-20 lg:h-24">
       <!-- Brand Section -->
@@ -226,11 +226,11 @@
     const nav = document.getElementById('mainNavbar');
     const adjustNavbar = () => {
       if (window.scrollY > 20) {
-        nav?.classList.remove('top-4', 'w-[92%]', 'bg-[#052914]/90', 'rounded-[24px]');
-        nav?.classList.add('top-0', 'w-full', 'bg-[#031d0e]/98', 'rounded-none', 'border-x-0', 'border-t-0', 'shadow-[0_10px_30px_rgba(0,0,0,0.4)]');
+        nav?.classList.remove('top-4', 'w-[92%]', 'bg-green-950', 'rounded-[24px]');
+        nav?.classList.add('top-0', 'w-full', 'bg-green-950', 'rounded-none', 'border-x-0', 'border-t-0', 'shadow-[0_10px_30px_rgba(0,0,0,0.4)]');
       } else {
-        nav?.classList.remove('top-0', 'w-full', 'bg-[#031d0e]/98', 'rounded-none', 'border-x-0', 'border-t-0', 'shadow-[0_10px_30px_rgba(0,0,0,0.4)]');
-        nav?.classList.add('top-4', 'w-[92%]', 'bg-[#052914]/90', 'rounded-[24px]');
+        nav?.classList.remove('top-0', 'w-full', 'bg-green-950', 'rounded-none', 'border-x-0', 'border-t-0', 'shadow-[0_10px_30px_rgba(0,0,0,0.4)]');
+        nav?.classList.add('top-4', 'w-[92%]', 'bg-green-950', 'rounded-[24px]');
       }
     };
     

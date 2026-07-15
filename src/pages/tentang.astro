@@ -10,11 +10,52 @@ const profilList = tentangData || [];
 const { data: syaikhunaData } = await supabase.from('syaikhuna').select('*');
 const asatidzList = syaikhunaData || [];
 
-// Ambil Visi & Misi dari pengaturan_web
-const { data: configData } = await supabase.from('pengaturan_web').select('*').in('key', ['visi_yayasan', 'misi_yayasan']);
+// Ambil Visi, Misi & Fasilitas dari pengaturan_web
+const { data: configData } = await supabase.from('pengaturan_web').select('*');
+
 const visi = configData?.find(c => c.key === 'visi_yayasan')?.value || "Mencetak insan kamil yang beriman, bertakwa, berakhlakul karimah, berilmu amaliah, dan beramal ilmiah berlandaskan aqidah Ahlussunnah Wal Jama'ah.";
 const misiRaw = configData?.find(c => c.key === 'misi_yayasan')?.value || "Menyelenggarakan pendidikan pesantren salaf dan formal.\nMembina karakter santri dengan adab islami.\nMembekali keterampilan teknologi.";
 const misiList = misiRaw.split('\n').filter(m => m.trim() !== '');
+
+let fasilitasList = [
+  {
+    id: "fac-1",
+    nama: "Masjid Jami' Nailul Khoir",
+    kategori: "Pusat Ibadah",
+    deskripsi: "Pusat pelaksanaan ibadah salat berjamaah, pembacaan wirid, dan pengajian kitab kuning.",
+    foto_url: "/images/hero-bg.jpg"
+  },
+  {
+    id: "fac-2",
+    nama: "Laboratorium Komputer",
+    kategori: "Teknologi",
+    deskripsi: "Laboratorium modern ber-AC dengan rasio PC 1:1 untuk praktek software engineering RPL & TKJ.",
+    foto_url: "/images/hero-bg.jpg"
+  },
+  {
+    id: "fac-3",
+    nama: "Asrama Pondok",
+    kategori: "Asrama",
+    deskripsi: "Kamar tinggal santri yang rapi dan terpisah antara asrama putra dan putri dengan pengawasan 24 jam.",
+    foto_url: "/images/hero-bg.jpg"
+  },
+  {
+    id: "fac-4",
+    nama: "Ruang Kelas Smart",
+    kategori: "Ruang Belajar",
+    deskripsi: "Ruang belajar teori berlantai keramik yang bersih dan dilengkapi papan tulis kaca serta proyektor lcd.",
+    foto_url: "/images/hero-bg.jpg"
+  }
+];
+
+const dbFasilitas = configData?.find(c => c.key === 'sarana_fasilitas')?.value;
+if (dbFasilitas) {
+  try {
+    fasilitasList = JSON.parse(dbFasilitas);
+  } catch (e) {
+    console.error("Gagal parse data fasilitas:", e);
+  }
+}
 ---
 
 <MainLayout title="Profil & Tentang Kami">
@@ -155,66 +196,26 @@ const misiList = misiRaw.split('\n').filter(m => m.trim() !== '');
         <div class="h-1.5 w-32 bg-pesantren mx-auto mt-8 rounded-full"></div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Fasilitas 1 -->
-        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="0">
-          <div class="h-56 w-full overflow-hidden relative shrink-0">
-            <img src="/images/hero-bg.jpg" alt="Masjid Jami'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter saturate-[80%]" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 bg-emas text-[#031c14] text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Pusat Ibadah</span>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between">
-            <div>
-              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Masjid Jami' Nailul Khoir</h3>
-              <p class="text-gray-600 text-sm leading-relaxed">Pusat pelaksanaan ibadah salat berjamaah, pembacaan wirid, dan pengajian kitab kuning.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {fasilitasList.map((fasilitas, idx) => (
+          <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay={idx * 100}>
+            <div class="h-56 w-full overflow-hidden relative shrink-0">
+              <img src={fasilitas.foto_url || "/images/hero-bg.jpg"} alt={fasilitas.nama} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter saturate-[80%]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              {fasilitas.kategori && (
+                <span class="absolute bottom-4 left-4 bg-emas text-[#031c14] text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">
+                  {fasilitas.kategori}
+                </span>
+              )}
+            </div>
+            <div class="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">{fasilitas.nama}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">{fasilitas.deskripsi}</p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Fasilitas 2 -->
-        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="100">
-          <div class="h-56 w-full overflow-hidden relative shrink-0">
-            <img src="/images/hero-bg.jpg" alt="Lab Komputer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter hue-rotate-15" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 bg-blue-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Teknologi</span>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between">
-            <div>
-              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Laboratorium Komputer</h3>
-              <p class="text-gray-600 text-sm leading-relaxed">Laboratorium modern ber-AC dengan rasio PC 1:1 untuk praktek software engineering RPL & TKJ.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fasilitas 3 -->
-        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="200">
-          <div class="h-56 w-full overflow-hidden relative shrink-0">
-            <img src="/images/hero-bg.jpg" alt="Asrama Santri" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-95" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 bg-pesantren text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Asrama</span>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between">
-            <div>
-              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Asrama Pondok</h3>
-              <p class="text-gray-600 text-sm leading-relaxed">Kamar tinggal santri yang rapi dan terpisah antara asrama putra dan putri dengan pengawasan 24 jam.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fasilitas 4 -->
-        <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group border border-gray-100 flex flex-col h-full" data-aos="fade-up" data-aos-delay="300">
-          <div class="h-56 w-full overflow-hidden relative shrink-0">
-            <img src="/images/hero-bg.jpg" alt="Ruang Kelas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter contrast-125" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <span class="absolute bottom-4 left-4 bg-orange-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">Ruang Belajar</span>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between">
-            <div>
-              <h3 class="font-black text-xl text-gray-900 mb-2 leading-tight">Ruang Kelas Smart</h3>
-              <p class="text-gray-600 text-sm leading-relaxed">Ruang belajar teori berlantai keramik yang bersih dan dilengkapi papan tulis kaca serta proyektor lcd.</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   </section>

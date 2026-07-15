@@ -1,5 +1,33 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import { supabase } from '../lib/supabase.js';
+
+// Ambil data pengaturan dinamis
+const { data: configData } = await supabase.from('pengaturan_web').select('*');
+
+const settings: Record<string, string> = {};
+if (configData) {
+  configData.forEach(item => {
+    settings[item.key] = item.value;
+  });
+}
+
+// Fallback values
+const contactWa = settings['contact_wa'] || '6288218336152';
+const contactEmail = settings['contact_email'] || 'pesantrennailulkhoir@gmail.com';
+const contactAddress = settings['contact_address'] || 'Blok Desa, RT 01/RW 01, Desa Panyindangan, Kecamatan Banjaran, Kabupaten Majalengka, Jawa Barat, 45468';
+
+// WhatsApp formatting for display
+const formatWaDisplay = (num: string) => {
+  const cleaned = num.replace(/\D/g, '');
+  if (cleaned.startsWith('62')) {
+    return `+62 ${cleaned.substring(2, 5)}-${cleaned.substring(5, 9)}-${cleaned.substring(9)}`;
+  }
+  if (cleaned.startsWith('0')) {
+    return `+62 ${cleaned.substring(1, 4)}-${cleaned.substring(4, 8)}-${cleaned.substring(8)}`;
+  }
+  return `+${cleaned}`;
+};
 ---
 <MainLayout title="Kontak Kami - Yayasan PP Nailul Khoir">
   <!-- Premium Hero Section -->
@@ -100,11 +128,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               </div>
               <div>
                 <h3 class="font-bold text-gray-100 text-lg">Alamat Kesekretariatan</h3>
-                <p class="text-green-50/70 mt-1 leading-relaxed text-sm">
-                  Blok Desa, RT 01/RW 01, Desa Panyindangan,<br>
-                  Kecamatan Banjaran, Kabupaten Majalengka,<br>
-                  Jawa Barat, 45468
-                </p>
+                <p class="text-green-50/70 mt-1 leading-relaxed text-sm whitespace-pre-wrap">{contactAddress}</p>
               </div>
             </div>
 
@@ -115,8 +139,11 @@ import MainLayout from '../layouts/MainLayout.astro';
               </div>
               <div>
                 <h3 class="font-bold text-gray-100 text-lg">Konsultasi / WA PPDB</h3>
-                <p class="mt-1 leading-relaxed"><a href="https://wa.me/6288218336152" target="_blank" class="text-green-50/70 text-sm hover:text-emas hover:underline transition-colors block mb-1">+62 882-1833-6152 (Mang Aan)</a></p>
-                <p class="leading-relaxed"><a href="https://wa.me/6285794405083" target="_blank" class="text-green-50/70 text-sm hover:text-emas hover:underline transition-colors block">+62 857-9440-5083 (Panitia PPDB)</a></p>
+                <p class="mt-1 leading-relaxed">
+                  <a href={`https://wa.me/${contactWa}`} target="_blank" class="text-green-50/70 text-sm hover:text-emas hover:underline transition-colors block mb-1">
+                    {formatWaDisplay(contactWa)} (Admin PPDB)
+                  </a>
+                </p>
               </div>
             </div>
 
@@ -127,7 +154,11 @@ import MainLayout from '../layouts/MainLayout.astro';
               </div>
               <div>
                 <h3 class="font-bold text-gray-100 text-lg">Alamat Email</h3>
-                <p class="mt-1 leading-relaxed"><a href="mailto:pesantrennailulkhoir@gmail.com" class="text-green-50/70 text-sm hover:text-emas hover:underline transition-colors">pesantrennailulkhoir@gmail.com</a></p>
+                <p class="mt-1 leading-relaxed">
+                  <a href={`mailto:${contactEmail}`} class="text-green-50/70 text-sm hover:text-emas hover:underline transition-colors">
+                    {contactEmail}
+                  </a>
+                </p>
               </div>
             </div>
           </div>
