@@ -60,8 +60,158 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nailulkh
 		
 		<!-- AOS CSS -->
 		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+		<!-- Theme & Translation Inline Init -->
+		<script is:inline>
+		  // Instant Theme setup
+		  const theme = localStorage.getItem('theme') || 'light';
+		  if (theme === 'dark') {
+		    document.documentElement.classList.add('dark');
+		  } else {
+		    document.documentElement.classList.remove('dark');
+		  }
+
+		  // Language Dictionary
+		  window.translations = {
+		    id: {
+		      beranda: "BERANDA",
+		      berita: "BERITA",
+		      asatidz: "ASATIDZ",
+		      kajian: "KAJIAN",
+		      galeri: "GALERI",
+		      donasi: "DONASI",
+		      tentang: "TENTANG",
+		      faq: "FAQ",
+		      ppdb: "PPDB ONLINE",
+		      welcome: "Selamat Datang Di",
+		      slogan: '"Terwujudnya kader muslim yang kaya akan ilmu, tangguh dalam aqidah, dan mulia dengan akhlaqul karimah."',
+		      pendidikan: "PENDIDIKAN TERPADU",
+		      pendidikan_title: "Pilihan Program Belajar Formal & Informal",
+		      program_pondok: "Pondok Pesantren Salafiyah",
+		      program_smp: "SMP IT Nailul Khoir",
+		      program_smk: "SMK Nailul Khoir",
+		      informasi_publik: "INFORMASI PUBLIK",
+		      kabar_terbaru: "Kabar Terbaru",
+		      majelis_taklim: "Majelis Taklim Umum",
+		      jadwal_kajian: "Jadwal Kajian Pesantren",
+		      hubungi_kami: "Hubungi Kami",
+		      alamat: "Alamat Kami",
+		      kontak: "Kontak",
+		      tautan: "Tautan Langsung",
+		      hak_cipta: "© 2026 Yayasan Pondok Pesantren Nailul Khoir. Hak Cipta Dilindungi."
+		    },
+		    ar: {
+		      beranda: "الرئيسية",
+		      berita: "الأخبار",
+		      asatidz: "الأساتذة",
+		      kajian: "الدروس",
+		      galeri: "المعرض",
+		      donasi: "التبرعات",
+		      tentang: "معلومات عنا",
+		      faq: "الأسئلة الشائعة",
+		      ppdb: "التسجيل المباشر",
+		      welcome: "مرحباً بكم في",
+		      slogan: '"نشأة جيل muslim غني بالعلوم، راسخ في العقيدة، وذو أخلاق كريمة."',
+		      pendidikan: "التعليم المتكامل",
+		      pendidikan_title: "خيارات برنامج الدراسة الرسمي وغير الرسمي",
+		      program_pondok: "معهد السلفية الإسلامي",
+		      program_smp: "مدرسة نايل الخير المتوسطة",
+		      program_smk: "مدرسة نايل الخير المهنية",
+		      informasi_publik: "المعلومات العامة",
+		      kabar_terbaru: "آخر الأخبار",
+		      majelis_taklim: "مجلس التعليم العام",
+		      jadwal_kajian: "جدول الدروس بالمعهد",
+		      hubungi_kami: "اتصل بنا",
+		      alamat: "عنواننا",
+		      kontak: "الاتصال",
+		      tautan: "روابط مباشرة",
+		      hak_cipta: "© ٢٠٢٦ مؤسسة معهد نيل الخير الإسلامي. جميع الحقوق محفوظة."
+		    },
+		    su: {
+		      beranda: "BUMI",
+		      berita: "WARTA",
+		      asatidz: "ASATIDZ",
+		      kajian: "PANGAOSAN",
+		      galeri: "GALERI",
+		      donasi: "DONASI",
+		      tentang: "PERKAWIS",
+		      faq: "FAQ",
+		      ppdb: "DAPTAR ONLINE",
+		      welcome: "Wilujeng Sumping Di",
+		      slogan: '"Ngawujudkeun kader muslim anu beunghar ku elmu, tanggoh dina aqidah, sarta mulia ku akhlaqul karimah."',
+		      pendidikan: "ATIKAN TERPADU",
+		      pendidikan_title: "Pilihan Program Diajar Formal & Informal",
+		      program_pondok: "Pondok Pesantren Salafiyah",
+		      program_smp: "SMP IT Nailul Khoir",
+		      program_smk: "SMK Nailul Khoir",
+		      informasi_publik: "WARA-WARA",
+		      kabar_terbaru: "Warta Panganyarna",
+		      majelis_taklim: "Majelis Taklim Umum",
+		      jadwal_kajian: "Jadwal Pangaosan Pesantren",
+		      hubungi_kami: "Hubungi Kami",
+		      alamat: "Alamat Kami",
+		      kontak: "Kontak",
+		      tautan: "Tautan Langsung",
+		      hak_cipta: "© 2026 Yayasan Pondok Pesantren Nailul Khoir. Hak Cipta Ditangtayungan."
+		    },
+		    jv: {
+		      beranda: "NGAREP",
+		      berita: "PAWARTA",
+		      asatidz: "ASATIDZ",
+		      kajian: "KAJIAN",
+		      galeri: "GALERI",
+		      donasi: "DONASI",
+		      tentang: "TENTANG",
+		      faq: "FAQ",
+		      ppdb: "DAFTAR ONLINE",
+		      welcome: "Sugeng Rawuh Ing",
+		      slogan: '"Mujudake kader muslim sing sugih ngelmu, tangguh ing aqidah, lan mulya kanthi akhlaqul karimah."',
+		      pendidikan: "PENDIDIKAN TERPADU",
+		      pendidikan_title: "Pilihan Program Sinau Formal & Informal",
+		      program_pondok: "Pondok Pesantren Salafiyah",
+		      program_smp: "SMP IT Nailul Khoir",
+		      program_smk: "SMK Nailul Khoir",
+		      informasi_publik: "WARA-WARA",
+		      kabar_terbaru: "Pawarta Anyar",
+		      majelis_taklim: "Majelis Taklim Umum",
+		      jadwal_kajian: "Jadwal Kajian Pesantren",
+		      hubungi_kami: "Hubungi Kami",
+		      alamat: "Alamat Kami",
+		      kontak: "Kontak",
+		      tautan: "Tautan Langsung",
+		      hak_cipta: "© 2026 Yayasan Pondok Pesantren Nailul Khoir. Hak Cipta Dilindungi."
+		    }
+		  };
+
+		  // Function to apply translation
+		  window.applyLanguage = function(lang) {
+		    localStorage.setItem('lang', lang);
+		    
+		    // Handle RTL direction for Arabic
+		    if (lang === 'ar') {
+		      document.documentElement.dir = 'rtl';
+		      document.documentElement.lang = 'ar';
+		    } else {
+		      document.documentElement.dir = 'ltr';
+		      document.documentElement.lang = lang;
+		    }
+
+		    // Update label in dropdown
+		    const label = document.getElementById('currentLangLabel');
+		    if (label) label.textContent = lang.toUpperCase();
+
+		    // Translate all elements with data-translate attribute
+		    const elements = document.querySelectorAll('[data-translate]');
+		    elements.forEach(el => {
+		      const key = el.getAttribute('data-translate');
+		      if (window.translations[lang] && window.translations[lang][key]) {
+		        el.textContent = window.translations[lang][key];
+		      }
+		    });
+		  };
+		</script>
 	</head>
-	<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+	<body class="bg-gray-50 text-gray-800 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-500">
 		<Navbar />
 		<main class="flex-grow pb-24 lg:pb-0">
 			<slot />
