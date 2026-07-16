@@ -156,7 +156,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         
         const { error: uploadError } = await supabase.storage
           .from('berita_images')
-          .upload(fileName, file, { cacheControl: '3600' });
+          .upload(fileName, file, { 
+            cacheControl: '3600',
+            contentType: file.type || 'image/jpeg'
+          });
 
         if (uploadError) throw uploadError;
         
@@ -168,7 +171,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         setAlert("Foto Latar Belakang berhasil diperbarui!", "success");
         loadSettings();
       } catch (err: any) {
-        setAlert(err.message, "error");
+        console.error("Gagal unggah foto latar belakang:", err);
+        setAlert(`Gagal mengunggah foto. Detail: ${err.message || err}. Silakan periksa koneksi internet Anda atau coba file lain.`, "error");
       } finally {
         btn.disabled = false;
         btn.textContent = 'Update Hero Background';
@@ -220,7 +224,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
         const { error: uploadError } = await supabase.storage
           .from('berita_images')
-          .upload(fileName, file, { cacheControl: '3600' });
+          .upload(fileName, file, { 
+            cacheControl: '3600',
+            contentType: file.type || 'application/pdf'
+          });
 
         if (uploadError) throw uploadError;
 
@@ -232,7 +239,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         setAlert("Brosur PDF berhasil diperbarui!", "success");
         loadSettings();
       } catch (err: any) {
-        setAlert(err.message, "error");
+        console.error("Gagal unggah brosur:", err);
+        setAlert(`Gagal mengunggah brosur. Detail: ${err.message || err}. Pastikan file PDF valid, koneksi stabil, dan buka F12 Console untuk melihat rincian error.`, "error");
       } finally {
         btn.disabled = false;
         if (btnText) btnText.textContent = 'Unggah & Perbarui Brosur';
