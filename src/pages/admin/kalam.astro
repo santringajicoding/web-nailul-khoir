@@ -1,0 +1,243 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Manajemen Kalam (Poster Dakwah)">
+  
+  <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Manajemen Kalam</h2>
+      <p class="text-gray-600 mt-2 text-lg">Kelola poster dakwah dan syiar islami yang akan tampil di halaman utama.</p>
+    </div>
+    <button id="btnToggleForm" class="bg-pesantren hover:bg-green-800 text-white px-5 py-3 rounded-xl font-bold transition-all flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+      </svg>
+      Upload Poster Baru
+    </button>
+  </div>
+
+  <!-- Modal / Form Tambah Kalam (Hidden by default) -->
+  <div id="formContainer" class="hidden bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-8 relative">
+    <button id="btnCloseForm" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h3 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 border-b pb-3 text-left">Unggah Poster Kalam Baru</h3>
+    
+    <div id="alertFormName" class="hidden mb-4 p-3 rounded text-sm font-medium text-left"></div>
+
+    <form id="formKalam" class="space-y-4 text-left">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1">Judul Poster / Tema Dakwah <span class="text-red-500">*</span></label>
+          <input type="text" id="judul" name="judul" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none" placeholder="Ex: Keutamaan Menuntut Ilmu / Fakta Muktamar NU">
+        </div>
+        
+        <div class="col-span-1">
+          <label class="block text-sm font-bold text-gray-700 mb-1" id="labelFoto">Pilih File Gambar Poster <span class="text-red-500">*</span></label>
+          <input type="file" id="foto_file" name="foto_file" required accept="image/*" class="w-full px-3 py-1.5 text-sm text-gray-700 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pesantren outline-none file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 cursor-pointer">
+        </div>
+      </div>
+
+      <div class="pt-4 flex justify-end gap-3">
+        <button type="submit" id="btnSubmitKalam" class="bg-pesantren hover:bg-green-800 text-white font-bold py-2.5 px-8 rounded-lg shadow shadow-pesantren/20 transition-all flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+          <span id="btnSubmitText">Unggah Poster</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Display Data Kalam -->
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    <div class="p-4 sm:p-6 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div class="font-bold text-gray-700">Daftar Poster Kalam Aktif</div>
+      <button id="btnRefreshKalam" class="bg-white text-pesantren border border-pesantren/30 hover:bg-green-50 px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        Segarkan
+      </button>
+    </div>
+
+    <div id="kalamGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 min-h-[400px]">
+       <!-- Skeleton Loader -->
+       <div class="col-span-full py-20 text-center text-gray-500">
+         <svg class="animate-spin h-10 w-10 text-pesantren mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+         Menghubungkan ke Kalam...
+       </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase.js';
+
+    let kalamList: any[] = [];
+
+    // Load Data
+    const loadKalam = async () => {
+      const grid = document.getElementById('kalamGrid');
+      if(!grid) return;
+
+      const { data, error } = await supabase.from('pengaturan_web').select('value').eq('key', 'kalam_posters').single();
+
+      if (error && error.code !== 'PGRST116') {
+        grid.innerHTML = `<div class="col-span-full text-center text-red-500 font-bold p-8">Gagal memuat kalam: ${error.message}</div>`;
+        return;
+      }
+
+      if (data && data.value) {
+        try {
+          kalamList = JSON.parse(data.value);
+        } catch (e) {
+          console.error("Gagal parse kalam posters:", e);
+          kalamList = [];
+        }
+      } else {
+        kalamList = [];
+      }
+
+      if (kalamList.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-gray-500 p-20 border-2 border-dashed border-gray-200 rounded-3xl m-4">Belum ada poster Kalam terunggah.</div>`;
+        return;
+      }
+
+      // Sort by newest first
+      kalamList.sort((a: any, b: any) => b.created_at - a.created_at);
+
+      grid.innerHTML = kalamList.map(item => `
+        <div class="group relative aspect-[3/4] bg-gray-100 rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500">
+          <img src="${item.foto_url}" alt="${item.judul}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+            <h4 class="text-white font-bold text-sm leading-tight mb-3 truncate">${item.judul}</h4>
+            <div class="flex gap-2">
+               <button data-action="hapus-kalam" data-id="${item.id}" data-judul="${item.judul}" class="flex-1 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase transition-all shadow-lg">Hapus Poster</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    // Toggle Form
+    const formContainer = document.getElementById('formContainer');
+    const btnToggleForm = document.getElementById('btnToggleForm');
+    const btnCloseForm = document.getElementById('btnCloseForm');
+    const formKalam = document.getElementById('formKalam') as HTMLFormElement;
+    const alertForm = document.getElementById('alertFormName');
+
+    const setAlert = (msg: string, type: 'success' | 'error') => {
+      if (alertForm) {
+        alertForm.textContent = msg;
+        alertForm.className = `mb-4 p-3 rounded text-sm font-bold block ${type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`;
+        setTimeout(() => alertForm.classList.add('hidden'), 5000);
+      }
+    };
+
+    btnToggleForm?.addEventListener('click', () => {
+      formKalam?.reset();
+      formContainer?.classList.remove('hidden');
+      formContainer?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    btnCloseForm?.addEventListener('click', () => {
+      formContainer?.classList.add('hidden');
+      formKalam?.reset();
+    });
+
+    // Form Submit (Upload & Save)
+    formKalam?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btnSubmit = document.getElementById('btnSubmitKalam') as HTMLButtonElement;
+      const btnText = document.getElementById('btnSubmitText');
+      const fileInput = document.getElementById('foto_file') as HTMLInputElement;
+      const judulInput = document.getElementById('judul') as HTMLInputElement;
+
+      if (!fileInput.files || fileInput.files.length === 0) return setAlert("Pilih file gambar poster terlebih dahulu.", "error");
+
+      btnSubmit.disabled = true;
+      if (btnText) btnText.textContent = 'Mengunggah...';
+
+      try {
+        const file = fileInput.files[0];
+        const fileName = `kalam-${Date.now()}.${file.name.split('.').pop()}`;
+
+        // 1. Upload to storage
+        const { error: uploadError } = await supabase.storage
+          .from('berita_images')
+          .upload(fileName, file, { 
+            cacheControl: '3600',
+            contentType: file.type || 'image/jpeg'
+          });
+
+        if (uploadError) throw uploadError;
+
+        // 2. Get Public URL
+        const { data: { publicUrl } } = supabase.storage.from('berita_images').getPublicUrl(fileName);
+
+        // 3. Add to local list
+        const newPoster = {
+          id: `kalam-${Date.now()}`,
+          judul: judulInput.value.trim(),
+          foto_url: publicUrl,
+          created_at: Date.now()
+        };
+        kalamList.push(newPoster);
+
+        // 4. Save to database settings table
+        const { error: dbError } = await supabase.from('pengaturan_web').upsert({
+          key: 'kalam_posters',
+          value: JSON.stringify(kalamList)
+        }, { onConflict: 'key' });
+
+        if (dbError) throw dbError;
+
+        setAlert("Poster Kalam berhasil ditambahkan!", "success");
+        formKalam.reset();
+        setTimeout(() => {
+          formContainer?.classList.add('hidden');
+        }, 1500);
+        loadKalam();
+      } catch (err: any) {
+        console.error("Gagal tambah kalam:", err);
+        setAlert(`Gagal menambahkan: ${err.message || err}`, "error");
+      } finally {
+        btnSubmit.disabled = false;
+        if (btnText) btnText.textContent = 'Unggah Poster';
+      }
+    });
+
+    // Refresh button
+    document.getElementById('btnRefreshKalam')?.addEventListener('click', loadKalam);
+
+    // Click Actions (Delete)
+    document.getElementById('kalamGrid')?.addEventListener('click', async (e) => {
+      const target = (e.target as Element).closest('button');
+      if(!target) return;
+
+      const action = target.getAttribute('data-action');
+      const id = target.getAttribute('data-id');
+      const judul = target.getAttribute('data-judul');
+
+      if (action === 'hapus-kalam') {
+        if (confirm(`Hapus poster Kalam "${judul}" secara permanen?`)) {
+          // Remove from list
+          kalamList = kalamList.filter(item => item.id !== id);
+
+          // Update DB settings table
+          const { error } = await supabase.from('pengaturan_web').upsert({
+            key: 'kalam_posters',
+            value: JSON.stringify(kalamList)
+          }, { onConflict: 'key' });
+
+          if (error) {
+            alert("Gagal menghapus: " + error.message);
+          } else {
+            loadKalam();
+          }
+        }
+      }
+    });
+
+    // Initial Load
+    loadKalam();
+  </script>
+</AdminLayout>

@@ -37,6 +37,45 @@ try {
 } catch (e) {
   // Gunakan gambar fallback
 }
+
+// Mengambil data Kalam Posters
+let kalamList = [];
+try {
+  const { data: kalamSetting } = await supabase
+    .from('pengaturan_web')
+    .select('value')
+    .eq('key', 'kalam_posters')
+    .single();
+
+  if (kalamSetting && kalamSetting.value) {
+    kalamList = JSON.parse(kalamSetting.value);
+  }
+} catch (e) {
+  // Gunakan fallback
+}
+
+if (!kalamList || kalamList.length === 0) {
+  kalamList = [
+    {
+      id: 'kalam-fallback-1',
+      judul: '8 Fakta Sejarah Muktamar NU',
+      foto_url: '/images/hero-bg.jpg',
+      created_at: 1
+    },
+    {
+      id: 'kalam-fallback-2',
+      judul: 'Pendidikan Islam Karakter Santri',
+      foto_url: '/images/hero-bg.jpg',
+      created_at: 2
+    },
+    {
+      id: 'kalam-fallback-3',
+      judul: 'Kajian Rutin Kitab Kuning',
+      foto_url: '/images/hero-bg.jpg',
+      created_at: 3
+    }
+  ];
+}
 ---
 
 <MainLayout title="Beranda Utama">
@@ -214,6 +253,59 @@ try {
        <div class="absolute top-[25%] left-[10%] w-3 h-3 rounded-full bg-[#dfb15b] shadow-[0_0_20px_rgba(223,177,91,1)] animate-pulse"></div>
        <div class="absolute top-[65%] right-[15%] w-4 h-4 rounded-full bg-white opacity-40 shadow-[0_0_20px_rgba(255,255,255,1)] animate-pulse delay-700"></div>
        <div class="absolute bottom-[25%] left-[25%] w-2 h-2 rounded-full bg-yellow-200 shadow-[0_0_15px_rgba(223,177,91,1)] animate-ping"></div>
+    </div>
+  </section>
+
+  <!-- SEKSI KALAM (Poster Dakwah Coverflow Slider) -->
+  <section class="py-24 bg-gray-50 border-b border-gray-100 overflow-hidden relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Header Section -->
+      <div class="flex justify-between items-center mb-12">
+        <div class="flex items-center gap-3">
+          <div class="w-1.5 h-8 bg-[#dfb15b] rounded-full"></div>
+          <h2 class="text-3xl font-display font-black tracking-tight text-gray-900 uppercase">
+            Kalam
+          </h2>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="flex items-center gap-3">
+          <button id="btnKalamPrev" class="p-3 bg-white hover:bg-gray-100 text-gray-800 rounded-full border border-gray-200 shadow-sm transition-all active:scale-95 hover:scale-105" aria-label="Previous Poster">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button id="btnKalamNext" class="p-3 bg-white hover:bg-gray-100 text-gray-800 rounded-full border border-gray-200 shadow-sm transition-all active:scale-95 hover:scale-105" aria-label="Next Poster">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Coverflow Slider Wrapper -->
+      <div class="relative w-full h-[400px] sm:h-[480px] md:h-[550px] flex items-center justify-center">
+        <div id="kalamSliderContainer" class="relative w-full h-full max-w-[1200px] flex items-center justify-center">
+          {kalamList.map((kalam, idx) => (
+            <div 
+              class="kalam-slide absolute w-[220px] sm:w-[290px] md:w-[360px] aspect-[3/4] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+              data-index={idx}
+            >
+              <img 
+                src={kalam.foto_url} 
+                alt={kalam.judul} 
+                class="w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700" 
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <h4 class="text-white font-black text-sm sm:text-base leading-snug drop-shadow-md">{kalam.judul}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -471,5 +563,115 @@ try {
     }
 
     loadDynamicHero();
+
+    // --- SCRIPT SLIDER KALAM COVERFLOW ---
+    function initKalamSlider() {
+      const slides = document.querySelectorAll('.kalam-slide');
+      if (slides.length === 0) return;
+
+      let activeIndex = 0;
+      let intervalId: any = null;
+
+      function updateSlider() {
+        slides.forEach((slide: any) => {
+          const index = parseInt(slide.getAttribute('data-index') || '0');
+          let diff = index - activeIndex;
+          const total = slides.length;
+
+          // Normalize diff untuk shortest circular distance
+          while (diff < -total / 2) diff += total;
+          while (diff > total / 2) diff -= total;
+
+          // Reset classes
+          slide.className = "kalam-slide absolute w-[220px] sm:w-[290px] md:w-[360px] aspect-[3/4] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group";
+
+          if (diff === 0) {
+            // Slide Aktif di Tengah
+            slide.classList.add('z-30', 'scale-100', 'opacity-100', 'translate-x-0', 'pointer-events-auto');
+          } else if (diff === 1 || (diff === -1 * (total - 1) && total > 2)) {
+            // Slide Kanan (Next)
+            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', 'translate-x-[55%]', 'sm:translate-x-[42%]', 'md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+          } else if (diff === -1 || (diff === total - 1 && total > 2)) {
+            // Slide Kiri (Prev)
+            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', '-translate-x-[55%]', '-sm:translate-x-[42%]', '-md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+          } else {
+            // Slide Tersembunyi Jauh
+            slide.classList.add('z-10', 'scale-[0.6]', 'opacity-0', 'pointer-events-none');
+            if (diff < 0) {
+              slide.classList.add('-translate-x-[110%]');
+            } else {
+              slide.classList.add('translate-x-[110%]');
+            }
+          }
+        });
+      }
+
+      function nextSlide() {
+        activeIndex = (activeIndex + 1) % slides.length;
+        updateSlider();
+      }
+
+      function prevSlide() {
+        activeIndex = (activeIndex - 1 + slides.length) % slides.length;
+        updateSlider();
+      }
+
+      function startInterval() {
+        intervalId = setInterval(nextSlide, 5000);
+      }
+
+      function stopInterval() {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function resetInterval() {
+        stopInterval();
+        startInterval();
+      }
+
+      // Event Listeners Buttons
+      document.getElementById('btnKalamPrev')?.addEventListener('click', () => {
+        prevSlide();
+        resetInterval();
+      });
+
+      document.getElementById('btnKalamNext')?.addEventListener('click', () => {
+        nextSlide();
+        resetInterval();
+      });
+
+      // Click on adjacent slides to navigate
+      slides.forEach((slide: any) => {
+        slide.addEventListener('click', () => {
+          const index = parseInt(slide.getAttribute('data-index') || '0');
+          let diff = index - activeIndex;
+          const total = slides.length;
+          while (diff < -total / 2) diff += total;
+          while (diff > total / 2) diff -= total;
+
+          if (diff === 1) {
+            nextSlide();
+            resetInterval();
+          } else if (diff === -1) {
+            prevSlide();
+            resetInterval();
+          }
+        });
+      });
+
+      // Pause on hover
+      const sliderContainer = document.getElementById('kalamSliderContainer');
+      sliderContainer?.addEventListener('mouseenter', stopInterval);
+      sliderContainer?.addEventListener('mouseleave', startInterval);
+
+      // Initial Update and Start
+      updateSlider();
+      startInterval();
+    }
+
+    initKalamSlider();
   </script>
 </MainLayout>
