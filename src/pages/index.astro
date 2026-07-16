@@ -285,11 +285,11 @@ if (!kalamList || kalamList.length === 0) {
       </div>
 
       <!-- Coverflow Slider Wrapper -->
-      <div class="relative w-full h-[400px] sm:h-[480px] md:h-[550px] flex items-center justify-center">
+      <div class="relative w-full h-[320px] sm:h-[420px] md:h-[480px] flex items-center justify-center">
         <div id="kalamSliderContainer" class="relative w-full h-full max-w-[1200px] flex items-center justify-center">
           {kalamList.map((kalam, idx) => (
             <div 
-              class="kalam-slide absolute w-[220px] sm:w-[290px] md:w-[360px] aspect-[3/4] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+              class="kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
               data-index={idx}
             >
               <img 
@@ -583,7 +583,7 @@ if (!kalamList || kalamList.length === 0) {
           while (diff > total / 2) diff -= total;
 
           // Reset classes
-          slide.className = "kalam-slide absolute w-[220px] sm:w-[290px] md:w-[360px] aspect-[3/4] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group";
+          slide.className = "kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group";
 
           if (diff === 0) {
             // Slide Aktif di Tengah
