@@ -4,9 +4,13 @@
 import { supabase } from '../lib/supabase.js';
 
 // Mengambil galeri asli dari database
-const { data: dbGaleri, error } = await supabase.from('galeri').select('*').order('created_at', { ascending: false });
+const { data: dbGaleri, error } = await supabase
+  .from('galeri')
+  .select('*')
+  .order('created_at', { ascending: false });
 
 interface GaleriItem {
+  id?: string;
   url?: string;
   foto_url?: string;
   alt?: string;
@@ -14,85 +18,184 @@ interface GaleriItem {
   deskripsi?: string;
 }
 
-// Fallback gambar acak (Jaga-jaga jika tabel galeri belum terbuat atau kosong)
 let galeriFotos: GaleriItem[] = [];
 
 if (dbGaleri && dbGaleri.length > 0) {
   galeriFotos = dbGaleri;
 } else {
   galeriFotos = [
-    { url: "https://picsum.photos/seed/pondok1/400/300", alt: "Galeri Placeholder" },
-    { url: "https://picsum.photos/seed/pondok2/400/300", alt: "Galeri Placeholder" },
-    { url: "https://picsum.photos/seed/pondok3/400/300", alt: "Galeri Placeholder" },
-    { url: "https://picsum.photos/seed/pondok4/400/300", alt: "Galeri Placeholder" },
-    { url: "https://picsum.photos/seed/pondok5/400/300", alt: "Galeri Placeholder" },
-    { url: "https://picsum.photos/seed/pondok6/400/300", alt: "Galeri Placeholder" }
+    { id: 'g1', foto_url: "/images/hero-bg.jpg", judul: "Kajian Mingguan Santri" },
+    { id: 'g2', foto_url: "/images/hero-bg.jpg", judul: "Fasilitas Perpustakaan" },
+    { id: 'g3', foto_url: "/images/hero-bg.jpg", judul: "Kelas Belajar Mandiri" },
+    { id: 'g4', foto_url: "/images/hero-bg.jpg", judul: "Kegiatan Olahraga Sore" }
   ];
 }
-
-// Untuk efek infinite scroll mulus, array foto wajib di-duplikasi (minimal 2 lapis)
-const marqueeItems = [...galeriFotos, ...galeriFotos];
 ---
 
-<section class="py-16 bg-white overflow-hidden border-t border-gray-100">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center" data-aos="fade-up">
-    <h2 class="text-base text-emas font-bold tracking-wide uppercase">Galeri Kegiatan</h2>
-    <p class="mt-2 text-3xl font-display leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-      Sekilas Aktivitas Santri
-    </p>
-    <p class="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
-      Intip berbagai kegiatan positif, fasilitas, dan momen-momen istimewa di lingkungan Yayasan Pondok Pesantren Nailul Khoir.
-    </p>
-  </div>
+<section class="py-24 bg-white border-t border-b border-gray-100 overflow-hidden relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <!-- Header Section -->
+    <div class="flex justify-between items-center mb-12">
+      <div>
+        <h2 class="text-base text-emas font-bold tracking-wide uppercase">Galeri Kegiatan</h2>
+        <p class="mt-2 text-3xl font-display leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Sekilas Aktivitas Santri
+        </p>
+      </div>
+      
+      <!-- Navigation Buttons -->
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="btnGaleriPrev" class="p-3 bg-white hover:bg-gray-100 text-gray-800 rounded-full border border-gray-200 shadow-sm transition-all active:scale-95 hover:scale-105" aria-label="Previous Photo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button id="btnGaleriNext" class="p-3 bg-white hover:bg-gray-100 text-gray-800 rounded-full border border-gray-200 shadow-sm transition-all active:scale-95 hover:scale-105" aria-label="Next Photo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
 
-  <!-- Marquee Container -->
-  <div class="relative w-full flex overflow-x-hidden group">
-    <!-- Gradien pinggiran untuk efek fade (opsional) -->
-    <div class="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-    <!-- Track Animasi -->
-    <div class="animate-marquee flex gap-4 md:gap-6 w-max items-center py-4">
-      {marqueeItems.map((foto, index) => (
-        <div class="relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow w-64 h-48 md:w-80 md:h-56 shrink-0 border border-gray-100 cursor-pointer group">
-          <img 
-            src={foto.url || foto.foto_url} 
-            alt={foto.alt || foto.judul || `Galeri Kegiatan ${index + 1}`} 
-            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            loading="lazy" 
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-            <div class="p-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 w-full">
-              <p class="text-white font-black text-sm sm:text-base leading-tight drop-shadow-md truncate">
-                {foto.judul || "Lihat momen ini"}
-              </p>
+    <!-- Coverflow Slider Wrapper -->
+    <div class="relative w-full h-[320px] sm:h-[420px] md:h-[480px] flex items-center justify-center">
+      <div id="galeriSliderContainer" class="relative w-full h-full max-w-[1200px] flex items-center justify-center">
+        {galeriFotos.map((foto, idx) => (
+          <div 
+            class="galeri-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+            data-index={idx}
+          >
+            <img 
+              src={foto.url || foto.foto_url} 
+              alt={foto.alt || foto.judul || `Galeri Kegiatan ${idx + 1}`} 
+              class="w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700" 
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+              <h4 class="text-white font-black text-sm sm:text-base leading-snug drop-shadow-md">{foto.judul || "Aktivitas Santri"}</h4>
               {foto.deskripsi && (
-                 <p class="text-gray-300 text-xs mt-1 line-clamp-2">{foto.deskripsi}</p>
+                <p class="text-gray-200 text-xs mt-1.5 line-clamp-2 drop-shadow-sm font-medium">{foto.deskripsi}</p>
               )}
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
+
   </div>
-
-  <style>
-    /* Keyframes dan Class untuk Animasi Berjalan (Marquee) */
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); } 
-      /* Karena kita menduplikasi array, 50% berarti ia bergeser sejauh panjang array asli, 
-         sehingga ujungnya terhubung sempurna menjadi loop tak terbatas. */
-    }
-
-    .animate-marquee {
-      animation: marquee 35s linear infinite;
-      /* Membutuhkan width yang fit-content, di-handle by w-max * 2 secara logis oleh flex contents */
-    }
-
-    /* Fitur Opsional: Berhenti saat di-hover/disentuh */
-    .group:hover .animate-marquee {
-      animation-play-state: paused;
-    }
-  </style>
 </section>
+
+<script>
+  function initGaleriSlider() {
+    const slides = document.querySelectorAll('.galeri-slide');
+    if (slides.length === 0) return;
+
+    let activeIndex = 0;
+    let intervalId: any = null;
+
+    function updateSlider() {
+      slides.forEach((slide: any) => {
+        const index = parseInt(slide.getAttribute('data-index') || '0');
+        let diff = index - activeIndex;
+        const total = slides.length;
+
+        // Normalize diff untuk shortest circular distance
+        while (diff < -total / 2) diff += total;
+        while (diff > total / 2) diff -= total;
+
+        // Reset classes
+        slide.className = "galeri-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group";
+
+        if (diff === 0) {
+          // Slide Aktif di Tengah
+          slide.classList.add('z-30', 'scale-100', 'opacity-100', 'translate-x-0', 'pointer-events-auto');
+        } else if (diff === 1 || (diff === -1 * (total - 1) && total > 2)) {
+          // Slide Kanan (Next)
+          slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', 'translate-x-[55%]', 'sm:translate-x-[42%]', 'md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+        } else if (diff === -1 || (diff === total - 1 && total > 2)) {
+          // Slide Kiri (Prev)
+          slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', '-translate-x-[55%]', '-sm:translate-x-[42%]', '-md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+        } else {
+          // Slide Tersembunyi Jauh
+          slide.classList.add('z-10', 'scale-[0.6]', 'opacity-0', 'pointer-events-none');
+          if (diff < 0) {
+            slide.classList.add('-translate-x-[110%]');
+          } else {
+            slide.classList.add('translate-x-[110%]');
+          }
+        }
+      });
+    }
+
+    function nextSlide() {
+      activeIndex = (activeIndex + 1) % slides.length;
+      updateSlider();
+    }
+
+    function prevSlide() {
+      activeIndex = (activeIndex - 1 + slides.length) % slides.length;
+      updateSlider();
+    }
+
+    // Auto slide
+    function startInterval() {
+      intervalId = setInterval(nextSlide, 5000);
+    }
+
+    function stopInterval() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    function resetInterval() {
+      stopInterval();
+      startInterval();
+    }
+
+    // Event Listeners Buttons
+    document.getElementById('btnGaleriPrev')?.addEventListener('click', () => {
+      prevSlide();
+      resetInterval();
+    });
+
+    document.getElementById('btnGaleriNext')?.addEventListener('click', () => {
+      nextSlide();
+      resetInterval();
+    });
+
+    // Click on adjacent slides to navigate
+    slides.forEach((slide: any) => {
+      slide.addEventListener('click', () => {
+        const index = parseInt(slide.getAttribute('data-index') || '0');
+        let diff = index - activeIndex;
+        const total = slides.length;
+        while (diff < -total / 2) diff += total;
+        while (diff > total / 2) diff -= total;
+
+        if (diff === 1) {
+          nextSlide();
+          resetInterval();
+        } else if (diff === -1) {
+          prevSlide();
+          resetInterval();
+        }
+      });
+    });
+
+    // Pause on hover
+    const sliderContainer = document.getElementById('galeriSliderContainer');
+    sliderContainer?.addEventListener('mouseenter', stopInterval);
+    sliderContainer?.addEventListener('mouseleave', startInterval);
+
+    // Initial Update and Start
+    updateSlider();
+    startInterval();
+  }
+
+  // Memicu inisialisasi slider setelah DOM siap
+  document.addEventListener('DOMContentLoaded', initGaleriSlider);
+</script>
