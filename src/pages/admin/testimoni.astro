@@ -155,7 +155,12 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
         if (fileInput.files && fileInput.files.length > 0) {
            const file = fileInput.files[0];
            const fileName = `testi-${Date.now()}-${file.name}`;
-           const { data: uploadData, error: uploadError } = await supabase.storage.from('berita_images').upload(fileName, file);
+            const { data: uploadData, error: uploadError } = await supabase.storage
+              .from('berita_images')
+              .upload(fileName, file, {
+                cacheControl: '3600',
+                contentType: file.type || 'image/jpeg'
+              });
            if (!uploadError) {
              const { data: publicUrl } = supabase.storage.from('berita_images').getPublicUrl(fileName);
              finalFotoUrl = publicUrl.publicUrl;
