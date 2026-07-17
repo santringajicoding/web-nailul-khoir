@@ -617,6 +617,7 @@ if (!kalamList || kalamList.length === 0) {
       }
 
       function startInterval() {
+        stopInterval();
         intervalId = setInterval(nextSlide, 5000);
       }
 
@@ -632,16 +633,26 @@ if (!kalamList || kalamList.length === 0) {
         startInterval();
       }
 
-      // Event Listeners Buttons
-      document.getElementById('btnKalamPrev')?.addEventListener('click', () => {
-        prevSlide();
-        resetInterval();
-      });
+      // Event Listeners Buttons (Cloned to clear old listeners)
+      const btnPrev = document.getElementById('btnKalamPrev');
+      if (btnPrev) {
+        const newBtn = btnPrev.cloneNode(true);
+        btnPrev.parentNode?.replaceChild(newBtn, btnPrev);
+        newBtn.addEventListener('click', () => {
+          prevSlide();
+          resetInterval();
+        });
+      }
 
-      document.getElementById('btnKalamNext')?.addEventListener('click', () => {
-        nextSlide();
-        resetInterval();
-      });
+      const btnNext = document.getElementById('btnKalamNext');
+      if (btnNext) {
+        const newBtn = btnNext.cloneNode(true);
+        btnNext.parentNode?.replaceChild(newBtn, btnNext);
+        newBtn.addEventListener('click', () => {
+          nextSlide();
+          resetInterval();
+        });
+      }
 
       // Click on adjacent slides to navigate
       slides.forEach((slide: any) => {
@@ -664,14 +675,61 @@ if (!kalamList || kalamList.length === 0) {
 
       // Pause on hover
       const sliderContainer = document.getElementById('kalamSliderContainer');
-      sliderContainer?.addEventListener('mouseenter', stopInterval);
-      sliderContainer?.addEventListener('mouseleave', startInterval);
+      if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopInterval);
+        sliderContainer.addEventListener('mouseleave', startInterval);
+      }
 
       // Initial Update and Start
       updateSlider();
       startInterval();
     }
 
-    initKalamSlider();
+    async function loadDynamicKalam() {
+      try {
+        const { data, error } = await supabase
+          .from('pengaturan_web')
+          .select('value')
+          .eq('key', 'kalam_posters')
+          .single();
+
+        if (!error && data && data.value) {
+          const kalamList = JSON.parse(data.value);
+          if (kalamList && kalamList.length > 0) {
+            const oldContainer = document.getElementById('kalamSliderContainer');
+            if (oldContainer) {
+              const newContainer = oldContainer.cloneNode(false) as HTMLElement;
+              newContainer.innerHTML = kalamList.map((kalam: any, idx: number) => `
+                <div 
+                  class="kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+                  data-index="${idx}"
+                >
+                  <img 
+                    src="${kalam.foto_url}" 
+                    alt="${kalam.judul}" 
+                    class="w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700" 
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h4 class="text-white font-black text-sm sm:text-base leading-snug drop-shadow-md">${kalam.judul}</h4>
+                  </div>
+                </div>
+              `).join('');
+              oldContainer.parentNode?.replaceChild(newContainer, oldContainer);
+              initKalamSlider();
+            }
+          }
+        } else {
+          // If fetch fails or empty, init with static SSR items
+          initKalamSlider();
+        }
+      } catch (e) {
+        console.error("Gagal memuat kalam dinamis:", e);
+        initKalamSlider();
+      }
+    }
+
+    // Load dynamic client-side database posters
+    loadDynamicKalam();
   </script>
 </MainLayout>

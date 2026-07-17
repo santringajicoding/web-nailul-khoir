@@ -88,6 +88,8 @@ if (dbGaleri && dbGaleri.length > 0) {
 </section>
 
 <script>
+  import { supabase } from '../lib/supabase.js';
+
   function initGaleriSlider() {
     const slides = document.querySelectorAll('.galeri-slide');
     if (slides.length === 0) return;
@@ -141,6 +143,7 @@ if (dbGaleri && dbGaleri.length > 0) {
 
     // Auto slide
     function startInterval() {
+      stopInterval();
       intervalId = setInterval(nextSlide, 5000);
     }
 
@@ -156,16 +159,26 @@ if (dbGaleri && dbGaleri.length > 0) {
       startInterval();
     }
 
-    // Event Listeners Buttons
-    document.getElementById('btnGaleriPrev')?.addEventListener('click', () => {
-      prevSlide();
-      resetInterval();
-    });
+    // Event Listeners Buttons (Cloned to clear old listeners)
+    const btnPrev = document.getElementById('btnGaleriPrev');
+    if (btnPrev) {
+      const newBtn = btnPrev.cloneNode(true);
+      btnPrev.parentNode?.replaceChild(newBtn, btnPrev);
+      newBtn.addEventListener('click', () => {
+        prevSlide();
+        resetInterval();
+      });
+    }
 
-    document.getElementById('btnGaleriNext')?.addEventListener('click', () => {
-      nextSlide();
-      resetInterval();
-    });
+    const btnNext = document.getElementById('btnGaleriNext');
+    if (btnNext) {
+      const newBtn = btnNext.cloneNode(true);
+      btnNext.parentNode?.replaceChild(newBtn, btnNext);
+      newBtn.addEventListener('click', () => {
+        nextSlide();
+        resetInterval();
+      });
+    }
 
     // Click on adjacent slides to navigate
     slides.forEach((slide: any) => {
@@ -188,14 +201,63 @@ if (dbGaleri && dbGaleri.length > 0) {
 
     // Pause on hover
     const sliderContainer = document.getElementById('galeriSliderContainer');
-    sliderContainer?.addEventListener('mouseenter', stopInterval);
-    sliderContainer?.addEventListener('mouseleave', startInterval);
+    if (sliderContainer) {
+      sliderContainer.addEventListener('mouseenter', stopInterval);
+      sliderContainer.addEventListener('mouseleave', startInterval);
+    }
 
     // Initial Update and Start
     updateSlider();
     startInterval();
   }
 
+  async function loadDynamicGaleri() {
+    try {
+      const { data, error } = await supabase
+        .from('galeri')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const oldContainer = document.getElementById('galeriSliderContainer');
+        if (oldContainer) {
+          const newContainer = oldContainer.cloneNode(false) as HTMLElement;
+          newContainer.innerHTML = data.map((foto: any, idx: number) => {
+            const descriptionHtml = foto.deskripsi 
+              ? `<p class="text-gray-200 text-xs mt-1.5 line-clamp-2 drop-shadow-sm font-medium">${foto.deskripsi}</p>`
+              : '';
+            return `
+              <div 
+                class="galeri-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100"
+                data-index="${idx}"
+              >
+                <img 
+                  src="${foto.url || foto.foto_url}" 
+                  alt="${foto.alt || foto.judul || `Galeri Kegiatan ${idx + 1}`}" 
+                  class="h-full w-auto object-contain select-none group-hover:scale-105 transition-transform duration-700" 
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                  <h4 class="text-white font-black text-sm sm:text-base leading-snug drop-shadow-md">${foto.judul || "Aktivitas Santri"}</h4>
+                  ${descriptionHtml}
+                </div>
+              </div>
+            `;
+          }).join('');
+          oldContainer.parentNode?.replaceChild(newContainer, oldContainer);
+          initGaleriSlider();
+        }
+      } else {
+        initGaleriSlider();
+      }
+    } catch (e) {
+      console.error("Gagal memuat galeri dinamis:", e);
+      initGaleriSlider();
+    }
+  }
+
   // Memicu inisialisasi slider setelah DOM siap
-  document.addEventListener('DOMContentLoaded', initGaleriSlider);
+  document.addEventListener('DOMContentLoaded', () => {
+    loadDynamicGaleri();
+  });
 </script>
