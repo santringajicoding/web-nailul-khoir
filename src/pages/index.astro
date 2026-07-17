@@ -289,13 +289,13 @@ if (!kalamList || kalamList.length === 0) {
         <div id="kalamSliderContainer" class="relative w-full h-full max-w-[1200px] flex items-center justify-center">
           {kalamList.map((kalam, idx) => (
             <div 
-              class="kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+              class="kalam-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100/5"
               data-index={idx}
             >
               <img 
                 src={kalam.foto_url} 
                 alt={kalam.judul} 
-                class="w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700" 
+                class="h-full w-auto object-contain select-none group-hover:scale-105 transition-transform duration-700" 
                 loading="lazy"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
@@ -583,24 +583,24 @@ if (!kalamList || kalamList.length === 0) {
           while (diff > total / 2) diff -= total;
 
           // Reset classes
-          slide.className = "kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group";
+          slide.className = "kalam-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100/5";
 
           if (diff === 0) {
             // Slide Aktif di Tengah
             slide.classList.add('z-30', 'scale-100', 'opacity-100', 'translate-x-0', 'pointer-events-auto');
           } else if (diff === 1 || (diff === -1 * (total - 1) && total > 2)) {
             // Slide Kanan (Next)
-            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', 'translate-x-[55%]', 'sm:translate-x-[42%]', 'md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', 'translate-x-[140px]', 'sm:translate-x-[220px]', 'md:translate-x-[280px]', 'pointer-events-none', 'blur-[1.5px]');
           } else if (diff === -1 || (diff === total - 1 && total > 2)) {
             // Slide Kiri (Prev)
-            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', '-translate-x-[55%]', '-sm:translate-x-[42%]', '-md:translate-x-[36%]', 'pointer-events-none', 'blur-[1.5px]');
+            slide.classList.add('z-20', 'scale-[0.82]', 'opacity-40', '-translate-x-[140px]', '-sm:translate-x-[220px]', '-md:translate-x-[280px]', 'pointer-events-none', 'blur-[1.5px]');
           } else {
             // Slide Tersembunyi Jauh
             slide.classList.add('z-10', 'scale-[0.6]', 'opacity-0', 'pointer-events-none');
             if (diff < 0) {
-              slide.classList.add('-translate-x-[110%]');
+              slide.classList.add('-translate-x-[360px]');
             } else {
-              slide.classList.add('translate-x-[110%]');
+              slide.classList.add('translate-x-[360px]');
             }
           }
         });
@@ -701,13 +701,13 @@ if (!kalamList || kalamList.length === 0) {
               const newContainer = oldContainer.cloneNode(false) as HTMLElement;
               newContainer.innerHTML = kalamList.map((kalam: any, idx: number) => `
                 <div 
-                  class="kalam-slide absolute w-[240px] sm:w-[320px] md:w-[380px] aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group"
+                  class="kalam-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100/5"
                   data-index="${idx}"
                 >
                   <img 
                     src="${kalam.foto_url}" 
                     alt="${kalam.judul}" 
-                    class="w-full h-full object-cover select-none group-hover:scale-105 transition-transform duration-700" 
+                    class="h-full w-auto object-contain select-none group-hover:scale-105 transition-transform duration-700" 
                     loading="lazy"
                   />
                   <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
