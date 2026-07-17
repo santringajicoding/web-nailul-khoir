@@ -60,11 +60,11 @@ if (dbGaleri && dbGaleri.length > 0) {
     </div>
 
     <!-- Coverflow Slider Wrapper -->
-    <div class="relative w-full h-[250px] sm:h-[340px] md:h-[400px] flex items-center justify-center">
+    <div class="relative w-full h-[320px] sm:h-[420px] md:h-[480px] flex items-center justify-center">
       <div id="galeriSliderContainer" class="relative w-full h-full max-w-[1200px] flex items-center justify-center">
         {galeriFotos.map((foto, idx) => (
           <div 
-            class="galeri-slide absolute h-[200px] sm:h-[280px] md:h-[340px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100"
+            class="galeri-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100"
             data-index={idx}
           >
             <img 
@@ -106,7 +106,7 @@ if (dbGaleri && dbGaleri.length > 0) {
         while (diff > total / 2) diff -= total;
 
         // Reset classes
-        slide.className = "galeri-slide absolute h-[200px] sm:h-[280px] md:h-[340px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100";
+        slide.className = "galeri-slide absolute h-[240px] sm:h-[320px] md:h-[380px] w-auto rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 ease-out transform cursor-pointer group bg-gray-100";
 
         if (diff === 0) {
           // Slide Aktif di Tengah
